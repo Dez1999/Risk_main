@@ -345,7 +345,7 @@ public class Gameplay {
     "EastUSA", "CentralAmerica", "Venezuela", "Peru", "Brazil", "Argentina", "NorthAfrica", "Egypt", "EastAfrica",
     "Congo", "SouthAfrica", "Madagascar", "Iceland", "Scandinavia", "Ukraine", "Great Britain", "Northern Europe",
     "Southern Europe", "Western Europe", "Indonesia", "New Guinea", "Western Australia", "Eastern Australia",
-    "New Zealand", "Middle East", "Afghanistan", "Japaan", "China", "India", "Mongolia"};
+    "New Zealand", "Middle East", "Afghanistan", "Japan", "China", "India", "Mongolia"};
 
 
   private void listTheTerritories(ArrayList<Territory> territoryList) {
