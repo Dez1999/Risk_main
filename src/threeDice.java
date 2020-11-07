@@ -16,10 +16,9 @@ public class threeDice {
     private int z ;
     public threeDice() {
 
-        Random r = new Random();
-        first= new Die(r);
-        second= new Die(r);
-        third = new Die(r);
+        first= new Die();
+        second= new Die();
+        third = new Die();
 
     }
     public void roll(){

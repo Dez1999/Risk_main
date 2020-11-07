@@ -14,8 +14,8 @@ public class Die
      *
      * @param r The random number generator for this die.
      */
-    public Die(Random r)
-    {
+    public Die()
+    {   Random r = new Random();
         generator = r;
     }
 

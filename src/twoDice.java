@@ -20,9 +20,8 @@ import java.util.Random;public class twoDice {
     private int y ;
     public twoDice() {
 
-        Random r = new Random();
-        first= new Die(r);
-        second= new Die(r);
+        first= new Die();
+        second= new Die();
 
     }
     public void roll(){
