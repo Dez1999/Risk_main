@@ -55,6 +55,13 @@ public class Player
         }
         else return true;
     }
+
+    /**
+     * kills the player
+     */
+    public void setDead(){
+        isAlive = false;
+    }
     /**
      * returns the list of territories the player own
      *
