@@ -1,5 +1,5 @@
 import java.util.*;
-public class Gameplay {
+public class GameplayModel {
     public static final int MAX_DICE = 3;
     private Board board;
     private Player currentPlayer;
@@ -32,7 +32,7 @@ public class Gameplay {
     private int bonus = 0;
 
 
-    public Gameplay() {
+    public GameplayModel() {
         startGame();
     }
 
@@ -993,7 +993,7 @@ public class Gameplay {
     }
 
     public static void main(String[] args) {
-        Gameplay gameplay = new Gameplay();
+        GameplayModel gamePlayModel = new GameplayModel();
     }
 
 }
