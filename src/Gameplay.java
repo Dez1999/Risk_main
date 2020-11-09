@@ -23,7 +23,7 @@ public class Gameplay {
     private Territory defendingTerritory;
 
     private boolean exitAttack = false;  //Come back to this to implement. This is only local variable for attack method
-    private boolean playerOwnsAttackingTerritory= false; //Check if Attacking Territory can be used
+    private boolean playerOwnsAttackingTerritory = false; //Check if Attacking Territory can be used
     private boolean targetTerritoryisBordering = false;
     private boolean canAttack = false;
     private int defendingTroops;
@@ -32,7 +32,7 @@ public class Gameplay {
     private int bonus = 0;
 
 
-    public Gameplay(){
+    public Gameplay() {
         startGame();
     }
 
@@ -53,7 +53,6 @@ public class Gameplay {
         boolean gameWon = false;
 
 
-
         System.out.println("At the start of each turn each player receives 3 or more troops and" +
                 " if you rule a whole continent you will get more bonus troops.");
         System.out.println("The game will start with Player 1");
@@ -68,22 +67,22 @@ public class Gameplay {
 
 
             /**Set Next Player Turn*/
-            if (i == playersAlive.size() - 1 ) {
+            if (i == playersAlive.size() - 1) {
                 nextPlayer = getPlayers(0);
             }
-            if(i != playersAlive.size() - 1 ){
-                nextPlayer = getPlayers(i+1);
+            if (i != playersAlive.size() - 1) {
+                nextPlayer = getPlayers(i + 1);
             }
 
             /**Checks the Players Hand*/
-            for (Card card : currentPlayer.getHand().handList()){
+            for (Card card : currentPlayer.getHand().handList()) {
                 System.out.println("Current Player Hand:" +
                         card.getTerritoryName() + ": " + card.getClass());
             }
 
 
             String input;
-            if(currentPlayer.getHand().handList().size() >2) {
+            if (currentPlayer.getHand().handList().size() > 2) {
                 System.out.println("Would you like to turn in your Cards? (YES or NO)");
                 input = s.nextLine();   //execute command
 
@@ -119,7 +118,7 @@ public class Gameplay {
             //if pass is entered cycle to the next player
             System.out.println("Player " + (i + 1) + " passes");
 
-            if (i == numPlayers - 1 ) {
+            if (i == numPlayers - 1) {
                 i = -1;
             }
 
@@ -133,10 +132,11 @@ public class Gameplay {
 
     /**
      * Method: Removes cards in Players hand
+     *
      * @param istradable true if Player can turn in Hands
      */
     private void tradeInCards(boolean istradable) {
-        if(istradable){
+        if (istradable) {
             currentPlayer.getHand().removeCards();
             bonus = bonus + 10;
             System.out.println("Player's cards have been removed from Hand. Troops were added to Bonus Troops");
@@ -184,7 +184,7 @@ public class Gameplay {
         for (int i = 0; i < num; i++) {
             String str1 = Integer.toString(i);
             playersAlive.add(new Player(str1));
-            System.out.println( "player" + playersAlive.get(i).getName());
+            System.out.println("player" + playersAlive.get(i).getName());
         }
 
         playersDead = new ArrayList<>();
@@ -192,6 +192,7 @@ public class Gameplay {
 
     /**
      * Method to return a player from the playersAlive list
+     *
      * @param index
      * @return
      */
@@ -202,10 +203,10 @@ public class Gameplay {
 
     /**
      * Method: Removes the player from the playersAlive List
+     *
      * @param player
      */
-    public void removePlayer(Player player)
-    {
+    public void removePlayer(Player player) {
         playersAlive.remove(player);
         playersDead.add(player);
     }
@@ -213,20 +214,18 @@ public class Gameplay {
 
     /**
      * Method: Used to process the Command from the user
+     *
      * @param comm
      */
     public void processCommand(String comm) {
 
         if (comm.equals("PASS")) {
             nextPlayerTurn();
-        }
-        else if (comm.equals("HELP")) {
+        } else if (comm.equals("HELP")) {
             printHelp();
-        }
-        else if (comm.equals("QUIT")) {
+        } else if (comm.equals("QUIT")) {
             quit();
-        }
-        else if (comm.equals("ATTACK")) {
+        } else if (comm.equals("ATTACK")) {
             attack();
         }
         //else if (comm.equals("FORTIFY")) {
@@ -234,8 +233,7 @@ public class Gameplay {
         //}
         else if (comm.equals("PRINT")) {
             getGameStatus();
-        }
-        else {
+        } else {
             System.out.println("INVALID COMMAND");
             enterCommand();
         }
@@ -256,14 +254,14 @@ public class Gameplay {
         }
         enterCommand();
     }
-    private void fortify()
-    {}
+
+    private void fortify() {
+    }
 
     //FIX This: print each players own Territories. Each territory has player owner
-    private void getGameStatus()
-    {
+    private void getGameStatus() {
         //Prints all Territories: Territory : Name, Troops : int, PlayerOwnerShip : player
-        for (Territory territory1 : board.getTerritoriesList()){
+        for (Territory territory1 : board.getTerritoriesList()) {
             System.out.println(territory1.getName() + "-> Troops : " + territory1.getTroops() + ", Owner: Player " + territory1.getPlayer().getName());
         }
         enterCommand();
@@ -272,9 +270,8 @@ public class Gameplay {
 
     /**
      * Method: Changes the current player turn to the next player turn
-     *
      */
-    private void nextPlayerTurn(){
+    private void nextPlayerTurn() {
         currentPlayer = nextPlayer;
     }
 
@@ -291,7 +288,7 @@ public class Gameplay {
 
 
     public void WinnerStatus() {
-        if(playersAlive.size() == 1){
+        if (playersAlive.size() == 1) {
             System.out.println("Winner!! Winner!!");
             System.out.println("Player" + playersAlive.get(0).getName() + ", you have conquered the WORLD!");
             System.out.println("");
@@ -329,14 +326,14 @@ public class Gameplay {
 
     /**
      * Method: This method adds troops to specific Territory. CHANGE NAME
-     * @param t Territory name
+     *
+     * @param t     Territory name
      * @param troop Number of troops
      * @return 0 or -1
      */
     public int stringTerritoryMapping(String t, int troop) {
         Territory addT = mapper(t);
-        if (addT !=null)
-        {
+        if (addT != null) {
             addT.addTroops(troop);
             return 0;
         }
@@ -345,11 +342,11 @@ public class Gameplay {
 
     /**
      * Method: Returns Territory
+     *
      * @param confirm Territory String name
      * @return Terr Territory
      */
-    public Territory mapper(String confirm)
-    {
+    public Territory mapper(String confirm) {
         for (Territory terr : board.getTerritoriesList())
             if (terr.getName().equals(confirm)) {
                 return terr;
@@ -358,6 +355,7 @@ public class Gameplay {
     }
 
 //FIX THIS
+
     /**
      * Sets the amount of initial troops each player can start out with depending on number of players. Also assigns Territory Ownership
      */
@@ -494,8 +492,10 @@ public class Gameplay {
     private int getInitialPlayerTroopstoplace() {
         return initialPlayerTroopstoplace;
     }
+
     /**
      * Method: List the territories owned
+     *
      * @param territoryList
      */
     private void listTheTerritories(ArrayList<Territory> territoryList) {
@@ -508,16 +508,16 @@ public class Gameplay {
 
     /**
      * Method: Lists the Continents owned
+     *
      * @param continentList
      */
-    private void listTheContinents(ArrayList<Continent> continentList){
+    private void listTheContinents(ArrayList<Continent> continentList) {
         System.out.println();
         System.out.println("Continents Owned: ");
 
-        if (continentList.size() == 0){
+        if (continentList.size() == 0) {
             System.out.println("No Continents Owned");
-        }
-        else {
+        } else {
             for (Continent cont : continentList) {
                 System.out.println(cont.getName());
             }
@@ -526,10 +526,10 @@ public class Gameplay {
 
     /**
      * Method: Used to deploy troops to selected Territory
+     *
      * @param newTroops
      */
-    private void DeployTroops(int newTroops)
-    {
+    private void DeployTroops(int newTroops) {
         listTheTerritories(currentPlayer.getTerritories());
         listTheContinents(currentPlayer.getContinents());
 
@@ -544,6 +544,7 @@ public class Gameplay {
 
     /**
      * Method: Used to check if selected Territory is owned by Player. Then helps to deploy troops into selected Territory
+     *
      * @param newTroops
      */
     private void deployInTerritory(int newTroops) {
@@ -569,7 +570,9 @@ public class Gameplay {
         return currentPlayer;
     }
 
-    /**This Method needs to be Reviewed*/
+    /**
+     * This Method needs to be Reviewed
+     */
     private void attack() {
         Scanner s = new Scanner(System.in);
 
@@ -601,24 +604,21 @@ public class Gameplay {
         Scanner s = new Scanner(System.in);
         int troopsAmount = attackingTerritory.getTroops();  //Returns number of troops in selected Attacking Territory
 
-        while(!canAttack && !exitAttack) {
+        while (!canAttack && !exitAttack) {
             System.out.println("Please choose the Number of Troops to Attack with. Press BACK to exit ATTACK phase");
 
             String stringword = s.nextLine();
-            if (stringword.equals("BACK")){
+            if (stringword.equals("BACK")) {
                 exitAttack = true;
-            }
-            else {
+            } else {
                 int troops = Integer.parseInt(stringword);
 
-                if (troops >= 1 && troops <=3){
+                if (troops >= 1 && troops <= 3) {
                     attackTroopLogic(troops);
                     //Need to exit while loop if canAttack is true
-                }
-                else if (troops > 3){
+                } else if (troops > 3) {
                     System.out.println("You cannot attack with more than 3 troops at one time. Please attack with 1-3 troops.");
-                }
-                else {
+                } else {
                     System.out.println("You did not enter the right amount of troops to Attack with");
                 }
             }
@@ -629,26 +629,24 @@ public class Gameplay {
 
     /**
      * Method: Used to figure out the Troop Logic. The number of troops for each Battle/Roll
+     *
      * @param troops number of troops selected by User
      */
     private void attackTroopLogic(int troops) {
-        if (attackingTerritory.getTroops() > troops){
+        if (attackingTerritory.getTroops() > troops) {
             //check amount of defending troops can be used
-            if(defendingTerritory.getTroops() == 1){
+            if (defendingTerritory.getTroops() == 1) {
                 int defendingTroops = 1;
                 rollDiceSuccess(troops, defendingTroops);  //Run Dice Roll
                 canAttack = true;
-            }
-            else if(defendingTerritory.getTroops() > 1){
+            } else if (defendingTerritory.getTroops() > 1) {
                 int defendingTroops = 2;
                 rollDiceSuccess(troops, defendingTroops);
                 canAttack = true;
-            }
-            else if(defendingTerritory.getTroops() == 0){
+            } else if (defendingTerritory.getTroops() == 0) {
                 System.out.println("ERROR: defending Territory has no troops");
             }
-        }
-        else {
+        } else {
             System.out.println("Attacking Territory does not have enough troops to Attack");
 
         }
@@ -671,8 +669,8 @@ public class Gameplay {
 
 
         //1 Attacking Dice
-        if(attackingDice == 1){
-            if(defendingTroops == 1) {
+        if (attackingDice == 1) {
+            if (defendingTroops == 1) {
                 a1 = die.roll();
                 d1 = die.roll();
 
@@ -685,19 +683,17 @@ public class Gameplay {
                     defendLoss = 0;
                     attackOutcome(-1, attackLoss, defendLoss, attackingTroops);
                 }
-            }
-            else{ //def troops == 2
+            } else { //def troops == 2
                 a1 = die.roll();
                 dice2.roll();
                 d1 = dice2.getHighest();
                 d2 = dice2.getSecondHighest();
 
-                if(a1 > d1){
+                if (a1 > d1) {
                     attackLoss = 0;
                     defendLoss = 1;
-                    attackOutcome(1, attackLoss, defendLoss,attackingTroops);
-                }
-                else {
+                    attackOutcome(1, attackLoss, defendLoss, attackingTroops);
+                } else {
                     attackLoss = 1;
                     defendLoss = 0;
                     attackOutcome(1, attackLoss, defendLoss, attackingTroops);
@@ -706,8 +702,8 @@ public class Gameplay {
         }
 
         //2 Attacking Dice
-        else if (attackingDice == 2){
-            if(defendingTroops == 1) {
+        else if (attackingDice == 2) {
+            if (defendingTroops == 1) {
                 dice2.roll();
                 a1 = dice2.getHighest();
                 a2 = dice2.getSecondHighest();
@@ -722,8 +718,7 @@ public class Gameplay {
                     defendLoss = 0;
                     attackOutcome(-1, attackLoss, defendLoss, attackingTroops);
                 }
-            }
-            else{ //def troops == 2
+            } else { //def troops == 2
                 dice2.roll();
                 a1 = dice2.getHighest();
                 a2 = dice2.getSecondHighest();
@@ -732,31 +727,28 @@ public class Gameplay {
                 d1 = dice2.getHighest();
                 d2 = dice2.getSecondHighest();
 
-                if(a1 > d1){
+                if (a1 > d1) {
                     attackLoss = 0;
                     defendLoss = 1;
 
-                    if (a2 > d2){
+                    if (a2 > d2) {
                         attackLoss = 0;
                         defendLoss = 2;
                         attackOutcome(1, attackLoss, defendLoss, attackingTroops);
-                    }
-                    else {
+                    } else {
                         attackLoss = 1;
                         defendLoss = 1;
                         attackOutcome(0, attackLoss, defendLoss, attackingTroops);
                     }
-                }
-                else if (a1 <= d1){
+                } else if (a1 <= d1) {
                     attackLoss = 1;
                     defendLoss = 0;
 
-                    if (a2 > d2){
+                    if (a2 > d2) {
                         attackLoss = 1;
                         defendLoss = 1;
                         attackOutcome(0, attackLoss, defendLoss, attackingTroops);
-                    }
-                    else {
+                    } else {
                         attackLoss = 2;
                         defendLoss = 0;
                         attackOutcome(-1, attackLoss, defendLoss, attackingTroops);
@@ -768,110 +760,104 @@ public class Gameplay {
         }
 
         //3 Attacking Dice
-        else if (attackingDice == 3){
-                if(defendingTroops == 1) {
-                    dice3.roll();
-                    a1 = dice2.getHighest();
-                    a2 = dice2.getSecondHighest();
-                    d1 = die.roll();
+        else if (attackingDice == 3) {
+            if (defendingTroops == 1) {
+                dice3.roll();
+                a1 = dice2.getHighest();
+                a2 = dice2.getSecondHighest();
+                d1 = die.roll();
 
-                    if (a1 > d1 || a2 > d1) {
+                if (a1 > d1 || a2 > d1) {
+                    attackLoss = 0;
+                    defendLoss = 1;
+                    attackOutcome(1, attackLoss, defendLoss, attackingTroops);
+                } else {
+                    attackLoss = 1;
+                    defendLoss = 0;
+                    attackOutcome(-1, attackLoss, defendLoss, attackingTroops);
+                }
+            } else {
+                dice3.roll();
+                a1 = dice3.getHighest();
+                a2 = dice3.getSecondHighest();
+
+                dice2.roll();
+                d1 = dice2.getHighest();
+                d2 = dice2.getSecondHighest();
+
+                if (a1 > d1) {
+                    attackLoss = 0;
+                    defendLoss = 1;
+
+                    if (a2 > d2) {
                         attackLoss = 0;
-                        defendLoss = 1;
+                        defendLoss = 2;
                         attackOutcome(1, attackLoss, defendLoss, attackingTroops);
-                    }
-                    else {
+                    } else {
                         attackLoss = 1;
+                        defendLoss = 1;
+                        attackOutcome(0, attackLoss, defendLoss, attackingTroops);
+                    }
+                } else if (a1 <= d1) {
+                    attackLoss = 1;
+                    defendLoss = 0;
+
+                    if (a2 > d2) {
+                        attackLoss = 1;
+                        defendLoss = 1;
+                        attackOutcome(0, attackLoss, defendLoss, attackingTroops);
+                    } else {
+                        attackLoss = 2;
                         defendLoss = 0;
                         attackOutcome(-1, attackLoss, defendLoss, attackingTroops);
                     }
                 }
-                else{
-                    dice3.roll();
-                    a1 = dice3.getHighest();
-                    a2 = dice3.getSecondHighest();
-
-                    dice2.roll();
-                    d1 = dice2.getHighest();
-                    d2 = dice2.getSecondHighest();
-
-                    if(a1 > d1){
-                        attackLoss = 0;
-                        defendLoss = 1;
-
-                        if (a2 > d2){
-                            attackLoss = 0;
-                            defendLoss = 2;
-                            attackOutcome(1, attackLoss, defendLoss, attackingTroops);
-                        }
-                        else {
-                            attackLoss = 1;
-                            defendLoss = 1;
-                            attackOutcome(0, attackLoss, defendLoss, attackingTroops);
-                        }
-                    }
-                    else if (a1 <= d1){
-                        attackLoss = 1;
-                        defendLoss = 0;
-
-                        if (a2 > d2){
-                            attackLoss = 1;
-                            defendLoss = 1;
-                            attackOutcome(0, attackLoss, defendLoss, attackingTroops);
-                        }
-                        else {
-                            attackLoss = 2;
-                            defendLoss = 0;
-                            attackOutcome(-1, attackLoss, defendLoss, attackingTroops);
-                        }
-                    }
 
             }
 
         }
     }
-    private void attackOutcome(int rollResult,int attackLoss, int defendLoss, int attackingTroops){
+
+    private void attackOutcome(int rollResult, int attackLoss, int defendLoss, int attackingTroops) {
         //setTroops
         Player prevOwnerPlayer = defendingTerritory.getPlayer();
         String prevOwnerName = defendingTerritory.getPlayer().getName();
 
         //Attacker Wins
-        if(rollResult == 1){
+        if (rollResult == 1) {
             defendingTerritory.removeTroops(defendLoss);
 
-            if(defendingTerritory.getTroops()<=0) {
+            if (defendingTerritory.getTroops() <= 0) {
 
-                //Check if defending player is killed
+                System.out.println(attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops");
+                System.out.println(attackingTerritory.getName() + " has conquered " + defendingTerritory.getName());
+                territoriesConquered++;
 
                 defendingTerritory.changeOwner(currentPlayer);
                 defendingTerritory.getPlayer().removeTerritories(defendingTerritory);
                 currentPlayer.addTerritories(defendingTerritory);
                 prevOwnerPlayer.removeTerritories(defendingTerritory);
-                System.out.println(attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops");
-                System.out.println(attackingTerritory.getName() + " has conquered " + defendingTerritory.getName());
-                territoriesConquered++;
 
                 //Method to move attacking Troops
                 defendingTerritory.addTroops(attackingTroops);
                 attackingTerritory.removeTroops(attackingTroops);
 
                 //Method to give currentPlayer a new Card if this is it's first attack in the Turn
-                if (territoriesConquered == 1){
+                if (territoriesConquered == 1) {
                     Card newCard = board.getDeck().drawCard();
                     currentPlayer.getHand().addCard(newCard);
                 }
 
-
-                //Remove player from game if killed
                 if (defendingTerritory.getPlayer().getTerritories().isEmpty()) {
+                    //Remove player from game
                     kill(prevOwnerPlayer);
                 }
             }
             else {
                 System.out.println(attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops");
-
-                }
             }
+        }
+
 
         //Defender Wins
         else if(rollResult == -1){
@@ -885,34 +871,31 @@ public class Gameplay {
             defendingTerritory.removeTroops(defendLoss);
 
             if(defendingTerritory.getTroops()<=0) {
+                System.out.println(defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". ");
+                System.out.println(attackingTerritory.getName() +
+                        " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
+                System.out.println(attackingTerritory.getName() + " has conquered " + defendingTerritory.getName());
+                territoriesConquered++;
+
+                defendingTerritory.changeOwner(currentPlayer);
+                defendingTerritory.getPlayer().removeTerritories(defendingTerritory);
+                currentPlayer.addTerritories(defendingTerritory);
+                prevOwnerPlayer.removeTerritories(defendingTerritory);
+
+                //Method to move attacking Troops
+                defendingTerritory.addTroops(attackingTroops);
+                attackingTerritory.removeTroops(attackingTroops);
+
+                //Method to give currentPlayer a new Card if this is it's first attack in the Turn
+                if (territoriesConquered == 1){
+                    Card newCard = board.getDeck().drawCard();
+                    currentPlayer.getHand().addCard(newCard);
+                }
 
                 //Check if defending player is killed
                 if (defendingTerritory.getPlayer().getTerritories().isEmpty()) {
-
-                    System.out.println(defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". ");
-                    System.out.println(attackingTerritory.getName() +
-                            " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
-                    System.out.println(attackingTerritory.getName() + " has conquered " + defendingTerritory.getName());
-                    territoriesConquered++;
-
-                    defendingTerritory.changeOwner(currentPlayer);
-                    defendingTerritory.getPlayer().removeTerritories(defendingTerritory);
-                    currentPlayer.addTerritories(defendingTerritory);
-                    prevOwnerPlayer.removeTerritories(defendingTerritory);
-
-                    //Method to move attacking Troops
-                    defendingTerritory.addTroops(attackingTroops);
-                    attackingTerritory.removeTroops(attackingTroops);
-
-                    //Method to give currentPlayer a new Card if this is it's first attack in the Turn
-                    if (territoriesConquered == 1){
-                        Card newCard = board.getDeck().drawCard();
-                        currentPlayer.getHand().addCard(newCard);
-                    }
-
                     //Remove player from game
                     kill(prevOwnerPlayer);
-
                 }
             }
             else {
@@ -921,9 +904,7 @@ public class Gameplay {
                         " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
 
                 }
-
             }
-
     }
 
 

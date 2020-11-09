@@ -291,14 +291,14 @@ public class Board {
 
         //North America
         territoriesList[0] = new Territory("Alaska");
-        territoriesList[1] = new Territory("NorthWestTerritories");
+        territoriesList[1] = new Territory("NorthWest Territories");
         territoriesList[2] = new Territory("GreenLand");
         territoriesList[3] = new Territory("Alberta");
         territoriesList[4] = new Territory("Ontario");
         territoriesList[5] = new Territory("Quebec");
         territoriesList[6] = new Territory("WestUSA");
         territoriesList[7] = new Territory("EastUSA");
-        territoriesList[8] = new Territory("CentralAmerica");
+        territoriesList[8] = new Territory("Central America");
 
         //South America
         territoriesList[9] = new Territory("Venezuela");
@@ -307,11 +307,11 @@ public class Board {
         territoriesList[12] = new Territory("Argentina");
 
         //Africa
-        territoriesList[13] = new Territory("NorthAfrica");
+        territoriesList[13] = new Territory("North Africa");
         territoriesList[14] = new Territory("Egypt");
-        territoriesList[15] = new Territory("EastAfrica");
+        territoriesList[15] = new Territory("East Africa");
         territoriesList[16] = new Territory("Congo");
-        territoriesList[17] = new Territory("SouthAfrica");
+        territoriesList[17] = new Territory("South Africa");
         territoriesList[18] = new Territory("Madagascar");
 
         //Europe
