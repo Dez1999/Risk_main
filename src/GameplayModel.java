@@ -3,6 +3,7 @@ public class GameplayModel {
     public static final int MAX_DICE = 3;
     private Board board;
     private Player currentPlayer;
+
     private Player nextPlayer;
     private Die die = new Die();
     private twoDice dice2 = new twoDice();
@@ -19,10 +20,13 @@ public class GameplayModel {
     private String attackingTerritoryName;
     private int attackers;
     private String defendingTerritoryName;
+
     private Territory attackingTerritory;
+    private Territory selectedTerritory;
     private Territory defendingTerritory;
 
     private boolean exitAttack = false;  //Come back to this to implement. This is only local variable for attack method
+
     private boolean playerOwnsAttackingTerritory = false; //Check if Attacking Territory can be used
     private boolean targetTerritoryisBordering = false;
     private boolean canAttack = false;
@@ -30,6 +34,57 @@ public class GameplayModel {
     private int territoriesConquered = 0;
 
     private int bonus = 0;
+    boolean gameWon = false;
+    private int i;
+    int userAttackingTroops = 1;
+    private List<GamePlayView> GamePlayView = new ArrayList<>();
+
+
+    private String instructions;
+
+
+
+
+    /** Game Logic*/
+    public boolean isAttackerSelected() {
+        return isAttackerSelected;
+    }
+
+    public void setIsAttackerSelected(boolean attackerSelected) {
+        isAttackerSelected = attackerSelected;
+    }
+
+    private boolean isAttackerSelected = false;
+
+    public boolean isDefenderSelected() {
+        return isDefenderSelected;
+    }
+
+    public void setDefenderSelected(boolean defenderSelected) {
+        isDefenderSelected = defenderSelected;
+    }
+
+    private boolean isDefenderSelected = false;
+
+    public boolean isDiceSelected() {
+        return isDiceSelected;
+    }
+
+    public void setDiceSelected(boolean diceSelected) {
+        isDiceSelected = diceSelected;
+    }
+
+    private boolean isDiceSelected = false;
+
+    public boolean isDeployed() {
+        return isDeployed;
+    }
+
+    public void setDeployed(boolean deployed) {
+        isDeployed = deployed;
+    }
+
+    private boolean isDeployed = false;
 
 
     public GameplayModel() {
@@ -39,96 +94,132 @@ public class GameplayModel {
 
     public void startGame() {
 
-        printWelcome();
+
+
         inputNumberofPlayers();
         this.playersAlive = new ArrayList<Player>();
         InitializePlayers(numPlayers);
         board = new Board(numPlayers);
-        //addInitialTroopstoTerritories(numPlayers);
+
         initializeLand();
-        Scanner s = new Scanner(System.in);
-        System.out.println("welcome to game....");
+
+        //printCommands();
+
+        //Show GameStatus
+        printWelcome();
         printRules();
-        printCommands();
-        boolean gameWon = false;
-
-
         System.out.println("At the start of each turn each player receives 3 or more troops and" +
                 " if you rule a whole continent you will get more bonus troops.");
+
+        //Show GameStatus
         System.out.println("The game will start with Player 1");
 
-        //Start of Player Turn
-        for (int i = 0; i < playersAlive.size(); i++) {
-            bonus = 0; //Reset bonus troops
 
-            /**Sets the currentPlayer*/
-            currentPlayer = getPlayers(i);
-            System.out.println("It is " + "Player " + (i + 1) + "'s turn");
+        i = 1;
+        /**Sets the currentPlayer*/
+        currentPlayer = getPlayers(0);
 
-
-            /**Set Next Player Turn*/
-            if (i == playersAlive.size() - 1) {
-                nextPlayer = getPlayers(0);
-            }
-            if (i != playersAlive.size() - 1) {
-                nextPlayer = getPlayers(i + 1);
-            }
-
-            /**Checks the Players Hand*/
-            for (Card card : currentPlayer.getHand().handList()) {
-                System.out.println("Current Player Hand:" +
-                        card.getTerritoryName() + ": " + card.getClass());
-            }
+        /**Sets Next Player Turn*/
+        nextPlayer = getPlayers(1);
 
 
-            String input;
-            if (currentPlayer.getHand().handList().size() > 2) {
-                System.out.println("Would you like to turn in your Cards? (YES or NO)");
-                input = s.nextLine();   //execute command
-
-                if (input.equals("YES")) {
-                    tradeInCards(true);
-                } else {
-                    System.out.println("You have chosen not to use any cards this turn.");
-                    currentPlayer.getHand().checkCardSet();
-                    boolean istradable = currentPlayer.getHand().canTurnCardsIn();
-                    tradeInCards(istradable); //boolean
-                }
-            }
-
-
-            /**Calculates the bonus troops a player receives */
-            if (currentPlayer.getContinents().size() > 0) {
-                for (int j = 0; j < currentPlayer.getContinents().size(); j++) {
-                    bonus = bonus + currentPlayer.getContinents().get(j).getBonusArmies();
-                }
-                System.out.println("you received" + bonus + "bonus troops for the continents you are holding");
-            }
-            int troopsNewTurn = (currentPlayer.getTerritories().size() / 3) + bonus;
-            System.out.println("Player " + (i + 1) + " receives " + troopsNewTurn + " troops");
-
-
-            /**Method to deploy troops */
-            DeployTroops(troopsNewTurn);
-
-
-            /**Asks the user for a command*/
-            enterCommand();
-
-            //if pass is entered cycle to the next player
-            System.out.println("Player " + (i + 1) + " passes");
-
-            if (i == numPlayers - 1) {
-                i = -1;
-            }
-
-            /** Reset Territories conquered in the current Turn to 0*/
-            territoriesConquered = 0;
-
-            /** Checks the WinnerStatus at the end of each Turn*/
-            WinnerStatus();
-        }
     }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public void addGamePlayView(GamePlayView gpv){
+        GamePlayView.add(gpv);
+
+    }
+
+    public void setUserAttackingTroops(int userAttackingTroops) {
+        this.userAttackingTroops = userAttackingTroops;
+    }
+
+
+    public Player getNextPlayer() {
+        return nextPlayer;
+    }
+
+    public boolean isExitAttack() {
+        return exitAttack;
+    }
+
+    public boolean isPlayerOwnsAttackingTerritory() {
+        return playerOwnsAttackingTerritory;
+    }
+
+    public Territory getSelectedTerritory() {
+        return selectedTerritory;
+    }
+
+    public void setSelectedTerritory(Territory selectedTerritory) {
+        this.selectedTerritory = selectedTerritory;
+    }
+
+    /**
+     * Method: User Deploys Troops
+     */
+    public boolean userDeploysTroops(){
+        //Check Player hand
+        checkPlayerhand();
+
+        //Calculate Troops
+        calculateBonusTroops();
+
+        /**Method to deploy troops */
+        boolean success = deployInTerritory(bonus);
+
+        //Update Map View to show Troops being added. NEED METHOD
+
+        return success;
+    }
+
+    private void checkPlayerhand(){
+        /**Checks the Players Hand*/
+
+        //Show in GameStatus
+        for (Card card : currentPlayer.getHand().handList()) {
+            System.out.println("Current Player Hand:" +
+                    card.getTerritoryName() + ": " + card.getClass());
+        }
+
+        currentPlayer.getHand().checkCardSet();
+        boolean istradable = currentPlayer.getHand().canTurnCardsIn();
+        tradeInCards(istradable); //boolean
+
+    }
+
+    /**Calculates the bonus troops a player receives
+     *
+     */
+    private void calculateBonusTroops() {
+        bonus = 0;
+        if (currentPlayer.getContinents().size() > 0) {
+            for (int j = 0; j < currentPlayer.getContinents().size(); j++) {
+                bonus = bonus + currentPlayer.getContinents().get(j).getBonusArmies();
+            }
+
+            //Put this into GameStatus
+            System.out.println("you received" + bonus + "bonus troops for the continents you are holding");
+        }
+        bonus = (currentPlayer.getTerritories().size() / 3) + bonus;
+
+        //Put this into GameStatus
+        System.out.println(currentPlayer.getName() + " receives " + bonus + " troops");
+    }
+
+
+    /**
+     * Method: Returns board
+     * @return
+     */
+    public Board getBoard() {
+        return board;
+    }
+
 
     /**
      * Method: Removes cards in Players hand
@@ -139,6 +230,8 @@ public class GameplayModel {
         if (istradable) {
             currentPlayer.getHand().removeCards();
             bonus = bonus + 10;
+
+            //Show in GameStatus
             System.out.println("Player's cards have been removed from Hand. Troops were added to Bonus Troops");
         }
     }
@@ -220,7 +313,7 @@ public class GameplayModel {
     public void processCommand(String comm) {
 
         if (comm.equals("PASS")) {
-            nextPlayerTurn();
+            changePlayer();
         } else if (comm.equals("HELP")) {
             printHelp();
         } else if (comm.equals("QUIT")) {
@@ -268,12 +361,6 @@ public class GameplayModel {
 
     }
 
-    /**
-     * Method: Changes the current player turn to the next player turn
-     */
-    private void nextPlayerTurn() {
-        currentPlayer = nextPlayer;
-    }
 
     private void printCommands() {
         System.out.println("THESE ARE THE POSSIBLE COMMANDS:\n" +
@@ -287,13 +374,14 @@ public class GameplayModel {
     }
 
 
-    public void WinnerStatus() {
+    public boolean WinnerStatus() {
+
         if (playersAlive.size() == 1) {
-            System.out.println("Winner!! Winner!!");
-            System.out.println("Player" + playersAlive.get(0).getName() + ", you have conquered the WORLD!");
-            System.out.println("");
-            System.out.println("The game has now ended.");
-            System.exit(0);
+            gameWon = true;
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
@@ -354,7 +442,6 @@ public class GameplayModel {
         return null;
     }
 
-//FIX THIS
 
     /**
      * Sets the amount of initial troops each player can start out with depending on number of players. Also assigns Territory Ownership
@@ -529,16 +616,16 @@ public class GameplayModel {
      *
      * @param newTroops
      */
-    private void DeployTroops(int newTroops) {
-        listTheTerritories(currentPlayer.getTerritories());
-        listTheContinents(currentPlayer.getContinents());
+    public void DeployTroops(int newTroops) {
+        //listTheTerritories(currentPlayer.getTerritories());
+        //listTheContinents(currentPlayer.getContinents());
 
-        System.out.println("Add Troops to:");
+        //System.out.println("Add Troops to:");
 
         deployInTerritory(newTroops);
 
-        listTheTerritories(currentPlayer.getTerritories());
-        System.out.println();
+        //listTheTerritories(currentPlayer.getTerritories());
+        //System.out.println();
         //board.getTer(g).addTroops(1);
     }
 
@@ -547,7 +634,7 @@ public class GameplayModel {
      *
      * @param newTroops
      */
-    private void deployInTerritory(int newTroops) {
+    private boolean deployInTerritory(int newTroops) {
         Scanner s = new Scanner(System.in);
         String addingToTerritory;
         addingToTerritory = s.nextLine();
@@ -556,14 +643,16 @@ public class GameplayModel {
         for (Territory terr : currentPlayer.getTerritories()) {
             if (terr.getName().equals(addingToTerritory)) {//deploying troops if == true
                 int g = stringTerritoryMapping(addingToTerritory, newTroops);
-                return;
+                return true;
             } else if (terr.getName().equals((currentPlayer.getTerritories().get(temp)).getName())) {
+
                 System.out.println("You have entered an invalid Territory");
                 System.out.println("Enter a Territory to deploy troops to");
-                deployInTerritory(newTroops);
-            }
+                return false;
 
+            }
         }
+        return false;
     }
 
     public Player getCurrentPlayer() {
@@ -573,8 +662,8 @@ public class GameplayModel {
     /**
      * This Method needs to be Reviewed
      */
-    private void attack() {
-        Scanner s = new Scanner(System.in);
+    public void attack() {
+        //Scanner s = new Scanner(System.in);
 
         //Check if Current Player Owns Attacking Territory
         checkAttackingOwnership();
@@ -598,29 +687,31 @@ public class GameplayModel {
     /**
      * Method: Chooses number of Attacking Troops to use
      */
-    private void chooseAttackingTroops() {
+    public void chooseAttackingTroops() {
         canAttack = false;
         exitAttack = false;
         Scanner s = new Scanner(System.in);
         int troopsAmount = attackingTerritory.getTroops();  //Returns number of troops in selected Attacking Territory
 
         while (!canAttack && !exitAttack) {
-            System.out.println("Please choose the Number of Troops to Attack with. Press BACK to exit ATTACK phase");
+            //System.out.println("Please choose the Number of Troops to Attack with. Press BACK to exit ATTACK phase");
 
-            String stringword = s.nextLine();
-            if (stringword.equals("BACK")) {
+            //int stringword = s.nextInt();
+
+            if (userAttackingTroops >= 1 && userAttackingTroops <= 3) {
+                attackTroopLogic(userAttackingTroops);
+                //Need to exit while loop if canAttack is true
+
+            } else if (userAttackingTroops > 3) {
+
+                //Show GameStatus
+                System.out.println("You cannot attack with more than 3 troops at one time. Please attack with 1-3 troops.");
                 exitAttack = true;
             } else {
-                int troops = Integer.parseInt(stringword);
 
-                if (troops >= 1 && troops <= 3) {
-                    attackTroopLogic(troops);
-                    //Need to exit while loop if canAttack is true
-                } else if (troops > 3) {
-                    System.out.println("You cannot attack with more than 3 troops at one time. Please attack with 1-3 troops.");
-                } else {
-                    System.out.println("You did not enter the right amount of troops to Attack with");
-                }
+                //Show GameStatus
+                System.out.println("You did not enter the right amount of troops to Attack with");
+                exitAttack = true;
             }
 
         }//End of While loop
@@ -644,10 +735,16 @@ public class GameplayModel {
                 rollDiceSuccess(troops, defendingTroops);
                 canAttack = true;
             } else if (defendingTerritory.getTroops() == 0) {
+
+                //GameStatus
                 System.out.println("ERROR: defending Territory has no troops");
+                exitAttack = true;
             }
         } else {
+
+            //GameStatus
             System.out.println("Attacking Territory does not have enough troops to Attack");
+            exitAttack = true;
 
         }
     }
@@ -829,6 +926,7 @@ public class GameplayModel {
 
             if (defendingTerritory.getTroops() <= 0) {
 
+                //Show GameStatus
                 System.out.println(attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops");
                 System.out.println(attackingTerritory.getName() + " has conquered " + defendingTerritory.getName());
                 territoriesConquered++;
@@ -846,6 +944,9 @@ public class GameplayModel {
                 if (territoriesConquered == 1) {
                     Card newCard = board.getDeck().drawCard();
                     currentPlayer.getHand().addCard(newCard);
+
+                    //Show GameStatus
+                    //Players Receives a new Card
                 }
 
                 if (defendingTerritory.getPlayer().getTerritories().isEmpty()) {
@@ -854,6 +955,8 @@ public class GameplayModel {
                 }
             }
             else {
+
+                //Show GameStatus
                 System.out.println(attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops");
             }
         }
@@ -862,6 +965,8 @@ public class GameplayModel {
         //Defender Wins
         else if(rollResult == -1){
             attackingTerritory.removeTroops(attackLoss);
+
+            //Show GameStatus
             System.out.println(defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops");
         }
 
@@ -871,6 +976,8 @@ public class GameplayModel {
             defendingTerritory.removeTroops(defendLoss);
 
             if(defendingTerritory.getTroops()<=0) {
+
+                //Show GameStatus
                 System.out.println(defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". ");
                 System.out.println(attackingTerritory.getName() +
                         " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
@@ -890,6 +997,9 @@ public class GameplayModel {
                 if (territoriesConquered == 1){
                     Card newCard = board.getDeck().drawCard();
                     currentPlayer.getHand().addCard(newCard);
+
+                    //Show GameStatus
+                    //Player receives a new Card
                 }
 
                 //Check if defending player is killed
@@ -899,6 +1009,8 @@ public class GameplayModel {
                 }
             }
             else {
+
+                //Show GameStatus
                 System.out.println(defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". ");
                 System.out.println(attackingTerritory.getName() +
                         " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
@@ -916,27 +1028,21 @@ public class GameplayModel {
         playersAlive.remove(prevOwnerPlayer);
         playersDead.add(prevOwnerPlayer);
         prevOwnerPlayer.setDead();
+
+        //Show GameStatus
         System.out.println("Player " + prevOwnerPlayer.getName() + " is killed.");
     }
 
     /**
      * Checks if Target is Bordering Attacking Territory
      */
-    private void isTargetBordering() {
+    public void isTargetBordering() {
         exitAttack = false;
         targetTerritoryisBordering = false;
-        Scanner s = new Scanner(System.in);
+        //Scanner s = new Scanner(System.in);
         while (!targetTerritoryisBordering && !exitAttack) {
-            System.out.println("Please choose the Target territory. Press BACK to exit attack phase");
-            String Target = s.nextLine();
-
-            defendingTerritory = mapper(Target);
-
-            //Check if word Entered is equal to BACK
-            if (Target.equals("BACK")){
-                exitAttack = true;
-            }
-            else {
+            //System.out.println("Please choose the Target territory. Press BACK to exit attack phase");
+            //String Target = s.nextLine();
 
                 //Check Target territory is bordering Attacking Territory and Not currentPlayers Territory
                 if (defendingTerritory.getPlayer() != currentPlayer) {
@@ -949,42 +1055,37 @@ public class GameplayModel {
 
                 //Check if currentPlayer owns Target Territory. THIS MIGHT NOT BE NEEDED FOR GUI
                 else if (defendingTerritory.getPlayer() == currentPlayer) {
-                    System.out.println("You own this Territory. You must choose a Territory you don't own");
+                    targetTerritoryisBordering = false;
+                    exitAttack = true;
                 }
 
                 //Check if TargetTerrirtory is not bordering Attacking territory
                 else {
                     for (Territory borderterr : attackingTerritory.getBorderTerritories()) {
                         if (borderterr != defendingTerritory) {
-                            System.out.println(Target + " is NOT Bordering " + attackingTerritory.getName());
+                            exitAttack = true;
                         }
                     }
                 }
-            }
+
         } //End of While Loop
     }
 
     /**
      * Method: Checks if currentPlayer Owns Attacking Territory
      */
-    private void checkAttackingOwnership() {
+    public void checkAttackingOwnership() {
         exitAttack = false;
         playerOwnsAttackingTerritory = false;
-        Scanner s = new Scanner(System.in);
+        //Scanner s = new Scanner(System.in);
         while (!playerOwnsAttackingTerritory && !exitAttack) {
-            System.out.println("Please choose the attacking territory. Press BACK to exit attack method");
-            String userInput = s.nextLine();
-            //attackingTerritoryName = userInput;
-            attackingTerritory = mapper(userInput);
+            //System.out.println("Please choose the attacking territory. Press BACK to exit attack method");
 
-            if (userInput.equals("BACK")){
+            if(attackingTerritory.getPlayer() != currentPlayer){
                 exitAttack = true;
-            }
-            else if(attackingTerritory.getPlayer() != currentPlayer){
-                System.out.println("You must own the attacking Territory");
+                //System.out.println("You must own the attacking Territory");
 
             }
-
             //Check if current player owns AttackingTerritory
             else if (attackingTerritory.getPlayer() == currentPlayer) {
                 playerOwnsAttackingTerritory = true;
@@ -992,8 +1093,67 @@ public class GameplayModel {
         }
     }
 
+    public void setAttackingTerritory(Territory attackingTerritory) {
+        this.attackingTerritory = attackingTerritory;
+    }
+
+    public void setDefendingTerritory(Territory defendingTerritory) {
+        this.defendingTerritory = defendingTerritory;
+    }
+
     public static void main(String[] args) {
         GameplayModel gamePlayModel = new GameplayModel();
+    }
+
+
+    /**THIS NEEDS TO BE REFINED*/
+    public void changePlayer() {
+
+        //for (int i = 0; i < playersAlive.size(); i++) {
+          //  bonus = 0; //Reset bonus troops
+
+        /**Sets the currentPlayer*/
+        currentPlayer = nextPlayer;
+
+        //Show in GameStatus
+        //System.out.println("It is " + currentPlayer.getName() + "'s turn");
+
+        /**Set Next Player Turn*/
+        if (getPlayers(playersAlive.size() -1) == currentPlayer) {
+            nextPlayer = getPlayers(0);
+            i = 0;
+        }
+        else if (getPlayers(playersAlive.size() -1) != currentPlayer) {
+            i++;
+            nextPlayer = getPlayers(i);
+        }
+
+        /*Reset Territories conquered in the current Turn to 0*/
+        territoriesConquered = 0;
+    }
+
+    /**
+     * Method: Shows gameStatus in JLabel
+     */
+    public void gameStatus(){
+        //Shows currentPlayer's turn
+        //Shows currentPlayer's Hand
+        //Shows extra message to show User
+        String tellUser = instructions;
+
+        //Add Instructions
+        //Check to see if the player is the correct one
+
+        for (GamePlayView tttv: GamePlayView)
+            tttv.handleGamePlayUpdate(new GamePlayEvent(this, currentPlayer, currentPlayer.getHand(), currentPlayer.getName()));
+    }
+
+    /**
+     * Method: UpDates View Board Status
+     */
+    public void updateBoardStatus(){
+        //updates Board with correct Territory Names, Owner Names, Troop Count
+
     }
 
 }

@@ -1,24 +1,32 @@
+import java.util.ArrayList;
 import java.util.EventObject;
 
 public class GamePlayEvent extends EventObject {
-    private Board gamePlayBoard;
-   // private int x;
-   // private int y;
+    private Player currentPlayer;
+    private Hand playerHand;
+    private String playerName;
+    private ArrayList<Territory> territories;
+    private ArrayList<Continent> continents;
 
-    public GamePlayEvent(GameplayModel gameModel) {//(, TicTacToeModel.Status status, int x, int y))
+    private String instruction;
+
+    public GamePlayEvent(GameplayModel gameModel, Player currentPlayer, Hand playerHand, String playername) {//(, TicTacToeModel.Status status, int x, int y))
         super(gameModel);
-      // this.status = status;
-        //this.x = x;
-        //this.y = y;
+        this.currentPlayer = currentPlayer;
+        this.playerHand = playerHand;
+        this.playerName = playername;
+
     }
 
-   // public TicTacToeModel.Status getStatus(){
-    //    return status;
-    //}
-    //public int getX(){
-     //   return this.x;
-    //}
-    //public int getY(){
-      //  return this.y;
-    //}
+   public Hand getPlayerHand(){
+        return playerHand;
+    }
+
+    public Player getcurrentPlayer(){
+        return currentPlayer;
+    }
+
+    public String getPlayerName(){
+        return playerName;
+    }
 }
