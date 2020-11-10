@@ -64,8 +64,19 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         gpm.setInstructions(gpm.printWelcome() + gpm.printRules() + "At the start of each turn each player receives 3 or more troops and" +
                 " if you rule a whole continent you will get more bonus troops.");
         gpm.gameStatus();
-        gpm.setInstructions("Player 0 begins the Game. Please choose the Territory to Deploy Troops to");
+        gpm.setInstructions("Player 1 begins the Game. Please choose the Territory to Deploy Troops to");
         gpm.gameStatus();
+
+        String territories = "Player 1";
+
+        for (Territory terr : gpm.getCurrentPlayer().getTerritories()) {
+            System.out.println(terr.getName() + "Player 1: Troops = " + terr.getTroops());
+            territories = territories + "\n " + terr.getName() + ": Troops = " + terr.getTroops();
+        }
+
+        JOptionPane.showInternalMessageDialog(null, territories,
+                "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
+
         //GameStatus.setText("This is where we will have the status");
         this.add(LabelPanel);
         this.add(next);

@@ -102,11 +102,11 @@ public class GamePlayController implements ActionListener {
                     else { //Defending Territory was successfully selected
 
                         //Show in GameStatus
-                        gpm.setInstructions("Choose the Number of Troops to Attack with (1 to 3 Troops");
+                        gpm.setInstructions("Choose the Number of Dice to Attack with (1 to 3 Dice");
                         gpm.gameStatus();
 
                         //Pop-up Window to have user select the # of troops
-                        int userTroops = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Attacking Troops. Only choose values 1-3:"));
+                        int userTroops = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Dice to use. Only choose values 1-3:"));
                         //Get user input number and save it then run method below:
                         gpm.setUserAttackingTroops(userTroops);
                         gpm.chooseAttackingTroops();
@@ -114,7 +114,7 @@ public class GamePlayController implements ActionListener {
                         if(gpm.isExitAttack()){
 
                             //Show in GameStatus
-                            gpm.setInstructions("You must choose the correct amount of Troops. Please choose the Attacking Territory");
+                            gpm.setInstructions("You must choose the correct amount of Dice. Please choose the Attacking Territory");
                             gpm.gameStatus();
                             next = 0;
                         }
@@ -151,14 +151,25 @@ public class GamePlayController implements ActionListener {
         }
 
         //Next Button is Selected. Change Player and start to deploy Troops
-        else if(e.getActionCommand().equals("Next")){
+        else if(e.getActionCommand().equals("next")){
             JOptionPane.showMessageDialog(parent, "Your turn is now Over");
 
             //Show GameStatus
-            gpm.setInstructions(gpm.getCurrentPlayer().getName() + " has passed their Turn."+ gpm.getNextPlayer() + " is up Next. Please choose the Territory to add Troops to");
+            gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " has passed their Turn. Player "+ gpm.getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
             gpm.gameStatus();
             gpm.changePlayer();  //This is good
             gpm.gameStatus();
+
+            String territories = null;
+
+            for (Territory terr : gpm.getCurrentPlayer().getTerritories()) {
+                System.out.println(terr.getName() + ": Troops = " + terr.getTroops());
+                territories = territories + "\n " + terr.getName() + ": Troops = " + terr.getTroops();
+            }
+
+            JOptionPane.showInternalMessageDialog(null, territories,
+                    "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
+
             next = -1;
         }
 

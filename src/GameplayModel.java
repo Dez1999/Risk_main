@@ -193,7 +193,9 @@ public class GameplayModel {
             }
 
             //Put this into GameStatus
-            instructions = ("you received" + bonus + "bonus troops for the continents you are holding");
+            JOptionPane.showInternalMessageDialog(null, "You received " + bonus + " bonus troops for the continents you are holding",
+                    "Bonus Troops", JOptionPane.INFORMATION_MESSAGE);
+            //instructions = ("you received" + bonus + "bonus troops for the continents you are holding");
         }
         bonus = (currentPlayer.getTerritories().size() / 3) + bonus;
         // "" + currentPlayer.getName() + " receives " + bonus + " troops"
@@ -223,7 +225,9 @@ public class GameplayModel {
             bonus = bonus + 10;
 
             //Show in GameStatus
-            System.out.println("Player's cards have been removed from Hand. Troops were added to Bonus Troops");
+            JOptionPane.showInternalMessageDialog(null, "Player's cards have been removed from Hand. Troops were added to Bonus Troops",
+                    "Card Hand In", JOptionPane.INFORMATION_MESSAGE);
+            //System.out.println("Player's cards have been removed from Hand. Troops were added to Bonus Troops");
         }
     }
 
@@ -270,7 +274,7 @@ public class GameplayModel {
      */
     public void InitializePlayers(int num) {
         for (int i = 0; i < num; i++) {
-            String str1 = Integer.toString(i);
+            String str1 = Integer.toString(i + 1);
             playersAlive.add(new Player(str1));
             System.out.println("player" + playersAlive.get(i).getName());
         }
@@ -350,6 +354,7 @@ public class GameplayModel {
     //NOT BEING USED?
     private void getGameStatus() {
         //Prints all Territories: Territory : Name, Troops : int, PlayerOwnerShip : player
+        String playerstatus;
         for (Territory territory1 : board.getTerritoriesList()) {
             System.out.println(territory1.getName() + "-> Troops : " + territory1.getTroops() + ", Owner: Player " + territory1.getPlayer().getName());
         }
@@ -713,12 +718,15 @@ public class GameplayModel {
             } else if (userAttackingTroops > 3) {
 
                 //Show GameStatus
-                System.out.println("You cannot attack with more than 3 troops at one time. Please attack with 1-3 troops.");
+
+                JOptionPane.showInternalMessageDialog(null, "You cannot attack with more than 3 dice at one time. Please attack with 1-3 dice.",
+                        "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
                 exitAttack = true;
             } else {
 
                 //Show GameStatus
-                System.out.println("You did not enter the right amount of troops to Attack with");
+                JOptionPane.showInternalMessageDialog(null, "You did not enter the right amount of Dice to Attack with",
+                        "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
                 exitAttack = true;
             }
 
@@ -751,7 +759,10 @@ public class GameplayModel {
         } else {
 
             //GameStatus
+            JOptionPane.showInternalMessageDialog(null, "Attacking Territory does not have enough troops to Attack",
+                    "Number of Troops", JOptionPane.INFORMATION_MESSAGE);
             System.out.println("Attacking Territory does not have enough troops to Attack");
+
             exitAttack = true;
 
         }
@@ -934,7 +945,12 @@ public class GameplayModel {
 
             if (defendingTerritory.getTroops() <= 0) {
 
+
                 //Show GameStatus
+                JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops" +
+                                attackingTerritory.getName() + " has conquered " + defendingTerritory.getName(),
+                        "Attacking Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
+
                 System.out.println(attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops");
                 System.out.println(attackingTerritory.getName() + " has conquered " + defendingTerritory.getName());
                 territoriesConquered++;
@@ -965,6 +981,8 @@ public class GameplayModel {
             else {
 
                 //Show GameStatus
+                JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops",
+                        "Attacking Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println(attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops");
             }
         }
@@ -975,6 +993,8 @@ public class GameplayModel {
             attackingTerritory.removeTroops(attackLoss);
 
             //Show GameStatus
+            JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops",
+                    "Defending Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
             System.out.println(defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops");
         }
 
@@ -986,6 +1006,12 @@ public class GameplayModel {
             if(defendingTerritory.getTroops()<=0) {
 
                 //Show GameStatus
+
+                JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
+                                attackingTerritory.getName() +
+                                " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops. Territory Conquered",
+                        "Territory Conquered", JOptionPane.INFORMATION_MESSAGE);
+
                 System.out.println(defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". ");
                 System.out.println(attackingTerritory.getName() +
                         " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
@@ -1019,6 +1045,10 @@ public class GameplayModel {
             else {
 
                 //Show GameStatus
+                JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
+                                attackingTerritory.getName() +
+                                " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops",
+                        "Battle Tied", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println(defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". ");
                 System.out.println(attackingTerritory.getName() +
                         " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
@@ -1038,6 +1068,8 @@ public class GameplayModel {
         prevOwnerPlayer.setDead();
 
         //Show GameStatus
+        JOptionPane.showInternalMessageDialog(null, "Player " + prevOwnerPlayer.getName() + " is killed.",
+                "Player is Killed", JOptionPane.INFORMATION_MESSAGE);
         System.out.println("Player " + prevOwnerPlayer.getName() + " is killed.");
     }
 
