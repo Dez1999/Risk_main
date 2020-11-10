@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * @author Peter, Des
+ */
 public class GamePlayFrame extends JFrame implements GamePlayView{
     private JButton[][] AfFirstbuttons;
     private JButton[][] AfSecondbuttons;
@@ -32,6 +35,10 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private JPanel LabelPanel = new JPanel();
     private JButton NewZealand;
     private JButton next = new JButton("next");
+
+    /**
+     * Setting up a frame for the game board layout.
+     */
     public GamePlayFrame(){
         super("Risk Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,7 +56,6 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
                 b.addActionListener(gpc);
                 b.setActionCommand(i + "" + j);
                 Africa.add(b);
-
             }
         }*/
         next.addActionListener(gpc);
@@ -94,6 +100,10 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
     }
 
+    /**
+     *Handles game instructions and player name updating for every game play event
+     * @param e
+     */
     @Override
     public void handleGamePlayUpdate(GamePlayEvent e ) {
         //  int x = e.getX();
@@ -110,6 +120,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         GameStatus.setText(output);
 
     }
+
+    /**
+     *Madagascar GUI setup
+     * @param gpc
+     */
     private  void MadagascarSetup(ActionListener gpc){
         Madagascar = new JButton("Madagascar");
         Madagascar.setPreferredSize((new Dimension(110,110)));
@@ -117,6 +132,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         Madagascar.setActionCommand("Madagascar");
         this.add(Madagascar);
     }
+
+    /**
+     * Japan GUI setup
+     * @param gpc
+     */
     private void JapanSetup(ActionListener gpc){
         Japan = new JButton("Japan");
         Japan.setPreferredSize(new Dimension( 100 ,50 ));
@@ -125,12 +145,22 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.add(Japan);
 
     }
+
+    /**
+     *NewZealand GUI setup
+     * @param gpc
+     */
     private void NewZealandSetup(ActionListener gpc){
         NewZealand = new JButton("NewZealand");
         NewZealand.setPreferredSize(new Dimension( 120 ,80 ));
         NewZealand.addActionListener(gpc);
         NewZealand.setActionCommand("NewZealand");
         this.add(NewZealand);}
+
+    /**
+     * extra GUI elements
+     * @param gpc
+     */
     private void extraSetup(ActionListener gpc){
         JPanel extra = new JPanel();
         extra.setLayout(new GridLayout(3,1));
@@ -170,12 +200,21 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
 
     }
+
+    /**
+     *Background GUI setup
+     */
     private void uselessSetup(){
         JPanel useless = new JPanel();
         useless.setPreferredSize(new Dimension(100 , 100));
         useless.setBackground(Color.BLUE);
         this.add(useless);
     }
+
+    /**
+     * Australia GUI Setup
+     * @param gpc
+     */
     private void AustraliaSetUp(ActionListener gpc){
         JPanel Australia = new JPanel();
         Australia.setLayout(new GridLayout(3,1));
@@ -219,6 +258,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.add(Australia);
 
     }
+
+    /**
+     *Asia GUI Setup
+     * @param gpc
+     */
     private void AsiaSetup(ActionListener gpc){
         JPanel Asia = new JPanel();
         Asia.setLayout(new GridLayout(3 ,1));
@@ -278,6 +322,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.add(Asia);
 
     }
+
+    /**
+     * Europe GUI Setup
+     * @param gpc
+     */
     private void EuropeSetup(ActionListener gpc){
         JPanel Europe = new JPanel();
         Europe.setLayout(new GridLayout(3,1));
@@ -336,6 +385,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         Europe.add(ElastPanel);
         this.add(Europe);
     }
+
+    /**
+     *North America GUI setup
+     * @param gpc
+     */
     private void NorthAmericaSetup(ActionListener gpc){
         JPanel northAmerica = new JPanel();
         northAmerica.setLayout(new GridLayout(4,1));
@@ -415,6 +469,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         northAmerica.add(NaLastbutton);
         this.add(northAmerica );
     }
+
+    /**
+     *South America GUI setup
+     * @param gpc
+     */
     private void SouthAmericaSetUp(ActionListener gpc){
         JPanel southAmerica = new JPanel();
         southAmerica.setLayout(new GridLayout(3,1));
@@ -449,6 +508,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.add(southAmerica );
 
     }
+
+    /**
+     *Africa GUI setup
+     * @param gpc
+     */
     private void AfricaSetUp(ActionListener gpc){
         JPanel Africa = new JPanel();
         Africa.setLayout(new GridLayout(3,1));
@@ -498,6 +562,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         this.add(Africa );
     }
+
+    /**
+     *main method for initializing the frame.
+     * @param args
+     */
     public static void main(String[] args){
         new GamePlayFrame();
     }

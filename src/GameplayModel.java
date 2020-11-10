@@ -167,7 +167,7 @@ public class GameplayModel {
         return success;
     }
 
-    private void checkPlayerhand(){
+    void checkPlayerhand(){
         /**Checks the Players Hand*/
 
         //Show in GameStatus
@@ -390,10 +390,17 @@ public class GameplayModel {
     //}
 
 
+    /**
+     * current player quits the game
+     */
     private void quit() {
         removePlayer(currentPlayer);
     }
 
+    /**
+     * Prints out rules in textbased version of game and returns them to be used in GUI.
+     * @return String rules
+     */
     public String printRules() {
         System.out.println
                 ("Rules \n" +
@@ -668,12 +675,30 @@ public class GameplayModel {
         return false;
     }
 
+    /**
+     * gets current player
+     * @return Player
+     */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
+    //for testing
+    public void setBoard(int x){
+        board = new Board(x);
+    }
+
+    //testing
+    public void setNumPlayers(int in){
+        this.numPlayers = in;
+    }
+
+    public void setPlayersAlive(){
+        this.playersAlive = new ArrayList<Player>();
+    }
+
     /**
-     * This Method needs to be Reviewed
+     * Currently unused in GUI implementation.
      */
     public void attack() {
         //Scanner s = new Scanner(System.in);
@@ -934,6 +959,14 @@ public class GameplayModel {
         }
     }
 
+    /**
+     * calculate the outcome of an attack and remove troops from losing territory. This method also handles the transfer of ownership for a territory
+     * and hands out territory cards by calling helper methods.
+     * @param rollResult
+     * @param attackLoss
+     * @param defendLoss
+     * @param attackingTroops
+     */
     private void attackOutcome(int rollResult, int attackLoss, int defendLoss, int attackingTroops) {
         //setTroops
         Player prevOwnerPlayer = defendingTerritory.getPlayer();
@@ -1147,6 +1180,9 @@ public class GameplayModel {
 
 
     /**THIS NEEDS TO BE REFINED*/
+    /**
+     *  changes current player turn
+     */
     public void changePlayer() {
 
         //for (int i = 0; i < playersAlive.size(); i++) {

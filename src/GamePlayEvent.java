@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.EventObject;
 
+/**
+ @author  Raul, Des, Peter
+ */
 public class GamePlayEvent extends EventObject {
     private Player currentPlayer;
     private Hand playerHand;
@@ -24,18 +27,34 @@ public class GamePlayEvent extends EventObject {
 
     }
 
+    /**
+     *  gets current player Hand object
+     * @return Hand
+     */
    public Hand getPlayerHand(){
         return playerHand;
     }
 
+    /**
+     * gets current player
+     * @return Player
+     */
     public Player getcurrentPlayer(){
         return currentPlayer;
     }
 
+    /**
+     * gets selected player Name field
+      * @return String
+     */
     public String getPlayerName(){
         return playerName;
     }
 
+    /**
+     * gets Instructions
+     * @return String
+     */
     public String getInstructions() {
         return instructions;
     }

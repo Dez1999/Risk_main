@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * @author Des, Peter, Raul
+ */
 public class GamePlayController implements ActionListener {
     private GameplayModel gpm;
     private int next;
@@ -23,6 +26,11 @@ public class GamePlayController implements ActionListener {
         return next;
     }
 
+    /**
+     * responds to actions performed by user and also handles player turn phases.
+     * ie; deploy, attack...etc
+     * @param e
+     */
 
     @Override
     public void actionPerformed(ActionEvent e) {
