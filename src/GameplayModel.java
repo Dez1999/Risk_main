@@ -1232,4 +1232,7 @@ public class GameplayModel {
 
     }
 
+    public void setNextPlayer(Player player) {
+        this.nextPlayer = player;
+    }
 }
