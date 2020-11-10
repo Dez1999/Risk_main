@@ -4,6 +4,9 @@ Java implementation of a basic GUI for the risk game
 
 version 2  of the Game 
 
+Note to User:
+•	The GUI was tested in an environment where the size of the monitor was atleast 24”. On a smaller screen, such as a laptop, the user won’t be able to see the whole board and play the game. Thus, the testing should be done on a larger monitor if you have access to one. We are currently working on allowing our game to be adjustable for all devices.
+
 Troops.java 
 is a super class for different types of armies and for the wildCard 
 so we can assign different armies or wildCard to cards clasa
