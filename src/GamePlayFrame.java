@@ -60,7 +60,13 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         LabelPanel.setPreferredSize(new Dimension(1400 , 50));
         LabelPanel.setBackground(Color.YELLOW);
         LabelPanel.add(GameStatus);
-        GameStatus.setText("This is where we will have the statusdsg");
+        //Show GameStatus
+        gpm.setInstructions(gpm.printWelcome() + gpm.printRules() + "At the start of each turn each player receives 3 or more troops and" +
+                " if you rule a whole continent you will get more bonus troops.");
+        gpm.gameStatus();
+        gpm.setInstructions("Player 0 begins the Game. Please choose the Territory to Deploy Troops to");
+        gpm.gameStatus();
+        //GameStatus.setText("This is where we will have the status");
         this.add(LabelPanel);
         this.add(next);
         NorthAmericaSetup(gpc);
@@ -84,12 +90,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         e.getcurrentPlayer();
 
         int handsize = e.getPlayerHand().handList().size();
-
         e.getPlayerName();
+        e.getInstructions();
 
         GameplayModel gpm = (GameplayModel) e.getSource();
         String output = null;
-        output = "Current Player: " + e.getPlayerName() + ".Number of cards: " + handsize;  //ADD later: Instructions and Outcome
+        output = "Current Player: " + e.getPlayerName() + ". Number of cards: " + handsize + ". " + e.getInstructions();  //ADD later: Instructions and Outcome
         GameStatus.setText(output);
 
     }

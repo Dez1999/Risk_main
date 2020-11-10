@@ -1,7 +1,9 @@
+import javax.swing.*;
 import java.util.*;
 public class GameplayModel {
     public static final int MAX_DICE = 3;
     private Board board;
+
     private Player currentPlayer;
 
     private Player nextPlayer;
@@ -91,29 +93,18 @@ public class GameplayModel {
         startGame();
     }
 
-
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
     public void startGame() {
-
-
 
         inputNumberofPlayers();
         this.playersAlive = new ArrayList<Player>();
         InitializePlayers(numPlayers);
         board = new Board(numPlayers);
-
         initializeLand();
 
         //printCommands();
-
-        //Show GameStatus
-        printWelcome();
-        printRules();
-        System.out.println("At the start of each turn each player receives 3 or more troops and" +
-                " if you rule a whole continent you will get more bonus troops.");
-
-        //Show GameStatus
-        System.out.println("The game will start with Player 1");
-
 
         i = 1;
         /**Sets the currentPlayer*/
@@ -121,7 +112,6 @@ public class GameplayModel {
 
         /**Sets Next Player Turn*/
         nextPlayer = getPlayers(1);
-
 
     }
 
@@ -203,12 +193,13 @@ public class GameplayModel {
             }
 
             //Put this into GameStatus
-            System.out.println("you received" + bonus + "bonus troops for the continents you are holding");
+            instructions = ("you received" + bonus + "bonus troops for the continents you are holding");
         }
         bonus = (currentPlayer.getTerritories().size() / 3) + bonus;
+        // "" + currentPlayer.getName() + " receives " + bonus + " troops"
 
         //Put this into GameStatus
-        System.out.println(currentPlayer.getName() + " receives " + bonus + " troops");
+        gameStatus();
     }
 
 
@@ -240,28 +231,32 @@ public class GameplayModel {
     /**
      * Method: Prints the Welcome message to the users
      */
-    private void printWelcome() {
+    String printWelcome() {
         System.out.println();
         System.out.println("Welcome to Risk!");
         System.out.println("Everybody wants to rule the world!");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
+        return "Welcome to Risk!" + "Everybody wants to rule the world!" + "Type 'help' if you need help.";
     }
 
     /**
      * Method: Method regarding the number of players
      */
     public void inputNumberofPlayers() {
-        System.out.println("Please choose how many players 2-6");
+
+        // System.out.println("Please choose how many players 2-6");
+        int inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
+        //Get user input number and save it then run method below:
         try {
-            Scanner scan = new Scanner(System.in);
-            int num = 0;
+            //Scanner scan = new Scanner(System.in);
+            //int num = 0;
             do {
-                System.out.print(">");
-                num = scan.nextInt();
-                if (!(num >= 1 && num <= 7)) System.out.println("Sorry, only 2-6 is Valid.");
-            } while (!(num >= 2 && num <= 6));
-            numPlayers = num;
+                //System.out.print(">");
+                //num = scan.nextInt();
+                if (!(inputPlayersplaying >= 1 && inputPlayersplaying <= 7)) inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
+            } while (!(inputPlayersplaying >= 2 && inputPlayersplaying <= 6));
+            numPlayers = inputPlayersplaying;
         } catch (Exception e) {
             System.out.println("Sorry, only 2-6 players are allowed");
             inputNumberofPlayers();
@@ -352,6 +347,7 @@ public class GameplayModel {
     }
 
     //FIX This: print each players own Territories. Each territory has player owner
+    //NOT BEING USED?
     private void getGameStatus() {
         //Prints all Territories: Territory : Name, Troops : int, PlayerOwnerShip : player
         for (Territory territory1 : board.getTerritoriesList()) {
@@ -393,7 +389,7 @@ public class GameplayModel {
         removePlayer(currentPlayer);
     }
 
-    public void printRules() {
+    public String printRules() {
         System.out.println
                 ("Rules \n" +
                         "1. The winner is the first player to eliminate every opponent by " +
@@ -409,6 +405,18 @@ public class GameplayModel {
                         "dice you rolled in your last attack.\n" +
                         "                                  "
                 );
+        return "Rules \n" +
+                "1. The winner is the first player to eliminate every opponent by " +
+                "capturing all 42 territories on the board.\n"
+                + "2. You can only attack a country that is adjacent to a country you control.\n"
+                + "3. At the start of each turn you will receive at least 3 armies or the # of territories " +
+                "you own divided by 3 (which ever one is higher).\n"
+                + "4. You can only attack a country if you own at least 2 armies in the attacking country.\n"
+                + "5. When attacking the person who is attacking can choose to roll up to 3 dice.\n"
+                + "6. The person defending can roll up to 2 dice but must have at least 2 armies in the " +
+                "defending country (if not they can only roll one dice).\n"
+                + "7. When you capture a territory, you must move at least as many armies as " +
+                "dice you rolled in your last attack.\n" ;
     }
 
 
@@ -635,14 +643,14 @@ public class GameplayModel {
      * @param newTroops
      */
     private boolean deployInTerritory(int newTroops) {
-        Scanner s = new Scanner(System.in);
-        String addingToTerritory;
-        addingToTerritory = s.nextLine();
+        //Scanner s = new Scanner(System.in);
+        //String addingToTerritory;
+        //addingToTerritory = s.nextLine();
         int temp = currentPlayer.getTerritories().size() - 1; // store last element in dynamic array
 
         for (Territory terr : currentPlayer.getTerritories()) {
-            if (terr.getName().equals(addingToTerritory)) {//deploying troops if == true
-                int g = stringTerritoryMapping(addingToTerritory, newTroops);
+            if (terr.getName().equals(selectedTerritory.getName())) {//deploying troops if == true
+                int g = stringTerritoryMapping(selectedTerritory.getName(), newTroops);
                 return true;
             } else if (terr.getName().equals((currentPlayer.getTerritories().get(temp)).getName())) {
 
@@ -1015,8 +1023,8 @@ public class GameplayModel {
                 System.out.println(attackingTerritory.getName() +
                         " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
 
-                }
             }
+        }
     }
 
 
@@ -1044,29 +1052,29 @@ public class GameplayModel {
             //System.out.println("Please choose the Target territory. Press BACK to exit attack phase");
             //String Target = s.nextLine();
 
-                //Check Target territory is bordering Attacking Territory and Not currentPlayers Territory
-                if (defendingTerritory.getPlayer() != currentPlayer) {
-                    for (Territory borderterr : attackingTerritory.getBorderTerritories()) {
-                        if (borderterr == defendingTerritory) {
-                            targetTerritoryisBordering = true;
-                        }
+            //Check Target territory is bordering Attacking Territory and Not currentPlayers Territory
+            if (defendingTerritory.getPlayer() != currentPlayer) {
+                for (Territory borderterr : attackingTerritory.getBorderTerritories()) {
+                    if (borderterr == defendingTerritory) {
+                        targetTerritoryisBordering = true;
                     }
                 }
+            }
 
-                //Check if currentPlayer owns Target Territory. THIS MIGHT NOT BE NEEDED FOR GUI
-                else if (defendingTerritory.getPlayer() == currentPlayer) {
-                    targetTerritoryisBordering = false;
-                    exitAttack = true;
-                }
+            //Check if currentPlayer owns Target Territory. THIS MIGHT NOT BE NEEDED FOR GUI
+            else if (defendingTerritory.getPlayer() == currentPlayer) {
+                targetTerritoryisBordering = false;
+                exitAttack = true;
+            }
 
-                //Check if TargetTerrirtory is not bordering Attacking territory
-                else {
-                    for (Territory borderterr : attackingTerritory.getBorderTerritories()) {
-                        if (borderterr != defendingTerritory) {
-                            exitAttack = true;
-                        }
+            //Check if TargetTerrirtory is not bordering Attacking territory
+            else {
+                for (Territory borderterr : attackingTerritory.getBorderTerritories()) {
+                    if (borderterr != defendingTerritory) {
+                        exitAttack = true;
                     }
                 }
+            }
 
         } //End of While Loop
     }
@@ -1110,7 +1118,7 @@ public class GameplayModel {
     public void changePlayer() {
 
         //for (int i = 0; i < playersAlive.size(); i++) {
-          //  bonus = 0; //Reset bonus troops
+        //  bonus = 0; //Reset bonus troops
 
         /**Sets the currentPlayer*/
         currentPlayer = nextPlayer;
@@ -1145,7 +1153,7 @@ public class GameplayModel {
         //Check to see if the player is the correct one
 
         for (GamePlayView tttv: GamePlayView)
-            tttv.handleGamePlayUpdate(new GamePlayEvent(this, currentPlayer, currentPlayer.getHand(), currentPlayer.getName()));
+            tttv.handleGamePlayUpdate(new GamePlayEvent(this, currentPlayer, currentPlayer.getHand(), currentPlayer.getName(),instructions));
     }
 
     /**

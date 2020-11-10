@@ -8,13 +8,19 @@ public class GamePlayEvent extends EventObject {
     private ArrayList<Territory> territories;
     private ArrayList<Continent> continents;
 
+
+
+    private String instructions;
+
+
     private String instruction;
 
-    public GamePlayEvent(GameplayModel gameModel, Player currentPlayer, Hand playerHand, String playername) {//(, TicTacToeModel.Status status, int x, int y))
+    public GamePlayEvent(GameplayModel gameModel, Player currentPlayer, Hand playerHand, String playername, String instruction) {//(, TicTacToeModel.Status status, int x, int y))
         super(gameModel);
         this.currentPlayer = currentPlayer;
         this.playerHand = playerHand;
         this.playerName = playername;
+        this.instructions = instruction;
 
     }
 
@@ -28,5 +34,9 @@ public class GamePlayEvent extends EventObject {
 
     public String getPlayerName(){
         return playerName;
+    }
+
+    public String getInstructions() {
+        return instructions;
     }
 }
