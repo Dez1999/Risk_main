@@ -1,5 +1,12 @@
 import javax.swing.*;
 import java.util.*;
+
+/**
+ * Class GamePlay
+ *
+ * @authors: Desmond, Peter, Raul
+ */
+
 public class GameplayModel {
     public static final int MAX_DICE = 3;
     private Board board;
