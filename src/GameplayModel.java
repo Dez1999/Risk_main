@@ -865,6 +865,7 @@ public class GameplayModel {
         int attackLoss = 0;
         int defendLoss = 0;
         int attackingTroops = attackingDice;
+        int defendingTroops = defendingDice;
 
 
         //1 Attacking Dice
@@ -895,7 +896,7 @@ public class GameplayModel {
                 } else {
                     attackLoss = 1;
                     defendLoss = 0;
-                    attackOutcome(1, attackLoss, defendLoss, attackingTroops);
+                    attackOutcome(-1, attackLoss, defendLoss, attackingTroops);
                 }
             }
         }
