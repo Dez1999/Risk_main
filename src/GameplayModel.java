@@ -1,5 +1,7 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Class GamePlay
@@ -34,7 +36,7 @@ public class GameplayModel {
     private Territory selectedTerritory;
     private Territory defendingTerritory;
 
-    private boolean exitAttack = false;  //Come back to this to implement. This is only local variable for attack method
+    private boolean exitAttack = false;  //This is global variable for attack method
 
     private boolean playerOwnsAttackingTerritory = false; //Check if Attacking Territory can be used
     private boolean targetTerritoryisBordering = false;
@@ -50,6 +52,17 @@ public class GameplayModel {
 
 
     private String instructions;
+
+    private static String RED = "RED";
+    private static String GRAY = "GRAY";
+    private static String GREEN = "GREEN";
+    private static String PINK = "PINK";
+    private static String YELLOW = "YELLOW";
+    private static String ORANGE = "ORANGE";
+    private ArrayList<String> colorList;
+    private Color playerColor;
+
+
 
 
 
@@ -105,6 +118,7 @@ public class GameplayModel {
     }
     public void startGame() {
 
+        setUpColorList();
         inputNumberofPlayers();
         this.playersAlive = new ArrayList<Player>();
         InitializePlayers(numPlayers);
@@ -120,6 +134,16 @@ public class GameplayModel {
         /**Sets Next Player Turn*/
         nextPlayer = getPlayers(1);
 
+    }
+
+    private void setUpColorList() {
+        colorList = new ArrayList<>();
+        colorList.add(GRAY);
+        colorList.add(RED);
+        colorList.add(GREEN);
+        colorList.add(YELLOW);
+        colorList.add(ORANGE);
+        colorList.add(PINK);
     }
 
     public void setInstructions(String instructions) {
@@ -244,11 +268,11 @@ public class GameplayModel {
      */
     String printWelcome() {
         System.out.println();
-        System.out.println("Welcome to Risk!");
-        System.out.println("Everybody wants to rule the world!");
+        System.out.println("Welcome to Risk! ");
+        System.out.println("Everybody wants to rule the world! ");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
-        return "Welcome to Risk!" + "Everybody wants to rule the world!" + "Type 'help' if you need help.";
+        return "Welcome to Risk!" + "Everybody wants to rule the world!" ;
     }
 
     /**
@@ -280,9 +304,11 @@ public class GameplayModel {
      * @param num the number of players playing in the game
      */
     public void InitializePlayers(int num) {
+        int j = 0;
         for (int i = 0; i < num; i++) {
             String str1 = Integer.toString(i + 1);
             playersAlive.add(new Player(str1));
+            playersAlive.get(i).setColor(colorList.get(i));   //Set color for player
             System.out.println("player" + playersAlive.get(i).getName());
         }
 
@@ -412,17 +438,17 @@ public class GameplayModel {
         System.out.println
                 ("Rules \n" +
                         "1. The winner is the first player to eliminate every opponent by " +
-                        "capturing all 42 territories on the board.\n"
+                        "capturing all the territories on the board.\n"
                         + "2. You can only attack a country that is adjacent to a country you control.\n"
                         + "3. At the start of each turn you will receive at least 3 armies or the # of territories " +
-                        "you own divided by 3 (which ever one is higher).\n"
+                        "your own divided by 3 (which ever one is higher).\n"
                         + "4. You can only attack a country if you own at least 2 armies in the attacking country.\n"
                         + "5. When attacking the person who is attacking can choose to roll up to 3 dice.\n"
                         + "6. The person defending can roll up to 2 dice but must have at least 2 armies in the " +
                         "defending country (if not they can only roll one dice).\n"
                         + "7. When you capture a territory, you must move at least as many armies as " +
                         "dice you rolled in your last attack.\n" +
-                        "                                  "
+                        " 8. Player 1 starts the game!                                 "
                 );
         return "Rules \n" +
                 "1. The winner is the first player to eliminate every opponent by " +
@@ -435,7 +461,8 @@ public class GameplayModel {
                 + "6. The person defending can roll up to 2 dice but must have at least 2 armies in the " +
                 "defending country (if not they can only roll one dice).\n"
                 + "7. When you capture a territory, you must move at least as many armies as " +
-                "dice you rolled in your last attack.\n" ;
+                "dice you rolled in your last attack.\n"
+                + "8. Player 1 starts the game! ";
     }
 
 
@@ -541,22 +568,22 @@ public class GameplayModel {
                 board.getTerritoriesList()[i].changeOwner(getPlayers(0));
                 getPlayers(0).addTerritories(board.getTerritoriesList()[i]);
             }
-            for (i = 8; i < 15; i++) {
+            for (i = 7; i < 14; i++) {
                 board.getTerritoriesList()[i].addTroops(4);
                 board.getTerritoriesList()[i].changeOwner(getPlayers(1));
                 getPlayers(1).addTerritories(board.getTerritoriesList()[i]);
             }
-            for (i = 15; i < 22; i++) {
+            for (i = 14; i < 21; i++) {
                 board.getTerritoriesList()[i].addTroops(4);
                 board.getTerritoriesList()[i].changeOwner(getPlayers(2));
                 getPlayers(2).addTerritories(board.getTerritoriesList()[i]);
             }
-            for (i = 22; i < 20; i++) {
+            for (i = 21; i < 29; i++) {
                 board.getTerritoriesList()[i].addTroops(4);
                 board.getTerritoriesList()[i].changeOwner(getPlayers(3));
                 getPlayers(3).addTerritories(board.getTerritoriesList()[i]);
             }
-            for (i = 30; i <= 36; i++) {
+            for (i = 29; i <= 36; i++) {
                 board.getTerritoriesList()[i].addTroops(4);
                 board.getTerritoriesList()[i].changeOwner(getPlayers(4));
                 getPlayers(4).addTerritories(board.getTerritoriesList()[i]);
@@ -702,6 +729,30 @@ public class GameplayModel {
 
     public void setPlayersAlive(){
         this.playersAlive = new ArrayList<Player>();
+    }
+
+    /**
+     * Method: Changes the current Players Color to indicate whos turn it is
+     */
+    public void changeColor(){
+        if (currentPlayer.getColor().equals("RED")){
+            playerColor = Color.RED;
+        }
+        else if(currentPlayer.getColor().equals("ORANGE")){
+            playerColor = Color.ORANGE;
+        }
+        else if(currentPlayer.getColor().equals("GRAY")){
+            playerColor = Color.GRAY;
+        }
+        else if(currentPlayer.getColor().equals("GREEN")){
+            playerColor = Color.GREEN;
+        }
+        else if(currentPlayer.getColor().equals("YELLOW")){
+            playerColor = Color.YELLOW;
+        }
+        else if(currentPlayer.getColor().equals("PINK")){
+            playerColor = Color.PINK;
+        }
     }
 
     /**
@@ -1223,12 +1274,14 @@ public class GameplayModel {
         //Shows currentPlayer's Hand
         //Shows extra message to show User
         String tellUser = instructions;
+        changeColor();
 
         //Add Instructions
         //Check to see if the player is the correct one
 
+
         for (GamePlayView tttv: GamePlayView)
-            tttv.handleGamePlayUpdate(new GamePlayEvent(this, currentPlayer, currentPlayer.getHand(), currentPlayer.getName(),instructions));
+            tttv.handleGamePlayUpdate(new GamePlayEvent(this, currentPlayer, currentPlayer.getHand(), currentPlayer.getName(),instructions, board.getTerritoriesList(), playerColor));
     }
 
     /**

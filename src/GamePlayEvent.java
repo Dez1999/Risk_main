@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.EventObject;
 
@@ -8,23 +9,29 @@ public class GamePlayEvent extends EventObject {
     private Player currentPlayer;
     private Hand playerHand;
     private String playerName;
-    private ArrayList<Territory> territories;
+    private Territory[] territories;
     private ArrayList<Continent> continents;
-
-
-
     private String instructions;
+    private Color playerColor;
 
 
-    private String instruction;
-
-    public GamePlayEvent(GameplayModel gameModel, Player currentPlayer, Hand playerHand, String playername, String instruction) {//(, TicTacToeModel.Status status, int x, int y))
+    public GamePlayEvent(GameplayModel gameModel, Player currentPlayer, Hand playerHand, String playername, String instruction, Territory[] territoriesList, Color playerColor) {
         super(gameModel);
         this.currentPlayer = currentPlayer;
         this.playerHand = playerHand;
         this.playerName = playername;
         this.instructions = instruction;
+        this.territories = territoriesList;
+        this.playerColor = playerColor;
 
+    }
+
+    /**
+     * Returns the current Players color
+     * @return
+     */
+    public Color getPlayerColor() {
+        return playerColor;
     }
 
     /**
@@ -57,5 +64,9 @@ public class GamePlayEvent extends EventObject {
      */
     public String getInstructions() {
         return instructions;
+    }
+
+    public Territory[] getTerritories() {
+        return territories;
     }
 }

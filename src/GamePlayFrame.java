@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * @author Peter, Des
@@ -35,11 +36,14 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private JPanel LabelPanel = new JPanel();
     private JButton NewZealand;
     private JButton next = new JButton("next");
+    private ArrayList<JButton> territoryButtons;
 
     /**
      * Setting up a frame for the game board layout.
      */
     public GamePlayFrame(){
+
+        //MVC Set Up
         super("Risk Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(Color.BLUE);
@@ -48,40 +52,40 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.setBackground(Color.BLUE);
         gpm.addGamePlayView(this);
         GamePlayController gpc = new GamePlayController(gpm);
-        //buttons = new JButton[2][2];
-        /*for( int i =0; i < 2 ; i++) {
-            for (int j = 0; j < 2; j++) {
-                JButton b = new JButton("some Country ");
-                buttons[i][j] = b;
-                b.addActionListener(gpc);
-                b.setActionCommand(i + "" + j);
-                Africa.add(b);
-            }
-        }*/
         next.addActionListener(gpc);
         next.setActionCommand("next");
         this.setSize(1600, 800);
         this.setVisible(true);
-        this.setResizable(false);
+        this.setResizable(true);  //Changed this to true
         LabelPanel.setPreferredSize(new Dimension(1400 , 50));
-        LabelPanel.setBackground(Color.YELLOW);
+        LabelPanel.setBackground(Color.gray);
         LabelPanel.add(GameStatus);
+        territoryButtons = new ArrayList<>(); //Set up List of all Territory Buttons
+
+
+
         //Show GameStatus
         gpm.setInstructions(gpm.printWelcome() + gpm.printRules() + "At the start of each turn each player receives 3 or more troops and" +
                 " if you rule a whole continent you will get more bonus troops.");
         gpm.gameStatus();
         gpm.setInstructions("Player 1 begins the Game. Please choose the Territory to Deploy Troops to");
-        gpm.gameStatus();
 
+
+        //Territory Ownership for First Player
         String territories = "Player 1";
-
         for (Territory terr : gpm.getCurrentPlayer().getTerritories()) {
             System.out.println(terr.getName() + "Player 1: Troops = " + terr.getTroops());
             territories = territories + "\n " + terr.getName() + ": Troops = " + terr.getTroops();
         }
 
-        JOptionPane.showInternalMessageDialog(null, territories,
-                "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
+        String gameRules = "" ;
+
+        gameRules = gpm.printWelcome() + gpm.printRules();
+
+        JOptionPane.showInternalMessageDialog(null, gameRules,
+                "Risk", JOptionPane.INFORMATION_MESSAGE);
+
+
 
         //GameStatus.setText("This is where we will have the status");
         this.add(LabelPanel);
@@ -98,6 +102,8 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         AustraliaSetUp(gpc);
         NewZealandSetup(gpc);
 
+        gpm.gameStatus();
+
     }
 
     /**
@@ -106,31 +112,73 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
      */
     @Override
     public void handleGamePlayUpdate(GamePlayEvent e ) {
-        //  int x = e.getX();
-        // int y = e.getY();
-        e.getcurrentPlayer();
+
+        Territory[] territories = e.getTerritories();
 
         int handsize = e.getPlayerHand().handList().size();
-        e.getPlayerName();
-        e.getInstructions();
-
         GameplayModel gpm = (GameplayModel) e.getSource();
         String output = null;
-        output = "Current Player: " + e.getPlayerName() + ". Number of cards: " + handsize + ". " + e.getInstructions();  //ADD later: Instructions and Outcome
+
+        output = "Current Player: " + e.getPlayerName() + ". " + e.getcurrentPlayer().getColor() +  ". Number of cards: " + handsize + ". " + e.getInstructions();  //ADD later: Instructions and Outcome
+
+        Color color = e.getPlayerColor();
+
+
         GameStatus.setText(output);
+        LabelPanel.setBackground(color);
+
+        //Update the Territory Owners and Number of Troops
+        //Iterate through the list of Buttons
+        //If Button name = Territory Name
+        //Change the Text of the Button to : Territory Name. Territory Owner. # of Troops using Territory List
+        for (JButton territoryButton : territoryButtons){
+            for (Territory terr : territories){
+                if (territoryButton.getActionCommand().equals(terr.getName())){
+                    if(terr.getPlayer().getName().equals("1"))
+                    {
+                        territoryButton.setBackground(Color.GRAY);
+                    }
+                    else if(terr.getPlayer().getName().equals("2"))
+                    {
+                        territoryButton.setBackground(Color.RED);
+                    }
+                    else if(terr.getPlayer().getName().equals("3"))
+                    {
+                        territoryButton.setBackground(Color.GREEN);
+                    }
+                    else if(terr.getPlayer().getName().equals("4"))
+                    {
+                        territoryButton.setBackground(Color.YELLOW);
+                    }
+                    else if(terr.getPlayer().getName().equals("5"))
+                    {
+                        territoryButton.setBackground(Color.ORANGE);
+                    }
+                    else if(terr.getPlayer().getName().equals("6"))
+                    {
+                        territoryButton.setBackground(Color.PINK);
+                    }
+                    territoryButton.setText(terr.getTroops() +" :"+ territoryButton.getActionCommand());
+                }
+            }
+        }
+
+
 
     }
 
     /**
      *Madagascar GUI setup
-     * @param gpc
+     * @param gpc ActionListener
      */
     private  void MadagascarSetup(ActionListener gpc){
         Madagascar = new JButton("Madagascar");
-        Madagascar.setPreferredSize((new Dimension(110,110)));
+        Madagascar.setPreferredSize((new Dimension(120,110)));
         Madagascar.addActionListener(gpc);
         Madagascar.setActionCommand("Madagascar");
         this.add(Madagascar);
+
+        territoryButtons.add(Madagascar);  //Add to ArrayList
     }
 
     /**
@@ -144,18 +192,23 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         Japan.setActionCommand("Japan");
         this.add(Japan);
 
+        territoryButtons.add(Japan);  //Add to ArrayList
+
     }
 
     /**
      *NewZealand GUI setup
      * @param gpc
      */
-    private void NewZealandSetup(ActionListener gpc){
+    private void NewZealandSetup(ActionListener gpc) {
         NewZealand = new JButton("NewZealand");
-        NewZealand.setPreferredSize(new Dimension( 120 ,80 ));
+        NewZealand.setPreferredSize(new Dimension(120, 80));
         NewZealand.addActionListener(gpc);
         NewZealand.setActionCommand("NewZealand");
-        this.add(NewZealand);}
+        this.add(NewZealand);
+
+        territoryButtons.add(NewZealand);  //Add to ArrayList
+    }
 
     /**
      * extra GUI elements
@@ -164,17 +217,20 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private void extraSetup(ActionListener gpc){
         JPanel extra = new JPanel();
         extra.setLayout(new GridLayout(3,1));
-        extra.setPreferredSize(new Dimension(300,200));
+        extra.setPreferredSize(new Dimension(360,200));  //Before: width = 300
         JPanel exFirstPanel = new JPanel();
         exFirstPanel.setLayout(new GridLayout(1,3));
         JPanel exempty1 = new JPanel();
         exempty1.setBackground(Color.BLUE);
+
         greenLand = new JButton("GreenLand");
         greenLand.addActionListener(gpc);
         greenLand.setActionCommand("GreenLand");
+        territoryButtons.add(greenLand);  //Add to ArrayList
         iceLand = new JButton("Iceland");
         iceLand.addActionListener(gpc);
         iceLand.setActionCommand("Iceland");
+        territoryButtons.add(iceLand);  //Add to ArrayList
         exFirstPanel.add(greenLand);
         exFirstPanel.add(exempty1);
         exFirstPanel.add(iceLand);
@@ -189,9 +245,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         exempty3.setBackground(Color.BLUE);
         exThird.add(exempty2);
         exThird.add(exempty3);
+
         greatBritain = new JButton("GreatBritain");
         greatBritain.addActionListener(gpc);
         greatBritain.setActionCommand("GreatBritain");
+        territoryButtons.add(greatBritain);  //Add to ArrayList
         exThird.add(greatBritain);
         extra.add(exFirstPanel);
         extra.add(exSecond);
@@ -227,10 +285,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("WesternAustralia");
                 b.setActionCommand("WesternAustralia");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i>0 ){
                 b.setText("EasternAustralia");
                 b.setActionCommand("EasternAustralia");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             ASThirdbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -246,9 +306,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         ASIbutton = new JButton("Indonesia");
         ASIbutton.addActionListener(gpc);
         ASIbutton.setActionCommand("Indonesia");
+        territoryButtons.add(ASIbutton);  //Add to ArrayList
+
         ASNbutton = new JButton("NewGuinea");
         ASNbutton.addActionListener(gpc);
         ASNbutton.setActionCommand("NewGuinea");
+        territoryButtons.add(ASNbutton);  //Add to ArrayList
         ASFirstPanel.add(ASNbutton);
         ASFirstPanel.add(ASempty1);
         ASFirstPanel.add(ASIbutton);
@@ -275,10 +338,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("MiddleEast");
                 b.setActionCommand("MiddleEast");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i>0 ){
                 b.setText("India");
                 b.setActionCommand("India");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             AThirdbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -295,10 +360,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("Afghanistan");
                 b.setActionCommand("Afghanistan");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i==1){
                 b.setText("China");
                 b.setActionCommand("China");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             ASecondbutton[0][i] = b;
             b.addActionListener(gpc);
@@ -315,6 +382,8 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         AFirstButton = new JButton("Mongolia");
         AFirstButton.addActionListener(gpc);
         AFirstButton.setActionCommand("Mongolia");
+        territoryButtons.add(AFirstButton);  //Add to ArrayList
+
         AFirstPanel.add(AFirstButton);
         Asia.add(AFirstPanel);
         Asia.add(ASecondPanel);
@@ -339,10 +408,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("WesternEurope");
                 b.setActionCommand("WesternEurope");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i>0 ){
                 b.setText("SouthernEurope");
                 b.setActionCommand("SouthernEurope");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             EThirdbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -359,10 +430,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("NorthernEurope");
                 b.setActionCommand("NorthernEurope");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i==1){
                 b.setText("Ukraine");
                 b.setActionCommand("Ukraine");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             ESecondbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -379,6 +452,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         EFirstbutton = new JButton("Scandinavia");
         EFirstbutton.addActionListener(gpc);
         EFirstbutton.setActionCommand("Scandinavia");
+        territoryButtons.add(EFirstbutton);  //Add to ArrayList
         EFirstPanel.add(EFirstbutton);
         Europe.add(EFirstPanel);
         Europe.add(ESecondPanel);
@@ -393,7 +467,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private void NorthAmericaSetup(ActionListener gpc){
         JPanel northAmerica = new JPanel();
         northAmerica.setLayout(new GridLayout(4,1));
-        northAmerica.setPreferredSize(new Dimension(350, 300));
+        northAmerica.setPreferredSize(new Dimension(350, 300));  //Before: width = 350
         JPanel NaFirstPanel = new JPanel();
         NaFirstPanel.setLayout(new GridLayout(1,4));
         NaFirstPanel.setBackground(Color.BLUE);
@@ -407,10 +481,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("Alaska");
                 b.setActionCommand("Alaska");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i>0 ){
                 b.setText("NorthWestTerritories");
                 b.setActionCommand("NorthWestTerritories");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             NaFirstbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -428,14 +504,17 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("Alberta");
                 b.setActionCommand("Alberta");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i==1 ){
                 b.setText("Ontario");
                 b.setActionCommand("Ontario");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i>1 ){
                 b.setText("Quebec");
                 b.setActionCommand("Quebec");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             NaSecondbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -450,10 +529,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("WestUSA");
                 b.setActionCommand("WestUSA");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i==1 ){
                 b.setText("EastUSA");
                 b.setActionCommand("EastUSA");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             NaThirdbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -463,6 +544,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         NaLastbutton = new JButton("CentralAmerica");
         NaLastbutton.addActionListener(gpc);
         NaLastbutton.setActionCommand("CentralAmerica");
+        territoryButtons.add(NaLastbutton);  //Add to ArrayList
         northAmerica.add(NaFirstPanel);
         northAmerica.add(NaSecondPanel);
         northAmerica.add(NaThirdPanel);
@@ -481,21 +563,25 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         SafButton = new JButton("Peru");
         SafButton.addActionListener(gpc);
         SafButton.setActionCommand("Peru");///HAS TO BE CHANGED TO KNOW WHAT BUTTON IS USED IN THE CONTROLLER WHEN we use e.getActionCommand() each should have a different command
+        territoryButtons.add(SafButton);  //Add to ArrayList
         JPanel SafFirstPanel = new JPanel();
         SafFirstPanel.setLayout(new GridLayout(1,2));
         SafFirstbuttons = new JButton[1][2];
         SafSecondbutton = new JButton("Argentina");
         SafSecondbutton.addActionListener(gpc);
         SafSecondbutton.setActionCommand("Argentina");//HAS TO BE CHANGED TO KNOW WHAT BUTTON IS USED IN THE CONTROLLER WHEN we use e.getActionCommand() each should have a different command
+        territoryButtons.add(SafSecondbutton);  //Add to ArrayList
         for(int i = 0 ; i < 2 ; i ++){
             JButton b = new JButton();
             if(i == 0){
                 b.setText("Venezuela");
                 b.setActionCommand("Venezuela");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i>0 ){
                 b.setText("Brazil");
                 b.setActionCommand("Brazil");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             SafFirstbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -528,10 +614,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("NorthAfrica");
                 b.setActionCommand("NorthAfrica");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i>0 ){
                 b.setText("Egypt");
                 b.setActionCommand("Egypt");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             AfFirstbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -543,10 +631,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             if(i == 0){
                 b.setText("Congo");
                 b.setActionCommand("Congo");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             if(i>0 ){
                 b.setText("EastAfrica");
                 b.setActionCommand("EastAfrica");
+                territoryButtons.add(b);  //Add to ArrayList
             }
             AfSecondbuttons[0][i] = b;
             b.addActionListener(gpc);
@@ -556,6 +646,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         AfButton = new JButton("SouthAfrica");
         AfButton.addActionListener(gpc);
         AfButton.setActionCommand("SouthAfrica");//HAS TO BE CHANGED TO KNOW WHAT BUTTON IS USED IN THE CONTROLLER WHEN we use e.getActionCommand() each should have a different command
+        territoryButtons.add(AfButton);  //Add to ArrayList
         Africa.add(AfFirstPanel);
         Africa.add(AfSecondPanel);
         Africa.add(AfButton);

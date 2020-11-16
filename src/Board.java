@@ -291,14 +291,14 @@ public class Board {
 
         //North America
         territoriesList[0] = new Territory("Alaska");
-        territoriesList[1] = new Territory("NorthWest Territories");
+        territoriesList[1] = new Territory("NorthWestTerritories");
         territoriesList[2] = new Territory("GreenLand");
         territoriesList[3] = new Territory("Alberta");
         territoriesList[4] = new Territory("Ontario");
         territoriesList[5] = new Territory("Quebec");
         territoriesList[6] = new Territory("WestUSA");
         territoriesList[7] = new Territory("EastUSA");
-        territoriesList[8] = new Territory("Central America");
+        territoriesList[8] = new Territory("CentralAmerica");
 
         //South America
         territoriesList[9] = new Territory("Venezuela");
@@ -307,31 +307,31 @@ public class Board {
         territoriesList[12] = new Territory("Argentina");
 
         //Africa
-        territoriesList[13] = new Territory("North Africa");
+        territoriesList[13] = new Territory("NorthAfrica");
         territoriesList[14] = new Territory("Egypt");
-        territoriesList[15] = new Territory("East Africa");
+        territoriesList[15] = new Territory("EastAfrica");
         territoriesList[16] = new Territory("Congo");
-        territoriesList[17] = new Territory("South Africa");
+        territoriesList[17] = new Territory("SouthAfrica");
         territoriesList[18] = new Territory("Madagascar");
 
         //Europe
         territoriesList[19] = new Territory("Iceland");
         territoriesList[20] = new Territory("Scandinavia");
         territoriesList[21] = new Territory("Ukraine");
-        territoriesList[22] = new Territory("Great Britain");
-        territoriesList[23] = new Territory("Northern Europe");
-        territoriesList[24] = new Territory("Southern Europe");
-        territoriesList[25] = new Territory("Western Europe");
+        territoriesList[22] = new Territory("GreatBritain");
+        territoriesList[23] = new Territory("NorthernEurope");
+        territoriesList[24] = new Territory("SouthernEurope");
+        territoriesList[25] = new Territory("WesternEurope");
 
         //Oceania
         territoriesList[26] = new Territory("Indonesia");
-        territoriesList[27] = new Territory("New Guinea");
-        territoriesList[28] = new Territory("Western Australia");
-        territoriesList[29] = new Territory("Eastern Australia");
-        territoriesList[30] = new Territory("New Zealand");
+        territoriesList[27] = new Territory("NewGuinea");
+        territoriesList[28] = new Territory("WesternAustralia");
+        territoriesList[29] = new Territory("EasternAustralia");
+        territoriesList[30] = new Territory("NewZealand");
 
         //Asia
-        territoriesList[31] = new Territory("Middle East");
+        territoriesList[31] = new Territory("MiddleEast");
         territoriesList[32] = new Territory("Afghanistan");
         territoriesList[33] = new Territory("Japan");
         territoriesList[34] = new Territory("China");

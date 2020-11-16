@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.* ;
 /**
  * Player Class represents each player playing the game and their Hand of cars and a list of the territories owned and
@@ -14,6 +15,7 @@ public class Player
     private ArrayList<Continent> ContinentsOwned;      /**ArrayList or LinkedList*/
     private int bonusTroops;
     private boolean isAlive;
+    private String color;
 
 
     /**
@@ -21,12 +23,12 @@ public class Player
      */
     public Player(String name)
     {
-
         this.name = name;
         playerHand = new Hand();
         territoriesOwned = new ArrayList<>();
         ContinentsOwned = new ArrayList<>();
         isAlive = true;
+
     }
 
     /**
@@ -34,6 +36,22 @@ public class Player
      */
     public String getName(){
         return name;
+    }
+
+    /**
+     * Set Players color
+     * @param color player color
+     */
+    public void setColor(String color){
+        this.color = color;
+    }
+
+    /**
+     * Return Players Color
+     * @return Color String
+     */
+    public String getColor(){
+        return color;
     }
 
     /**

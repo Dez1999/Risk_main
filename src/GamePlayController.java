@@ -192,20 +192,7 @@ public class GamePlayController implements ActionListener {
             //This will bring the user back to ATTACK phase and ask them to choose an attacking Territory
             next = 0;
         }
-        /*String[] coordinates = e.getActionCommand().split("");
-        tttm.play(Integer.parseInt(coordinates[0]), Integer.parseInt((coordinates[1])));
-        TicTacToeModel.Status s = tttm.getStatus();
-        JFrame parent = new JFrame();
-        if(s.equals(TicTacToeModel.Status.O_WON) ){
-            JOptionPane.showMessageDialog(parent, " Player O Won");
-        }
-        if(s.equals(TicTacToeModel.Status.X_WON)){
-            JOptionPane.showMessageDialog(parent, " Player X Won");
-        }
-        if(s.equals((TicTacToeModel.Status.TIE))){
-            JOptionPane.showMessageDialog(parent, "ITS A TIE");
 
-         */
         next++;   //Updates the Phase in the Game
         }
     }
