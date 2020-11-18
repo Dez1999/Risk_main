@@ -1159,6 +1159,11 @@ public class GameplayModel {
         playersDead.add(prevOwnerPlayer);
         prevOwnerPlayer.setDead();
 
+        //Fix logic below
+        //if (nextPlayer == prevOwnerPlayer){
+       //     nextPlayer =
+       // }
+
         //Show GameStatus
         JOptionPane.showInternalMessageDialog(null, "Player " + prevOwnerPlayer.getName() + " is killed.",
                 "Player is Killed", JOptionPane.INFORMATION_MESSAGE);

@@ -560,9 +560,9 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         JPanel southAmerica = new JPanel();
         southAmerica.setLayout(new GridLayout(3,1));
         southAmerica.setPreferredSize(new Dimension(250, 300));
-        SafButton = new JButton("Peru");
+        SafButton = new JButton("Venezuela");
         SafButton.addActionListener(gpc);
-        SafButton.setActionCommand("Peru");///HAS TO BE CHANGED TO KNOW WHAT BUTTON IS USED IN THE CONTROLLER WHEN we use e.getActionCommand() each should have a different command
+        SafButton.setActionCommand("Venezuela");///HAS TO BE CHANGED TO KNOW WHAT BUTTON IS USED IN THE CONTROLLER WHEN we use e.getActionCommand() each should have a different command
         territoryButtons.add(SafButton);  //Add to ArrayList
         JPanel SafFirstPanel = new JPanel();
         SafFirstPanel.setLayout(new GridLayout(1,2));
@@ -574,8 +574,8 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         for(int i = 0 ; i < 2 ; i ++){
             JButton b = new JButton();
             if(i == 0){
-                b.setText("Venezuela");
-                b.setActionCommand("Venezuela");
+                b.setText("Peru");
+                b.setActionCommand("Peru");
                 territoryButtons.add(b);  //Add to ArrayList
             }
             if(i>0 ){

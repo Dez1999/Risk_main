@@ -81,6 +81,13 @@ public class Board {
      * Creates the cards and the deck for the Risk Game
      */
     private void setDeck() {
+
+        cavalry = new Cavalry();
+        wildCardA = new wildCard();
+        infantry = new infantry();
+        artillery = new artillery();
+        wildCardB = new wildCard();
+
         Card Alaska, NorthWestTerritories, GreenLand, Alberta, Ontario, Quebec, WestUSA, EastUSA, CentralAmerica;
         Card Venezuela, Peru, Brazil, Argentina, NorthAfrica, Egypt, EastAfrica, Congo, SouthAfrica, Madagascar;
         Card Iceland, Scandinavia, Ukraine, GreatBritain, NorthernEurope, SouthernEurope, WesternEurope, Indonesia, NewGuinea, WesternAustralia, EasternAustralia;
