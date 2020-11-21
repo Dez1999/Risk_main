@@ -25,12 +25,7 @@ public class GameplayModel {
 
     public int numPlayers;
     private int initialPlayerTroopstoplace;
-    //parser : Parser
-    private int diceToUse;
     private int currentPhase;
-    private String attackingTerritoryName;
-    private int attackers;
-    private String defendingTerritoryName;
 
     private Territory attackingTerritory;
     private Territory selectedTerritory;
@@ -41,7 +36,6 @@ public class GameplayModel {
     private boolean playerOwnsAttackingTerritory = false; //Check if Attacking Territory can be used
     private boolean targetTerritoryisBordering = false;
     private boolean canAttack = false;
-    private int defendingTroops;
     private int territoriesConquered = 0;
 
     private int bonus = 0;
@@ -61,54 +55,12 @@ public class GameplayModel {
     private static String ORANGE = "ORANGE";
     private ArrayList<String> colorList;
     private Color playerColor;
-
-
-
-
-
-
-    /** Game Logic*/
-    public boolean isAttackerSelected() {
-        return isAttackerSelected;
-    }
-
-    public void setIsAttackerSelected(boolean attackerSelected) {
-        isAttackerSelected = attackerSelected;
-    }
-
     private boolean isAttackerSelected = false;
-
-    public boolean isDefenderSelected() {
-        return isDefenderSelected;
-    }
-
-    public void setDefenderSelected(boolean defenderSelected) {
-        isDefenderSelected = defenderSelected;
-    }
-
     private boolean isDefenderSelected = false;
-
-    public boolean isDiceSelected() {
-        return isDiceSelected;
-    }
-
-    public void setDiceSelected(boolean diceSelected) {
-        isDiceSelected = diceSelected;
-    }
-
     private boolean isDiceSelected = false;
-
-    public boolean isDeployed() {
-        return isDeployed;
-    }
-
-    public void setDeployed(boolean deployed) {
-        isDeployed = deployed;
-    }
-
     private boolean isDeployed = false;
 
-
+    /** Game Logic*/
     public GameplayModel() {
         startGame();
     }
@@ -126,7 +78,6 @@ public class GameplayModel {
         initializeLand();
         //inputNumberAIplayers();
 
-        //printCommands();
 
         i = 1;
         /**Sets the currentPlayer*/
@@ -190,6 +141,43 @@ public class GameplayModel {
     public void setSelectedTerritory(Territory selectedTerritory) {
         this.selectedTerritory = selectedTerritory;
     }
+
+    public boolean isAttackerSelected() {
+        return isAttackerSelected;
+    }
+
+    public void setIsAttackerSelected(boolean attackerSelected) {
+        isAttackerSelected = attackerSelected;
+    }
+
+
+    public boolean isDefenderSelected() {
+        return isDefenderSelected;
+    }
+
+    public void setDefenderSelected(boolean defenderSelected) {
+        isDefenderSelected = defenderSelected;
+    }
+
+
+    public boolean isDiceSelected() {
+        return isDiceSelected;
+    }
+
+    public void setDiceSelected(boolean diceSelected) {
+        isDiceSelected = diceSelected;
+    }
+
+
+    public boolean isDeployed() {
+        return isDeployed;
+    }
+
+    public void setDeployed(boolean deployed) {
+        isDeployed = deployed;
+    }
+
+
 
     /**
      * Method: User Deploys Troops
@@ -290,7 +278,6 @@ public class GameplayModel {
      * Method: Method regarding the number of players
      */
     public void inputNumberofPlayers() {
-
         // System.out.println("Please choose how many players 2-6");
         int inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
         //Get user input number and save it then run method below:
@@ -307,7 +294,6 @@ public class GameplayModel {
             System.out.println("Sorry, only 2-6 players are allowed");
             inputNumberofPlayers();
         }
-
     }
 
     /**
@@ -350,49 +336,6 @@ public class GameplayModel {
     }
 
 
-    /**
-     * Method: Used to process the Command from the user
-     *
-     * @param comm
-     */
-    public void processCommand(String comm) {
-
-        if (comm.equals("PASS")) {
-            changePlayer();
-        } else if (comm.equals("HELP")) {
-            printHelp();
-        } else if (comm.equals("QUIT")) {
-            quit();
-        } else if (comm.equals("ATTACK")) {
-            attack();
-        }
-        //else if (comm.equals("FORTIFY")) {
-        //fortify();   //Milestone 3
-        //}
-        else if (comm.equals("PRINT")) {
-            getGameStatus();
-        } else {
-            System.out.println("INVALID COMMAND");
-            enterCommand();
-        }
-    }
-
-    private void enterCommand() {
-        Scanner s = new Scanner(System.in);
-        String command;
-        System.out.println("Enter a command:");
-        command = s.nextLine();   //execute command
-        processCommand(command);
-    }
-
-    private void printHelp() {
-        {
-            System.out.println();
-            printCommands();
-        }
-        enterCommand();
-    }
-
     private void fortify() {
     }
 
@@ -404,7 +347,7 @@ public class GameplayModel {
         for (Territory territory1 : board.getTerritoriesList()) {
             System.out.println(territory1.getName() + "-> Troops : " + territory1.getTroops() + ", Owner: Player " + territory1.getPlayer().getName());
         }
-        enterCommand();
+        //enterCommand();
 
     }
 
@@ -786,10 +729,6 @@ public class GameplayModel {
         if (targetTerritoryisBordering) {
             chooseAttackingTroops();   //Sets Number of Attacking Troops
         }
-
-        //Ask User if they want to attack again
-        /**Asks the user for a command*/
-        enterCommand();
 
     }
 
