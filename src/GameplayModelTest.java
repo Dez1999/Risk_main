@@ -76,7 +76,7 @@ class GameplayModelTest {
     @Test
     void checkPlayerhand(){
         gpm = new GameplayModel();
-        Player player1 = new Player("Player1");
+        Player player1 = new Player(gpm, "Player1");
         Territory afghanistan= new Territory("Afghanistan");
         Territory egypt = new Territory("Egypt");
         Territory brazil = new Territory("Brazil");

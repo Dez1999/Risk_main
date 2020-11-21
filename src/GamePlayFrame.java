@@ -64,7 +64,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
 
 
-        //Show GameStatus
+        //Show INSTRUCTIONS
         gpm.setInstructions(gpm.printWelcome() + gpm.printRules() + "At the start of each turn each player receives 3 or more troops and" +
                 " if you rule a whole continent you will get more bonus troops.");
         gpm.gameStatus();

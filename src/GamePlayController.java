@@ -160,6 +160,13 @@ public class GamePlayController implements ActionListener {
 
         //Next Button is Selected. Change Player and start to deploy Troops
         else if(e.getActionCommand().equals("next")){
+
+            //Player presses Next for first time
+            //Fortify()
+
+
+
+            //Player press Next second in their turn
             JOptionPane.showMessageDialog(parent, "Your turn is now Over");
 
             //Show GameStatus
@@ -179,6 +186,16 @@ public class GamePlayController implements ActionListener {
                     "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
 
             next = -1;
+
+            //Test for AI Player
+            if(gpm.getCurrentPlayer().isAIplayer()){
+                try {
+                    gpm.AIUtilityFunction();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                //gpm.getCurrentPlayer().AIplayerFunction();
+            }
         }
 
         //BACK Button is Selected. Go back to ATTACK

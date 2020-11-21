@@ -17,17 +17,27 @@ public class Player
     private boolean isAlive;
     private String color;
 
+    //Extra AI Player Attributes
+    GameplayModel gpm;
+    private Territory highestOppTerritory;
+    private boolean AIplayer;
+
 
     /**
      * Constructor for objects of class Player
      */
-    public Player(String name)
+    public Player(GameplayModel gpm, String name)
     {
         this.name = name;
         playerHand = new Hand();
         territoriesOwned = new ArrayList<>();
         ContinentsOwned = new ArrayList<>();
         isAlive = true;
+
+        this.gpm = gpm;
+        highestOppTerritory = new Territory("mostOpponentTerritories");
+        highestOppTerritory.setNumberOppTerr(0);
+        AIplayer = false;
 
     }
 
@@ -141,5 +151,17 @@ public class Player
                 territoriesOwned.remove(j);
             }
         }
+    }
+
+    public boolean isAIplayer() {
+        return AIplayer;
+    }
+
+    public void setAIplayer(boolean AIplayer) {
+        this.AIplayer = AIplayer;
+    }
+
+    public void setBonusTroops(int i){
+        bonusTroops = i;
     }
 }

@@ -124,6 +124,7 @@ public class GameplayModel {
         InitializePlayers(numPlayers);
         board = new Board(numPlayers);
         initializeLand();
+        //inputNumberAIplayers();
 
         //printCommands();
 
@@ -133,6 +134,16 @@ public class GameplayModel {
 
         /**Sets Next Player Turn*/
         nextPlayer = getPlayers(1);
+
+    }
+
+    /**
+     * Method: Asks User which players will be AI
+     */
+    private void inputNumberAIplayers() {
+
+        int AIPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please select"));
+
 
     }
 
@@ -216,7 +227,7 @@ public class GameplayModel {
     /**Calculates the bonus troops a player receives
      *
      */
-    private void calculateBonusTroops() {
+    void calculateBonusTroops() {
         bonus = 0;
         if (currentPlayer.getContinents().size() > 0) {
             for (int j = 0; j < currentPlayer.getContinents().size(); j++) {
@@ -224,8 +235,8 @@ public class GameplayModel {
             }
 
             //Put this into GameStatus
-            JOptionPane.showInternalMessageDialog(null, "You received " + bonus + " bonus troops for the continents you are holding",
-                    "Bonus Troops", JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showInternalMessageDialog(null, "You received " + bonus + " bonus troops for the continents you are holding",
+              //      "Bonus Troops", JOptionPane.INFORMATION_MESSAGE);
             //instructions = ("you received" + bonus + "bonus troops for the continents you are holding");
         }
         bonus = (currentPlayer.getTerritories().size() / 3) + bonus;
@@ -296,6 +307,7 @@ public class GameplayModel {
             System.out.println("Sorry, only 2-6 players are allowed");
             inputNumberofPlayers();
         }
+
     }
 
     /**
@@ -307,10 +319,11 @@ public class GameplayModel {
         int j = 0;
         for (int i = 0; i < num; i++) {
             String str1 = Integer.toString(i + 1);
-            playersAlive.add(new Player(str1));
+            playersAlive.add(new Player(this, str1));
             playersAlive.get(i).setColor(colorList.get(i));   //Set color for player
             System.out.println("player" + playersAlive.get(i).getName());
         }
+        playersAlive.get(num -1).setAIplayer(true);
 
         playersDead = new ArrayList<>();
     }
@@ -1300,5 +1313,100 @@ public class GameplayModel {
 
     public void setNextPlayer(Player player) {
         this.nextPlayer = player;
+    }
+
+    public int getBonus() {
+        return bonus;
+    }
+
+    /**
+     * Performs all the functions for the AI player
+     */
+    public void AIUtilityFunction() throws InterruptedException {
+        AIdeploy();
+        //   wait(100);
+
+        //attack()
+
+        //    wait(100);
+
+        //fortify()
+
+        //   wait(100);
+
+        AInextTurn();
+
+        //  wait(100);
+    }
+
+    /**
+     * Deploy Method: helps the AI player choose which Territory to deploy troops to at the start of the turn
+     */
+    public void AIdeploy() throws InterruptedException {
+        Territory highestOppTerritory = new Territory("HighestOpponentTerritories");
+        calculateBonusTroops();
+
+        //Check all Territories Owned and deploy to Territory that has the most adjacent Opponent Territories
+        for (Territory terr : currentPlayer.getTerritories()){
+            for(Territory adjTerr : terr.getBorderTerritories()){
+                if(adjTerr.getPlayer() != terr.getPlayer()){
+                    terr.addNumberOppTerr(1);
+                }
+            }
+        }
+
+        for(Territory terr : currentPlayer.getTerritories()){
+            if (terr.getNumberOppTerritories() >= highestOppTerritory.getNumberOppTerritories()){
+                highestOppTerritory = terr;
+            }
+        }
+
+        for(Territory terr : currentPlayer.getTerritories()){
+            if (highestOppTerritory == terr){
+                //Now Deploy Troops to highestOppTerritory
+                highestOppTerritory.addTroops(bonus);
+            }
+        }
+
+        //Extra Message for Other Users
+        Component frame = new Frame();
+        JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen to deploy " + bonus + " troops to " + highestOppTerritory.getName());
+
+    }
+
+    /**
+     * Attack Method: helps AI player perform a Attack in the game
+     */
+    public void AIattack() throws InterruptedException {
+
+
+
+
+
+        //wait(100);
+
+    }
+
+
+    /**
+     * Fortify Method: helps AI player fortify Troops to a specfic Territory that it owns
+     */
+    public void AIfortify() throws InterruptedException {
+
+
+
+       // wait(100);
+    }
+
+
+    /**
+     * NextTurn: helps AI player choose when to go to the next players Turn
+     */
+    public void AInextTurn() throws InterruptedException {
+        changePlayer();
+        setInstructions("Player " + getCurrentPlayer().getName() + " has passed their Turn. Player "+ getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
+        gameStatus();
+        // wait(100);
+
     }
 }

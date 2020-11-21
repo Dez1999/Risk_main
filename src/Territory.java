@@ -12,6 +12,7 @@ public class Territory
     private Player owner;
     private int troops ;
     private LinkedList<Territory> boardingTerritories;
+    private int numberOppTerritories;
     /*
      * Constructor for objects of class Territory
      */
@@ -20,6 +21,7 @@ public class Territory
         this.name = name;
         //this.boardingTerritories = boardingTerritories;
         boardingTerritories = new LinkedList<>();
+        numberOppTerritories = 0;
     }
 
     /**
@@ -95,5 +97,30 @@ public class Territory
      */
     public LinkedList<Territory> getBorderTerritories() {
         return boardingTerritories;
+    }
+
+    /**
+     * For AI Player: Adds to number of Opponent Bordering Territories
+     * @param i
+     */
+    public void addNumberOppTerr(int i) {
+        numberOppTerritories++;
+
+    }
+
+    /**
+     * Returns number of Opponent Bordering Territories
+     * @return
+     */
+    public int getNumberOppTerritories() {
+        return numberOppTerritories;
+    }
+
+    /**
+     * Sets Number of Opponent Bordering Territories
+     * @param i
+     */
+    public void setNumberOppTerr(int i){
+        numberOppTerritories = i;
     }
 }
