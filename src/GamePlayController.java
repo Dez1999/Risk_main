@@ -158,7 +158,7 @@ public class GamePlayController implements ActionListener {
             }
         }
 
-        //Next Button is Selected. Change Player and start to deploy Troops
+        //Next Button is Selected. Change Player and start to deploy Troops, Checks if AI player is next
         else if(e.getActionCommand().equals("next")){
 
             //Player presses Next for first time
@@ -186,6 +186,8 @@ public class GamePlayController implements ActionListener {
                     "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
 
             next = -1;
+
+
 
             //Test for AI Player
             if(gpm.getCurrentPlayer().isAIplayer()){

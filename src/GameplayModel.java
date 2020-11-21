@@ -991,7 +991,7 @@ public class GameplayModel {
 
 
                 //Show GameStatus
-                JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops" +
+                JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops. " +
                                 attackingTerritory.getName() + " has conquered " + defendingTerritory.getName(),
                         "Attacking Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
 
@@ -1318,8 +1318,34 @@ public class GameplayModel {
      */
     public void AIattack() throws InterruptedException {
 
+        //Should AI player Attack()
+            //Checks all Territories checks if troops is greater than 2 and Bordering Opponenet Territory
+            //returns true if can attack -> Continue Attack Mode
+            //returns false if won't attack -> Finish Attack mode
 
+        //Choose Which territories can attack()
+            //For loop to see which Territories are bordering Opponent Territories
+            //Add Available options to a list
 
+        //Of the available Territories: Select which Territories have more than 3 troops
+            //Territories with more than 3 troops:
+                //Choose Territory with more troops than opponent Territory as best option
+                //else: Choose Territory with equal amount of troops as opponent Territory
+                //else: exit attack
+
+        //if No Territories have more than 3 troops: Choose Territories with 3 troops
+            //Territories with 3 troops
+                //Choose Territory with more troops than opponent Territory as best option
+                //else: Choose Territory with equal amount of troops as opponent Territory
+                //else: exit attack
+
+        //if No Territories have more than 2 troops: Choose Territories with 2 troops
+            //Territories with 2 troops
+                //Choose Territory with more troops than opponent Territory as best option
+                //else: Choose Territory with equal amount of troops as opponent Territory
+                //else: exit attack
+        //If all Territories have 1 troop:
+            //exit attack and next player turn
 
 
         //wait(100);
@@ -1331,7 +1357,6 @@ public class GameplayModel {
      * Fortify Method: helps AI player fortify Troops to a specfic Territory that it owns
      */
     public void AIfortify() throws InterruptedException {
-
 
 
        // wait(100);
@@ -1346,6 +1371,5 @@ public class GameplayModel {
         setInstructions("Player " + getCurrentPlayer().getName() + " has passed their Turn. Player "+ getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
         gameStatus();
         // wait(100);
-
     }
 }
