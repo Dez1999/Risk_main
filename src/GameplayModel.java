@@ -451,8 +451,8 @@ public class GameplayModel {
             }
         return null;
     }
-
-
+    // consider using initialTroop variable and its getters/setters by introducing a new method that updates initialtroop count
+    // replace hardcoded troop numbers with initialTroops
     /**
      * Sets the amount of initial troops each player can start out with depending on number of players. Also assigns Territory Ownership
      */

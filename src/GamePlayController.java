@@ -9,6 +9,7 @@ public class GamePlayController implements ActionListener {
     private GameplayModel gpm;
     private int next;
     private boolean success;
+    private boolean isFortifying;
 
 
 
@@ -160,13 +161,11 @@ public class GamePlayController implements ActionListener {
 
         //Next Button is Selected. Change Player and start to deploy Troops, Checks if AI player is next
         else if(e.getActionCommand().equals("next")){
-
-            //Player presses Next for first time
-            //Fortify()
+    //Next (first time)
 
 
 
-            //Player press Next second in their turn
+
             JOptionPane.showMessageDialog(parent, "Your turn is now Over");
 
             //Show GameStatus
@@ -198,8 +197,16 @@ public class GamePlayController implements ActionListener {
                 }
                 //gpm.getCurrentPlayer().AIplayerFunction();
             }
-        }
 
+            isFortifying = true;
+        } else if(e.getActionCommand().equals("next") && isFortifying){
+            //next (2nd time)
+            //update instructions to have Fortify intstructions
+            next = 4;
+
+
+        }
+        //consider removing
         //BACK Button is Selected. Go back to ATTACK
         else if(e.getActionCommand().equals("Back")){
             JOptionPane.showMessageDialog(parent, "You have Restarted the Attack Phase");
@@ -211,6 +218,19 @@ public class GamePlayController implements ActionListener {
             //This will bring the user back to ATTACK phase and ask them to choose an attacking Territory
             next = 0;
         }
+        //Start deploy phase
+        else if(next == 4 && isFortifying){
+            //this is where next e.getActionComm... should return selected territory "A"
+            //update instructions to ask for territory to fortify "B"
+            next++;
+
+        } else if(next == 5 && isFortifying){
+            //e.getActionComm... should return selected terr;
+            //prompt user for a troop amount and fortify from territory A to B
+            //End the turn
+
+        }
+
 
         next++;   //Updates the Phase in the Game
         }
