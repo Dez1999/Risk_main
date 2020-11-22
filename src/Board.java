@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.*;
+
 
 /**
  * Board Class: This class creates the Territories, Continents, Cards, Deck, and Hands
@@ -222,7 +225,10 @@ public class Board {
         ArrayList<Territory> AsiaNAterritores = new ArrayList<>();
 
 
-        /**Add Territories for each Continent**/
+        /**
+         *   Add Territories for each Continent 
+         */
+
         NAterritores.add(territoriesList[0]);
         NAterritores.add(territoriesList[1]);
         NAterritores.add(territoriesList[2]);
@@ -524,7 +530,20 @@ public class Board {
         territoriesList[36].addBorderTerritories(territoriesList[34]);
         territoriesList[36].addBorderTerritories(territoriesList[33]);
 
+    shuffleTerritories(territoriesList);
+    }
+    /**
+     * Randomize territory list
+     */
+    public void shuffleTerritories(Territory[] array){
+        Random rand = new Random();  // Random number gen
 
+        for (int i=0; i<array.length; i++) {
+            int randomIndex = rand.nextInt(array.length);
+            Territory temp = array[i];
+            array[i] = array[randomIndex];
+            array[randomIndex] = temp;
+        }
     }
 
     /**
