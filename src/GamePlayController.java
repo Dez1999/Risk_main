@@ -37,6 +37,7 @@ public class GamePlayController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JFrame parent = new JFrame();
 
+
         //Select Territory to Deploy Troops
         if(next == 0){
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
@@ -222,6 +223,9 @@ public class GamePlayController implements ActionListener {
         else if(next == 4 && isFortifying){
             //this is where next e.getActionComm... should return selected territory "A"
             //update instructions to ask for territory to fortify "B"
+            gpm.gameStatus();
+            gpm.fortifyFrom();
+            //gps.fortifyTo();
             next++;
 
         } else if(next == 5 && isFortifying){

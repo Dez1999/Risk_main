@@ -82,8 +82,8 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         gameRules = gpm.printWelcome() + gpm.printRules();
 
-        JOptionPane.showInternalMessageDialog(null, gameRules,
-                "Risk", JOptionPane.INFORMATION_MESSAGE);
+     //   JOptionPane.showInternalMessageDialog(this, gameRules,
+     //           "Risk", JOptionPane.INFORMATION_MESSAGE);
 
 
 

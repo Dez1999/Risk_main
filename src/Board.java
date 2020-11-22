@@ -226,7 +226,7 @@ public class Board {
 
 
         /**
-         *   Add Territories for each Continent 
+         *   Add Territories for each Continent
          */
 
         NAterritores.add(territoriesList[0]);
