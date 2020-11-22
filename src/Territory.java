@@ -123,4 +123,12 @@ public class Territory
     public void setNumberOppTerr(int i){
         numberOppTerritories = i;
     }
+
+    /**
+     * Sets the number of troops in the Territory
+     * @param i
+     */
+    public void setTroops(int i) {
+        troops = i;
+    }
 }
