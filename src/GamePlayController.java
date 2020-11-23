@@ -165,7 +165,9 @@ public class GamePlayController implements ActionListener {
             if(isFortifying){
 
                 //Tell the user to select Territory A
+                gpm.setInstructions("Please choose a Territory to fortify from.");
                 //update the gameStatus
+                gpm.gameStatus();
                 next = 3;
             }
             else if(!isFortifying)
@@ -212,13 +214,13 @@ public class GamePlayController implements ActionListener {
 
             isFortifying = true;
         }
-        else if(e.getActionCommand().equals("next") && isFortifying){
+  //      else if(e.getActionCommand().equals("next") && isFortifying){
             //next (2nd time)
             //update instructions to have Fortify intstructions
-            next = 4;
+   //         next = 4;}
 
 
-        }
+       
         //consider removing
         //BACK Button is Selected. Go back to ATTACK
         else if(e.getActionCommand().equals("Back")){
@@ -235,16 +237,43 @@ public class GamePlayController implements ActionListener {
         else if(next == 4 && isFortifying){
             //this is where next e.getActionComm... should return selected territory "A"
             //update instructions to ask for territory to fortify "B"
-            gpm.gameStatus();
-            //gpm.fortifyFrom();
+
             //gps.fortifyTo();
-            //if Terr A is OK -> Continue to next = 5
-                //Update Status: select territory B
-            //else if TerrA is NOt ok -> set  next 3
-                //Update GameStatus: select territory A
+            //does player own selected territory
+            for (Territory terr : gpm.getBoard().getTerritoriesList()){
+                if(terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())){
+                    next = 5; // player selected a valid territory
+                }else{
+                    next = 3;// player selected an invalid territory
+                }
+            }
+            gpm.setFortifyFrom(e.getActionCommand()); //use the mapper to return territory clicked on
+            gpm.gameStatus();
+            gpm.isFortifier();
+
+
 
         } else if(next == 5 && isFortifying){
             //e.getActionComm... should return selected terr;
+            for (Territory terr : gpm.getBoard().getTerritoriesList()){
+                if(terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())){
+                    // player selected a valid territory
+                }else{
+                    next = 4;// player selected an invalid territory
+                }
+            }
+            Territory A;
+            Territory B;
+
+            boolean isPathable;
+            for (Territory terr : gpm.getCurrentPlayer().getTerritories()){
+                for(Territory adjTerr : terr.getBorderTerritories()){
+                    // need to complete pathing algo
+                    if(adjTerr.getPlayer() != terr.getPlayer()){
+                        //test
+                    }
+                }
+            }
             //Check if there is a path from A-B
                 //if no path -> set next = 4
                 //if yes -> continue with User prompt below
