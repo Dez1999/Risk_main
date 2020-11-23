@@ -9,6 +9,7 @@ public class GamePlayController implements ActionListener {
     private GameplayModel gpm;
     private int next;
     private boolean success;
+    private boolean isFortifying = false;
 
 
 
@@ -35,6 +36,7 @@ public class GamePlayController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JFrame parent = new JFrame();
+
 
         //Select Territory to Deploy Troops
         if(next == 0){
@@ -152,7 +154,7 @@ public class GamePlayController implements ActionListener {
                             }
                             else {
                                 //Show GameStatus
-                                gpm.setInstructions("Please choose Attacking Territory with Neighbouring Enemy Territories");
+                                gpm.setInstructions("Please choose Attacking Territory");
                                 gpm.gameStatus();
                                 next = 0;
                             }
@@ -167,52 +169,64 @@ public class GamePlayController implements ActionListener {
         //Next Button is Selected. Change Player and start to deploy Troops, Checks if AI player is next
         else if(e.getActionCommand().equals("next")){
 
-            //Player presses Next for first time
-            //Fortify()
+            if(isFortifying){
 
-
-
-            //Player press Next second in their turn
-            //JOptionPane.showMessageDialog(parent, "Your turn is now Over");
-
-            //Show GameStatus
-
-            String TurnPassed = "Player " + gpm.getCurrentPlayer().getName() + " has passed their Turn. Player " + gpm.getNextPlayer().getName() + " is up Next";
-            //gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " has passed their Turn. Player "+ gpm.getNextPlayer().getName() + " is up Next. Please choose the Territory to add"  Troops to");
-            //gpm.gameStatus();
-            gpm.changePlayer();  //This is good
-            gpm.calculateBonusTroops();
-            gpm.setInstructions(TurnPassed + ". Please choose the Territory to add " + gpm.getBonus() +  " Troops to");
-            gpm.gameStatus(); //test
-
-            /*
-            String territories = null;
-
-            for (Territory terr : gpm.getCurrentPlayer().getTerritories()) {
-                System.out.println(terr.getName() + ": Troops = " + terr.getTroops());
-                territories = territories + "\n " + terr.getName() + ": Troops = " + terr.getTroops();
+                //Tell the user to select Territory A
+                //update the gameStatus
+                next = 3;
             }
+            else if(!isFortifying)
+            {
+                JOptionPane.showMessageDialog(parent, "Your turn is now Over");
 
-            JOptionPane.showInternalMessageDialog(null, territories,
-                    "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
+                //Show GameStatus
+                gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " has passed their Turn. Player "+ gpm.getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
+                gpm.gameStatus();
+                gpm.changePlayer();  //This is good
+                gpm.gameStatus();
 
-             */
+                String territories = null;
 
-            next = -1;
-
-
-
-            //Test for AI Player
-            if(gpm.getCurrentPlayer().isAIplayer()){
-                try {
-                    gpm.AIUtilityFunction();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                for (Territory terr : gpm.getCurrentPlayer().getTerritories()) {
+                    System.out.println(terr.getName() + ": Troops = " + terr.getTroops());
+                    territories = territories + "\n " + terr.getName() + ": Troops = " + terr.getTroops();
                 }
-                //gpm.getCurrentPlayer().AIplayerFunction();
-            }
-        }
 
+                JOptionPane.showInternalMessageDialog(null, territories,
+                        "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
+
+                next = -1;
+
+
+
+                //Test for AI Player
+                if(gpm.getCurrentPlayer().isAIplayer()){
+                    try {
+                        gpm.AIUtilityFunction();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    //gpm.getCurrentPlayer().AIplayerFunction();
+                }
+
+            }
+
+
+
+
+    //Next (first time)
+
+
+            //isFortifying = true;
+        }
+        else if(e.getActionCommand().equals("next") && isFortifying){
+            //next (2nd time)
+            //update instructions to have Fortify intstructions
+            next = 4;
+
+
+        }
+        //consider removing
         //BACK Button is Selected. Go back to ATTACK
         else if(e.getActionCommand().equals("Back")){
             JOptionPane.showMessageDialog(parent, "You have Restarted the Attack Phase");
@@ -223,6 +237,27 @@ public class GamePlayController implements ActionListener {
 
             //This will bring the user back to ATTACK phase and ask them to choose an attacking Territory
             next = 0;
+        }
+        //Start deploy phase
+        else if(next == 4 && isFortifying){
+            //this is where next e.getActionComm... should return selected territory "A"
+            //update instructions to ask for territory to fortify "B"
+            gpm.gameStatus();
+            //gpm.fortifyFrom();
+            //gps.fortifyTo();
+            //if Terr A is OK -> Continue to next = 5
+                //Update Status: select territory B
+            //else if TerrA is NOt ok -> set  next 3
+                //Update GameStatus: select territory A
+
+        } else if(next == 5 && isFortifying){
+            //e.getActionComm... should return selected terr;
+            //Check if there is a path from A-B
+                //if no path -> set next = 4
+                //if yes -> continue with User prompt below
+                         //prompt user for a troop amount and fortify from territory A to B
+                         //If successful: fortify complete -> set isFortifying to false
+                         //End the turn
         }
 
         next++;   //Updates the Phase in the Game
