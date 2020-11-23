@@ -10,6 +10,7 @@ public class GamePlayController implements ActionListener {
     private int next;
     private boolean success;
     private boolean isFortifying = true;
+    boolean isPathable = false;
 
 
 
@@ -247,34 +248,29 @@ public class GamePlayController implements ActionListener {
                     next = 3;// player selected an invalid territory
                 }
             }
-            gpm.setFortifyFrom(e.getActionCommand()); //use the mapper to return territory clicked on
+         //   gpm.setFortifyFrom(e.getActionCommand()); //use the mapper to return territory clicked on
             gpm.gameStatus();
-            gpm.isFortifier();
-
-
 
         } else if(next == 5 && isFortifying){
             //e.getActionComm... should return selected terr;
             for (Territory terr : gpm.getBoard().getTerritoriesList()){
-                if(terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())){
+                if(terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer()) && isPathable){
                     // player selected a valid territory
                 }else{
                     next = 4;// player selected an invalid territory
                 }
             }
-            Territory A;
-            Territory B;
+            //Territory A;
+          //  Territory B;
 
-            boolean isPathable;
-            for (Territory terr : gpm.getCurrentPlayer().getTerritories()){
+            /**
+          for (Territory terr : gpm.getCurrentPlayer().getTerritories()){
                 for(Territory adjTerr : terr.getBorderTerritories()){
                     // need to complete pathing algo
-                    if(adjTerr.getPlayer() != terr.getPlayer()){
-                        //test////
-                        hgigjh
-                    }
-                }
-            }
+                    if(adjTerr == B){
+                        isPathable=true;
+                    }else{isPathable = false;}                }
+            }*/
             //Check if there is a path from A-B
                 //if no path -> set next = 4
                 //if yes -> continue with User prompt below
