@@ -1205,7 +1205,7 @@ public class GameplayModel {
      * Method: Checks if currentPlayer Owns Attacking Territory
      */
     public void checkAttackingOwnership() {
-        resetNumberOppTerrirtories();
+        resetNumberOppTerritories();
         attackTerrNoOpp = false;
         exitAttack = false;
         playerOwnsAttackingTerritory = false;
@@ -1340,7 +1340,7 @@ public class GameplayModel {
         setInstructions("AI Player" + currentPlayer.getName() + " has finished the Deploy Phase");
         gameStatus();
 
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(2);
 
         /**
          * FIX: AI will Sometimes Attack own Territory. Attacking Territory is correct. Check how Defending Territory is Chosen
@@ -1349,7 +1349,7 @@ public class GameplayModel {
         setInstructions("AI Player" + currentPlayer.getName() + " has finished the Attack Phase");
         gameStatus();
 
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(2);
 
         //    wait(100);
 
@@ -1357,7 +1357,7 @@ public class GameplayModel {
 
         //   wait(100);
 
-        resetNumberOppTerrirtories();
+        resetNumberOppTerritories();
 
         AInextTurn();
 
@@ -1367,7 +1367,7 @@ public class GameplayModel {
     /**
      * Method: Resets Numebr of Opponent Territories for Current Player
      */
-    private void resetNumberOppTerrirtories() {
+    private void resetNumberOppTerritories() {
         for (Territory terr : currentPlayer.getTerritories()){
             terr.setNumberOppTerr(0);
         }
@@ -1379,6 +1379,7 @@ public class GameplayModel {
     public void AIdeploy() throws InterruptedException {
         Territory highestOppTerritory = new Territory("HighestOpponentTerritories");
         calculateBonusTroops();
+        checkPlayerhand();  //Checks to see if AI can trade in Cards for Extra Bonus Troops
 
         //Check all Territories Owned and deploy to Territory that has the most adjacent Opponent Territories
         setNumberOppTerrirtories();
@@ -1653,8 +1654,8 @@ public class GameplayModel {
             }
         }
 
-        Territory weakestOpp;
-        weakestOpp = mostPop.getBorderTerritories().get(0);
+        Territory weakestOpp = new Territory("weakestOpp");
+        weakestOpp.setTroops(10000);
         for(Territory oppTerr : mostPop.getBorderTerritories()){
             if (oppTerr.getPlayer() != currentPlayer && oppTerr.getTroops() < weakestOpp.getTroops()){
                 weakestOpp = oppTerr;
