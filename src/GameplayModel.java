@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
 public class GameplayModel {
     public static final int MAX_DICE = 3;
     private Board board;
-
+    private int inputPlayersplaying;
     private Player currentPlayer;
 
     private Player nextPlayer;
@@ -279,7 +281,69 @@ public class GameplayModel {
      */
     public void inputNumberofPlayers() {
         // System.out.println("Please choose how many players 2-6");
-        int inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
+       // int inputPlayersplaying; //= (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
+        JFrame playersFrame = new JFrame("number of players");
+        playersFrame.setSize(300, 100);
+        playersFrame.setLayout(new FlowLayout());
+        playersFrame.getContentPane().setBackground(Color.BLUE);
+        JLabel stat = new JLabel("Please select the number of players playing");
+        JButton twoP = new JButton("2");
+        JButton threeP = new JButton("3");
+        JButton fourP = new JButton("4");
+        JButton fiveP = new JButton("5");
+        JButton sixP = new JButton("6");
+        twoP.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                inputPlayersplaying = 2;
+                numPlayers = inputPlayersplaying;
+                playersFrame.setVisible(false);
+            }
+        });
+        threeP.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                inputPlayersplaying = 3;
+                numPlayers = inputPlayersplaying;
+                playersFrame.setVisible(false);
+            }
+        });
+        fourP.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                inputPlayersplaying = 4;
+                numPlayers = inputPlayersplaying;
+                playersFrame.setVisible(false);
+            }
+        });
+        fiveP.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                inputPlayersplaying = 5;
+                numPlayers = inputPlayersplaying;
+                playersFrame.setVisible(false);
+            }
+        });
+        sixP.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                inputPlayersplaying = 6;
+                numPlayers = inputPlayersplaying;
+                playersFrame.setVisible(false);
+            }
+        });
+        playersFrame.add(stat);
+        playersFrame.add(twoP);
+        playersFrame.add(threeP);
+        playersFrame.add(fourP);
+        playersFrame.add(fiveP);
+        playersFrame.add(sixP);
+        playersFrame.setVisible(true);
         //Get user input number and save it then run method below:
         try {
             //Scanner scan = new Scanner(System.in);
@@ -287,9 +351,11 @@ public class GameplayModel {
             do {
                 //System.out.print(">");
                 //num = scan.nextInt();
-                if (!(inputPlayersplaying >= 1 && inputPlayersplaying <= 7)) inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
+               // if (!(inputPlayersplaying >= 1 && inputPlayersplaying <= 7)) inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
             } while (!(inputPlayersplaying >= 2 && inputPlayersplaying <= 6));
             numPlayers = inputPlayersplaying;
+            playersFrame.setVisible(false);
+
         } catch (Exception e) {
             System.out.println("Sorry, only 2-6 players are allowed");
             inputNumberofPlayers();
@@ -754,15 +820,15 @@ public class GameplayModel {
 
                 //Show GameStatus
 
-                JOptionPane.showInternalMessageDialog(null, "You cannot attack with more than 3 dice at one time. Please attack with 1-3 dice.",
-                        "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
-                exitAttack = true;
+                //JOptionPane.showInternalMessageDialog(null, "You cannot attack with more than 3 dice at one time. Please attack with 1-3 dice.",
+                      //  "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
+                //exitAttack = true;
             } else {
 
                 //Show GameStatus
-                JOptionPane.showInternalMessageDialog(null, "You did not enter the right amount of Dice to Attack with",
-                        "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
-                exitAttack = true;
+                //JOptionPane.showInternalMessageDialog(null, "You did not enter the right amount of Dice to Attack with",
+                      // "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
+                //exitAttack = true;
             }
 
         }//End of While loop
