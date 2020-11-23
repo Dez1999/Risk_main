@@ -270,7 +270,8 @@ public class GamePlayController implements ActionListener {
                 for(Territory adjTerr : terr.getBorderTerritories()){
                     // need to complete pathing algo
                     if(adjTerr.getPlayer() != terr.getPlayer()){
-                        //test
+                        //test////
+                        hgigjh
                     }
                 }
             }
