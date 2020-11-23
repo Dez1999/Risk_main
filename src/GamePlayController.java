@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,7 +10,11 @@ public class GamePlayController implements ActionListener {
     private GameplayModel gpm;
     private int next;
     private boolean success;
+
+    private int userTroops;
+
     private boolean isFortifying = false;
+
 
 
 
@@ -120,24 +125,70 @@ public class GamePlayController implements ActionListener {
                         //Show in GameStatus
                         gpm.setInstructions("Choose the Number of Dice to Attack with (1 to 3 Dice");
                         gpm.gameStatus();
-
-                        //Pop-up Window to have user select the # of troops
-                        int userTroops = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Dice to use. Only choose values 1-3:"));
+                        JFrame diceFrame = new JFrame("amount of dice for the attack");
+                        diceFrame.getContentPane().setBackground(Color.pink);
+                        diceFrame.setLayout(new FlowLayout());
+                        diceFrame.setSize(300, 200);
+                        JLabel label = new JLabel("choose the amount of dice you for the attack");
+                        label.setPreferredSize(new Dimension(270, 50));
+                        diceFrame.add(label);
+                        JButton oneDie = new JButton("1 Die");
+                        JButton twoDie = new JButton("2 Dice");
+                        JButton threeDie = new JButton("3 Dice");
+                        oneDie.addActionListener(new ActionListener()
+                        {
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                userTroops = 1;
+                                gpm.setUserAttackingTroops(userTroops);
+                                gpm.chooseAttackingTroops();
+                                diceFrame.setVisible(false);
+                            }
+                        });
+                        twoDie.addActionListener(new ActionListener()
+                        {
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                userTroops = 2;
+                                gpm.setUserAttackingTroops(userTroops);
+                                gpm.chooseAttackingTroops();
+                                diceFrame.setVisible(false);
+                            }
+                        });
+                        threeDie.addActionListener(new ActionListener()
+                        {
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                userTroops = 3;
+                                gpm.setUserAttackingTroops(userTroops);
+                                gpm.chooseAttackingTroops();
+                                diceFrame.setVisible(false);
+                            }
+                        });
+                        diceFrame.setVisible(true);
+                        diceFrame.add(oneDie);
+                        diceFrame.add(twoDie);
+                        diceFrame.add(threeDie);
                         //Get user input number and save it then run method below:
-                        gpm.setUserAttackingTroops(userTroops);
-                        gpm.chooseAttackingTroops();
+                       // gpm.setUserAttackingTroops(userTroops);
+                       // gpm.chooseAttackingTroops();
 
                         if(gpm.isExitAttack()){
 
                             //Show in GameStatus
+
                             gpm.setInstructions("You must choose the correct amount of Dice. Please choose the Attacking Territory with Neighbouring Enemy Territories");
+
                             gpm.gameStatus();
                             next = 0;
                         }
                         else {
                             //Attack was Successful
                             //updateBoardStatus()
-
+                            //diceFrame.setVisible(false);
+                            if(gpm.isExitAttack() == true){
+                               // diceFrame.setVisible(false);
+                            }
                             if (gpm.WinnerStatus()) { //Check if Game is Over
 
                                 //Show in Pop-up
@@ -159,7 +210,9 @@ public class GamePlayController implements ActionListener {
                                 next = 0;
                             }
                         }
-
+                        if(gpm.getCloseDiceFrame()){
+                          //  diceFrame.setVisible(false);
+                        }
                     }
 
                 }

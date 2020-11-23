@@ -1,8 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * Class GamePlay
@@ -11,10 +15,12 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class GameplayModel {
+
+    private boolean closeDiceFrame;
     public static final int MAX_DICE = 3;
     private Board board;
-
     private Player currentPlayer;
+    private int inputPlayersplaying ;
 
     private Player nextPlayer;
     private Die die = new Die();
@@ -74,15 +80,16 @@ public class GameplayModel {
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
-    public void startGame() {
+    public boolean getCloseDiceFrame() {return this.closeDiceFrame;}
+    public void startGame( ){
 
         setUpColorList();
-        inputNumberofPlayers();
+            setUpColorList();
+       inputNumberofPlayers() ;
         this.playersAlive = new ArrayList<Player>();
         InitializePlayers(numPlayers);
         board = new Board(numPlayers);
         initializeLand();
-        //inputNumberAIplayers();
 
 
         i = 1;
@@ -91,8 +98,8 @@ public class GameplayModel {
 
         /**Sets Next Player Turn*/
         nextPlayer = getPlayers(1);
+        }
 
-    }
 
     /**
      * Method: Asks User which players will be AI
@@ -225,7 +232,6 @@ public class GameplayModel {
 
         /**Method to deploy troops */
         boolean success = deployInTerritory(bonus);
-
         //Update Map View to show Troops being added. NEED METHOD
 
         return success;
@@ -308,27 +314,58 @@ public class GameplayModel {
         return "Welcome to Risk!" + "Everybody wants to rule the world!" ;
     }
 
+    public void setInputPlayersplaying(int n){
+        this.inputPlayersplaying = n;
+    }
+
     /**
      * Method: Method regarding the number of players
      */
     public void inputNumberofPlayers() {
-        // System.out.println("Please choose how many players 2-6");
-        int inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
-        //Get user input number and save it then run method below:
-        try {
-            //Scanner scan = new Scanner(System.in);
-            //int num = 0;
-            do {
-                //System.out.print(">");
-                //num = scan.nextInt();
-                if (!(inputPlayersplaying >= 1 && inputPlayersplaying <= 7)) inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
-            } while (!(inputPlayersplaying >= 2 && inputPlayersplaying <= 6));
-            numPlayers = inputPlayersplaying;
-        } catch (Exception e) {
-            System.out.println("Sorry, only 2-6 players are allowed");
-            inputNumberofPlayers();
+            //System.out.println("Please choose how many players 2-6");
+            this.inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
+            numPlayers = this.inputPlayersplaying;
+
+            // JFrame playersFrame = new JFrame("number of players");
+           // playersFrame.setSize(300, 100);
+            // playersFrame.setLayout(new FlowLayout());
+            //playersFrame.getContentPane().setBackground(Color.BLUE);
+            // JLabel stat = new JLabel("Please select the number of players playing");
+            //JButton twoP = new JButton("2");
+            //JButton threeP = new JButton("3");
+            //JButton fourP = new JButton("4");
+            //JButton fiveP = new JButton("5");
+            //JButton sixP = new JButton("6");
+            //twoP.addActionListener(this);
+            //threeP.addActionListener(this);
+            //fourP.addActionListener(this);
+            //fiveP.addActionListener(this);
+            //sixP.addActionListener(this);
+            //playersFrame.add(stat);
+            //playersFrame.add(twoP);
+            //playersFrame.add(threeP);
+            //playersFrame.add(fourP);
+            //playersFrame.add(fiveP);
+            //playersFrame.add(sixP);
+            //playersFrame.setVisible(true);
+
+            try {
+                //Scanner scan = new Scanner(System.in);
+                //int num = 0;
+                do {
+                    //System.out.print(">");
+                    //num = scan.nextInt();
+                    if (!(inputPlayersplaying >= 1 && inputPlayersplaying <= 7)) inputPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Players Playing. Choose 2-6"));
+                } while (!(inputPlayersplaying >= 2 && inputPlayersplaying <= 6));
+                numPlayers = this.inputPlayersplaying;
+                //playersFrame.setVisible(false);
+
+            } catch (Exception e) {
+                System.out.println("Sorry, only 2-6 players are allowed");
+                inputNumberofPlayers();
+            }
         }
-    }
+
 
     /**
      * Method: This method initializes the players in the Game
@@ -788,15 +825,15 @@ public class GameplayModel {
 
                 //Show GameStatus
 
-                JOptionPane.showInternalMessageDialog(null, "You cannot attack with more than 3 dice at one time. Please attack with 1-3 dice.",
-                        "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
-                exitAttack = true;
+                //JOptionPane.showInternalMessageDialog(null, "You cannot attack with more than 3 dice at one time. Please attack with 1-3 dice.",
+                      //  "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
+                //exitAttack = true;
             } else {
 
                 //Show GameStatus
-                JOptionPane.showInternalMessageDialog(null, "You did not enter the right amount of Dice to Attack with",
-                        "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
-                exitAttack = true;
+                //JOptionPane.showInternalMessageDialog(null, "You did not enter the right amount of Dice to Attack with",
+                      // "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
+                //exitAttack = true;
             }
 
         }//End of While loop
@@ -1016,14 +1053,14 @@ public class GameplayModel {
         //setTroops
         Player prevOwnerPlayer = defendingTerritory.getPlayer();
         String prevOwnerName = defendingTerritory.getPlayer().getName();
-
+        closeDiceFrame = false;
         //Attacker Wins
         if (rollResult == 1) {
             defendingTerritory.removeTroops(defendLoss);
 
             if (defendingTerritory.getTroops() <= 0) {
 
-
+                closeDiceFrame = true;
                 //Show GameStatus
                JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops. " +
                                 attackingTerritory.getName() + " has conquered " + defendingTerritory.getName(),
@@ -1046,18 +1083,19 @@ public class GameplayModel {
                 if (territoriesConquered == 1) {
                     Card newCard = board.getDeck().drawCard();
                     currentPlayer.getHand().addCard(newCard);
-
+                    closeDiceFrame = true;
                     //Show GameStatus
                     //Players Receives a new Card
                 }
 
                 if (defendingTerritory.getPlayer().getTerritories().isEmpty()) {
                     //Remove player from game
+                    closeDiceFrame = true;
                     kill(prevOwnerPlayer);
                 }
             }
             else {
-
+                closeDiceFrame = true;
                 //Show GameStatus
                 JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops",
                         "Attacking Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
@@ -1069,6 +1107,7 @@ public class GameplayModel {
         //Defender Wins
         else if(rollResult == -1){
             attackingTerritory.removeTroops(attackLoss);
+            closeDiceFrame = true;
 
             //Show GameStatus
             JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops",
@@ -1078,11 +1117,12 @@ public class GameplayModel {
 
         //There was a Tie
         else if (rollResult == 0){
+            closeDiceFrame = true;
             attackingTerritory.removeTroops(attackLoss); //expecting problem handling empty territory incase of tie in a 2v1 battle. 2v1 => 1v0  after tie
             defendingTerritory.removeTroops(defendLoss);
 
             if(defendingTerritory.getTroops()<=0) {
-
+                closeDiceFrame = true;
                 //Show GameStatus
 
                 JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
@@ -1121,7 +1161,7 @@ public class GameplayModel {
                 }
             }
             else {
-
+                closeDiceFrame = true;
                 //Show GameStatus
                 JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
                                 attackingTerritory.getName() +
@@ -1718,6 +1758,5 @@ public class GameplayModel {
         gameStatus();
         // wait(100);
     }
-
 
 }
