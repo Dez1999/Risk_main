@@ -9,7 +9,7 @@ public class GamePlayController implements ActionListener {
     private GameplayModel gpm;
     private int next;
     private boolean success;
-    private boolean isFortifying = true;
+    private boolean isFortifying = false;
 
 
 
@@ -217,7 +217,7 @@ public class GamePlayController implements ActionListener {
     //Next (first time)
 
 
-            isFortifying = true;
+            //isFortifying = true;
         }
         else if(e.getActionCommand().equals("next") && isFortifying){
             //next (2nd time)

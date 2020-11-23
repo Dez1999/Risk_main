@@ -1398,9 +1398,10 @@ public class GameplayModel {
         ArrayList<Territory> TerrWith1plus = AiTerrAttack(1);  //returns all Territories with more than 1 troops
 
 
-        Territory terrAgainstMostPop = new Territory("OwnMostPop");
-        Territory terrBiggestThreat = new Territory("BiggestThreatTerritory");
+        Territory terrAgainstMostPop;
+        Territory terrBiggestThreat;
         ArrayList<Territory> terrWeakestThreats = new ArrayList<>();
+        Territory chosenTerritory;
 
         //Determine the Target using 1 and 2.
         //1) With the most populated Territory -> return Target   : Find most populated terr, return enemy neighbouring Territory with least troops to attack
@@ -1415,10 +1416,10 @@ public class GameplayModel {
         //2) The biggest Threat  -> return BiggestThreat Target
         terrBiggestThreat = returnBiggestOppTerr(TerrWith1plus);
 
+        //Choose which Target Territory to Attack (terrAgainstMostPop, terrBiggestThreat,noAttack)
+        chosenTerritory = chooseBestTargetTerritory(TerrWith1plus, TerrWith3plus, terrAgainstMostPop, terrBiggestThreat);
 
-
-
-
+        
 
         //3) Standby No Attack
                 //Not being threatened
@@ -1481,6 +1482,43 @@ public class GameplayModel {
 
         //wait(100);
 
+    }
+
+    /**
+     * Method: Helps AI player choose which territory to Attack
+     * @param with1plus
+     * @param terrWith1plus all Owned Territories with more than 1 troop and have Opponent Territories
+     * @param terrAgainstMostPop
+     * @param terrBiggestThreat
+     * @return
+     */
+    private Territory chooseBestTargetTerritory(ArrayList<Territory> with1plus, ArrayList<Territory> terrWith1plus, Territory terrAgainstMostPop, Territory terrBiggestThreat) {
+        Territory noAttack = new Territory("Do not Attack");
+
+        //Select terrBiggestThreat if Satisfies the following Conditions
+        if (terrBiggestThreat.getTroops() > 2){
+            for (Territory borderTerr : terrBiggestThreat.getBorderTerritories()){
+                if(borderTerr.getPlayer() == currentPlayer && borderTerr.getTroops() > 3){
+                    return terrBiggestThreat;
+                }
+            }
+        }
+
+        //Select terrAgainstMostPop if it's troops = 1
+        if (terrAgainstMostPop.getTroops() == 1){
+            return terrAgainstMostPop;
+        }
+
+        //Select terrAgainstMostPop if its troops <= Player Owner territories
+        if (terrAgainstMostPop.getTroops() > 1){
+            for (Territory borderTerr : terrAgainstMostPop.getBorderTerritories()){
+                if(borderTerr.getPlayer() == currentPlayer && borderTerr.getTroops() >= terrAgainstMostPop.getTroops()){
+                    return terrAgainstMostPop;
+                }
+            }
+        }
+
+        return noAttack;
     }
 
     /**
