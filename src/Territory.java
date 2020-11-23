@@ -13,6 +13,7 @@ public class Territory
     private int troops ;
     private LinkedList<Territory> boardingTerritories;
     private int numberOppTerritories;
+    private boolean flagAdded;
     /*
      * Constructor for objects of class Territory
      */
@@ -22,6 +23,7 @@ public class Territory
         //this.boardingTerritories = boardingTerritories;
         boardingTerritories = new LinkedList<>();
         numberOppTerritories = 0;
+        flagAdded = false;
     }
 
     /**
@@ -130,5 +132,21 @@ public class Territory
      */
     public void setTroops(int i) {
         troops = i;
+    }
+
+    /**
+     * Sets the flag in the Territory is it was added to a list of Available Attacking Territories
+     * @param flag determines if it was added to a list or not
+     */
+    public void setFlagAdded(boolean flag){
+        flagAdded = flag;
+    }
+
+    /**
+     * Returns the boolean variable flag Added
+     * @return
+     */
+    public boolean getFlagAdded() {
+        return flagAdded;
     }
 }
