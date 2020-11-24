@@ -59,6 +59,10 @@ public class GameplayModel {
     private boolean isDefenderSelected = false;
     private boolean isDiceSelected = false;
     private boolean isDeployed = false;
+    boolean isPathable = false;
+    private Territory From;
+    private Territory To;
+
 
     /** Game Logic*/
     public GameplayModel() {
@@ -108,6 +112,20 @@ public class GameplayModel {
         colorList.add(PINK);
     }
 
+    public Territory getFrom() {
+        return From;
+    }
+
+    public void setFrom(Territory from) {
+        From = from;
+    }
+    public Territory getTo() {
+        return To;
+    }
+
+    public void setTo(Territory to) {
+        To = to;
+    }
     public void setInstructions(String instructions) {
         this.instructions = instructions;
     }
@@ -336,7 +354,7 @@ public class GameplayModel {
     }
 
 
-    private void fortify() {
+    void fortify() {
     }
 
     //FIX This: print each players own Territories. Each territory has player owner
@@ -1352,6 +1370,23 @@ public class GameplayModel {
 
     }
 
+    public boolean Fortify(int troops){
+
+    //move troops FROM -> TO.
+        if(troops < From.getTroops()) {
+                From.removeTroops(troops);
+                To.addTroops(troops);
+            return true;
+        } else{
+            return false;
+        }
+
+    }
+    public boolean isPathable(){
+        //insert pathing algo
+
+        return isPathable;
+    }
 
     /**
      * Fortify Method: helps AI player fortify Troops to a specfic Territory that it owns

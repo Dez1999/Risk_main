@@ -10,11 +10,9 @@ public class GamePlayController implements ActionListener {
     private int next;
     private boolean success;
     private boolean isFortifying = true;
-    boolean isPathable = false;
 
 
-
-    public GamePlayController(GameplayModel gpm){
+    public GamePlayController(GameplayModel gpm) {
 
         this.gpm = gpm;
         next = 0;
@@ -31,6 +29,7 @@ public class GamePlayController implements ActionListener {
     /**
      * responds to actions performed by user and also handles player turn phases.
      * ie; deploy, attack...etc
+     *
      * @param e
      */
     @Override
@@ -39,7 +38,7 @@ public class GamePlayController implements ActionListener {
 
 
         //Select Territory to Deploy Troops
-        if(next == 0){
+        if (next == 0) {
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (e.getActionCommand().equals(terr.getName())) {
                     gpm.setSelectedTerritory(terr);
@@ -47,15 +46,14 @@ public class GamePlayController implements ActionListener {
                     //Add troops to Territory
                     //Ask User to choose Attacking Territory
                     success = gpm.userDeploysTroops();
-                    if (success){ //Troops were deployed to selected Territory
+                    if (success) { //Troops were deployed to selected Territory
                         //gpm.updateBoardStatus()   -> ADD METHOD
 
 
                         //Show in GameStatus() used in JLabel : gpm
                         gpm.setInstructions("Please choose Attacking Territory");
                         gpm.gameStatus();
-                    }
-                    else{//Troops were not deployed to selected Territory
+                    } else {//Troops were not deployed to selected Territory
                         //Show in GameStatus()
                         gpm.setInstructions("Please Select Territory to add your bonus Troops to");
                         gpm.gameStatus();
@@ -67,18 +65,17 @@ public class GamePlayController implements ActionListener {
         }
 
         //Select Attacking Territory
-        else if(next == 1){
+        else if (next == 1) {
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (e.getActionCommand().equals(terr.getName())) {
                     gpm.setAttackingTerritory(terr);  //Assumes user selects their own Territory
                     gpm.checkAttackingOwnership();
-                    if(!gpm.isExitAttack()){  //Attacking Territory was successfully selected
+                    if (!gpm.isExitAttack()) {  //Attacking Territory was successfully selected
                         //updateBoardStatus()
                         //Show in GameStatus()
                         gpm.setInstructions("Please choose Defending Territory");
                         gpm.gameStatus();
-                    }
-                    else{ //Attackinf Territory was not successfully selected
+                    } else { //Attackinf Territory was not successfully selected
                         //Show in GameStatus
                         gpm.setInstructions("You must choose your own Territory");
                         gpm.gameStatus();
@@ -90,26 +87,25 @@ public class GamePlayController implements ActionListener {
 
 
         //Select Defending Territory
-            //Check if Defending Territory can be used
-            //If yes, then have a pop up window to ask the user to select # of troops
-            //then run one attack.
-            //Display attackOutcome()
-            //Display message to tell the user to select A New Attacking Territory
-            //set n = 0 restart attack phase.
-        else if(next == 2){
+        //Check if Defending Territory can be used
+        //If yes, then have a pop up window to ask the user to select # of troops
+        //then run one attack.
+        //Display attackOutcome()
+        //Display message to tell the user to select A New Attacking Territory
+        //set n = 0 restart attack phase.
+        else if (next == 2) {
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (e.getActionCommand().equals(terr.getName())) {
                     gpm.setDefendingTerritory(terr);
                     gpm.isTargetBordering();
-                    if (gpm.isExitAttack()){  //Defending Territory was not successfully Selected
+                    if (gpm.isExitAttack()) {  //Defending Territory was not successfully Selected
 
                         //Show in GameStatus
                         gpm.setInstructions("You own this Territory. You must choose a Territory you don't own");
                         gpm.gameStatus();
                         next = 1;
 
-                    }
-                    else { //Defending Territory was successfully selected
+                    } else { //Defending Territory was successfully selected
 
                         //Show in GameStatus
                         gpm.setInstructions("Choose the Number of Dice to Attack with (1 to 3 Dice");
@@ -121,14 +117,13 @@ public class GamePlayController implements ActionListener {
                         gpm.setUserAttackingTroops(userTroops);
                         gpm.chooseAttackingTroops();
 
-                        if(gpm.isExitAttack()){
+                        if (gpm.isExitAttack()) {
 
                             //Show in GameStatus
                             gpm.setInstructions("You must choose the correct amount of Dice. Please choose the Attacking Territory");
                             gpm.gameStatus();
                             next = 0;
-                        }
-                        else {
+                        } else {
                             //Attack was Successful
                             //updateBoardStatus()
 
@@ -145,8 +140,7 @@ public class GamePlayController implements ActionListener {
                                 */
                                 System.exit(0);
                                 //Exit Game using JFrame
-                            }
-                            else {
+                            } else {
                                 //Show GameStatus
                                 gpm.setInstructions("Please choose Attacking Territory");
                                 gpm.gameStatus();
@@ -161,22 +155,20 @@ public class GamePlayController implements ActionListener {
         }
 
         //Next Button is Selected. Change Player and start to deploy Troops, Checks if AI player is next
-        else if(e.getActionCommand().equals("next")){
+        else if (e.getActionCommand().equals("next")) {
 
-            if(isFortifying){
+            if (isFortifying) {
 
                 //Tell the user to select Territory A
                 gpm.setInstructions("Please choose a Territory to fortify from.");
                 //update the gameStatus
                 gpm.gameStatus();
                 next = 3;
-            }
-            else if(!isFortifying)
-            {
+            } else if (!isFortifying) {
                 JOptionPane.showMessageDialog(parent, "Your turn is now Over");
 
                 //Show GameStatus
-                gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " has passed their Turn. Player "+ gpm.getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
+                gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " has passed their Turn. Player " + gpm.getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
                 gpm.gameStatus();
                 gpm.changePlayer();  //This is good
                 gpm.gameStatus();
@@ -194,9 +186,8 @@ public class GamePlayController implements ActionListener {
                 next = -1;
 
 
-
                 //Test for AI Player
-                if(gpm.getCurrentPlayer().isAIplayer()){
+                if (gpm.getCurrentPlayer().isAIplayer()) {
                     try {
                         gpm.AIUtilityFunction();
                     } catch (InterruptedException ex) {
@@ -208,23 +199,20 @@ public class GamePlayController implements ActionListener {
             }
 
 
-
-
-    //Next (first time)
+            //Next (first time)
 
 
             isFortifying = true;
         }
-  //      else if(e.getActionCommand().equals("next") && isFortifying){
-            //next (2nd time)
-            //update instructions to have Fortify intstructions
-   //         next = 4;}
+        //      else if(e.getActionCommand().equals("next") && isFortifying){
+        //next (2nd time)
+        //update instructions to have Fortify intstructions
+        //         next = 4;}
 
 
-       
         //consider removing
         //BACK Button is Selected. Go back to ATTACK
-        else if(e.getActionCommand().equals("Back")){
+        else if (e.getActionCommand().equals("Back")) {
             JOptionPane.showMessageDialog(parent, "You have Restarted the Attack Phase");
 
             //Show GameStatus
@@ -234,53 +222,90 @@ public class GamePlayController implements ActionListener {
             //This will bring the user back to ATTACK phase and ask them to choose an attacking Territory
             next = 0;
         }
-        //Start deploy phase
-        else if(next == 4 && isFortifying){
+        //Start fortify phase
+        else if (next == 4 && isFortifying) {
             //this is where next e.getActionComm... should return selected territory "A"
             //update instructions to ask for territory to fortify "B"
 
+
             //gps.fortifyTo();
             //does player own selected territory
-            for (Territory terr : gpm.getBoard().getTerritoriesList()){
-                if(terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())){
+            for (Territory terr : gpm.getBoard().getTerritoriesList()) {
+                if (terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())) {
+                    Territory A = gpm.mapper(e.getActionCommand());
+                    gpm.setFrom(A);
+
                     next = 5; // player selected a valid territory
-                }else{
+                } else {
                     next = 3;// player selected an invalid territory
                 }
             }
-         //   gpm.setFortifyFrom(e.getActionCommand()); //use the mapper to return territory clicked on
+            //   gpm.setFortifyFrom(e.getActionCommand()); //use the mapper to return territory clicked on
             gpm.gameStatus();
 
-        } else if(next == 5 && isFortifying){
+        } else if (next == 5 && isFortifying) {
             //e.getActionComm... should return selected terr;
-            for (Territory terr : gpm.getBoard().getTerritoriesList()){
-                if(terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer()) && isPathable){
+            Territory B;
+            boolean isFortified = false;
+            for (Territory terr : gpm.getBoard().getTerritoriesList()) {
+                if (terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())) {
                     // player selected a valid territory
-                }else{
-                    next = 4;// player selected an invalid territory
+
+                    B = terr;
+                    gpm.setTo(B);
+                    if (!gpm.isPathable()) {
+                        gpm.setInstructions("You must select a valid connected territories. Please select a valid territory to Fortify again.");
+
+                        //update the gameStatus
+                        gpm.gameStatus();
+
+                        next = 3; // this code is repeated below. Figure out if can replace.                    }
+                    } else {
+                        next = 4;// player selected an invalid territory
+                    }
                 }
             }
-            //Territory A;
-          //  Territory B;
+                //create global vars in GPM for A,B. Update them here ^ / v
 
-            /**
-          for (Territory terr : gpm.getCurrentPlayer().getTerritories()){
-                for(Territory adjTerr : terr.getBorderTerritories()){
-                    // need to complete pathing algo
-                    if(adjTerr == B){
-                        isPathable=true;
-                    }else{isPathable = false;}                }
-            }*/
-            //Check if there is a path from A-B
+
+                if (gpm.isPathable()) {
+                    while (!isFortified) {
+                        //Pop-up Window to have user select the # of troops
+                        int troops = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to move. Please Use less than" + gpm.getFrom().getTroops()":"));
+
+                        //check if can fortify
+                        isFortified = gpm.Fortify(troops);
+                        //
+                        if (isFortified) {
+                            // notify success
+                            gpm.setInstructions("Success! You have fortified correctly. Press next to pass your turn");
+
+                            //update the gameStatus
+                            gpm.gameStatus();
+                            isFortified = true;
+                            isFortifying = false;
+
+                        }
+                    }
+                } else {
+                    gpm.setInstructions("You must select a valid connected territories. Please select a valid territory to Fortify again.");
+
+                    //update the gameStatus
+                    gpm.gameStatus();
+                    next = 3;
+
+                }
+
+
+                //Check if there is a path from B
                 //if no path -> set next = 4
                 //if yes -> continue with User prompt below
-                         //prompt user for a troop amount and fortify from territory A to B
-                         //If successful: fortify complete -> set isFortifying to false
-                         //End the turn
-
-        }
+                //prompt user for a troop amount and fortify from territory A to B
+                //If successful: fortify complete -> set isFortifying to false
+                //End the turn
 
 
-        next++;   //Updates the Phase in the Game
+            }
+            next++;   //Updates the Phase in the Game
         }
     }
