@@ -1384,6 +1384,7 @@ public class GameplayModel {
     }
     public boolean isPathable(){
         //insert pathing algo
+        isPathable = true;
 
         return isPathable;
     }

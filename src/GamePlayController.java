@@ -247,6 +247,7 @@ public class GamePlayController implements ActionListener {
             //e.getActionComm... should return selected terr;
             Territory B;
             boolean isFortified = false;
+            //making sure user owns selection.
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())) {
                     // player selected a valid territory
@@ -254,58 +255,46 @@ public class GamePlayController implements ActionListener {
                     B = terr;
                     gpm.setTo(B);
                     if (!gpm.isPathable()) {
-                        gpm.setInstructions("You must select a valid connected territories. Please select a valid territory to Fortify again.");
+                        gpm.setInstructions("You must select valid connected territories. Please select a valid territory to Fortify again.");
 
                         //update the gameStatus
                         gpm.gameStatus();
 
                         next = 3; // this code is repeated below. Figure out if can replace.                    }
                     } else {
-                        next = 4;// player selected an invalid territory
-                    }
-                }
-            }
-                //create global vars in GPM for A,B. Update them here ^ / v
+                        while (!isFortified) {
+                            //Pop-up Window to have user select the # of troops
+                            int troops = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to move. Please Use less than" + gpm.getFrom().getTroops()+":"));
 
+                            //check if can fortify
+                            isFortified = gpm.Fortify(troops);
+                            //
+                            if (isFortified) {
+                                // notify success
+                                gpm.setInstructions("Success! You have fortified correctly. Press next to pass your turn");
 
-                if (gpm.isPathable()) {
-                    while (!isFortified) {
-                        //Pop-up Window to have user select the # of troops
-                        int troops = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to move. Please Use less than" + gpm.getFrom().getTroops()":"));
+                                //update the gameStatus
+                                gpm.gameStatus();
+                                isFortified = true;
+                                isFortifying = false;
 
-                        //check if can fortify
-                        isFortified = gpm.Fortify(troops);
-                        //
-                        if (isFortified) {
-                            // notify success
-                            gpm.setInstructions("Success! You have fortified correctly. Press next to pass your turn");
-
-                            //update the gameStatus
-                            gpm.gameStatus();
-                            isFortified = true;
-                            isFortifying = false;
-
+                            }
                         }
                     }
-                } else {
-                    gpm.setInstructions("You must select a valid connected territories. Please select a valid territory to Fortify again.");
-
-                    //update the gameStatus
-                    gpm.gameStatus();
-                    next = 3;
-
                 }
-
-
-                //Check if there is a path from B
-                //if no path -> set next = 4
-                //if yes -> continue with User prompt below
-                //prompt user for a troop amount and fortify from territory A to B
-                //If successful: fortify complete -> set isFortifying to false
-                //End the turn
-
-
             }
-            next++;   //Updates the Phase in the Game
+            //create global vars in GPM for A,B. Update them here ^ / v
+
+            //Check if there is a path from B
+            //if no path -> set next = 4
+            //if yes -> continue with User prompt below
+            //prompt user for a troop amount and fortify from territory A to B
+            //If successful: fortify complete -> set isFortifying to false
+            //End the turn
+
+
+        }
+        next++;   //Updates the Phase in the Game
+
         }
     }
