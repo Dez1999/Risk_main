@@ -78,11 +78,18 @@ public class GameplayModel {
     private boolean isDefenderSelected = false;
     private boolean isDiceSelected = false;
     private boolean isDeployed = false;
+
+    boolean isPathable = false;
+    private Territory From;
+    private Territory To;
+
+
     private boolean attackTerrNoOpp = false;
 
     public static void main(String[] args) throws InterruptedException {
         GameplayModel gamePlayModel = new GameplayModel();
     }
+
 
     /** Game Logic*/
     public GameplayModel() throws InterruptedException {
@@ -238,6 +245,20 @@ public class GameplayModel {
         colorList.add(PINK);
     }
 
+    public Territory getFrom() {
+        return From;
+    }
+
+    public void setFrom(Territory from) {
+        From = from;
+    }
+    public Territory getTo() {
+        return To;
+    }
+
+    public void setTo(Territory to) {
+        To = to;
+    }
     public void setInstructions(String instructions) {
         this.instructions = instructions;
     }
@@ -500,7 +521,7 @@ public class GameplayModel {
     }
 
 
-    private void fortify() {
+    void fortify() {
     }
 
     //FIX This: print each players own Territories. Each territory has player owner
@@ -615,8 +636,8 @@ public class GameplayModel {
             }
         return null;
     }
-
-
+    // consider using initialTroop variable and its getters/setters by introducing a new method that updates initialtroop count
+    // replace hardcoded troop numbers with initialTroops
     /**
      * Sets the amount of initial troops each player can start out with depending on number of players. Also assigns Territory Ownership
      */
@@ -1883,6 +1904,69 @@ public class GameplayModel {
         }
     }
 
+    public boolean Fortify(int troops){
+
+    //move troops FROM -> TO.
+        if(troops < From.getTroops()) {
+                From.removeTroops(troops);
+                To.addTroops(troops);
+            return true;
+        } else{
+            return false;
+        }
+
+    }
+
+    /**
+     * Path finding algo -  In progress
+     * @param From
+     * @param To
+     * @param path
+     * @return boolean
+     */
+    /*
+    public boolean findPath(Territory From, Territory To, LinkedList path){
+
+        for (Territory terr : getCurrentPlayer().getTerritories()) {
+            if(terr.equals(From)){
+                path.add(terr);
+            } else{
+                // if FROM is not in owned territory list.
+            }
+
+           for(Territory adj: From.getBorderTerritories()){
+               if(To==adj){
+                   path.add(adj);
+                   return true;
+
+               }else{
+                   if(!findPath(adj,To,path)){
+                       path.removeLast();
+
+                   }
+
+                   return findPath(adj,To,path);
+               }
+           }return false;
+        }
+
+        return false;
+    }
+*/
+
+    /**
+     * Should run path finding algo- return true if path FROM->To.
+     * currently returning always true for testing purposes.
+     * @return
+     */
+    public boolean isPathable(){
+        LinkedList<Territory> path = new LinkedList<>();
+        //insert pathing algo
+        isPathable = true;
+        // ^ = findPath(this.From,this.To,path);
+
+        return isPathable;
+    }
 
     /**
      * Fortify Method: helps AI player fortify Troops to a specfic Territory that it owns
