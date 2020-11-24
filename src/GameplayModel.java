@@ -1418,15 +1418,22 @@ public class GameplayModel {
 
         return false;
     }
+*/
 
+    /**
+     * Should run path finding algo- return true if path FROM->To.
+     * currently returning always true for testing purposes.
+     * @return
+     */
     public boolean isPathable(){
         LinkedList<Territory> path = new LinkedList<>();
         //insert pathing algo
-        isPathable = findPath(this.From,this.To,path);
+        isPathable = true;
+        // ^ = findPath(this.From,this.To,path);
 
         return isPathable;
     }
-*/
+
     /**
      * Fortify Method: helps AI player fortify Troops to a specfic Territory that it owns
      */
