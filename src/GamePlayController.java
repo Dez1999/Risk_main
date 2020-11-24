@@ -10,7 +10,7 @@ public class GamePlayController implements ActionListener {
     private GameplayModel gpm;
     private int next;
     private boolean success;
-    private boolean isFortifying = true;
+    //private boolean isFortifying = true;
 
     private int userTroops;
 
