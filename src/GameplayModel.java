@@ -8,11 +8,13 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Integer.parseInt;
 
+import java.util.concurrent.TimeUnit;
 /**
  * Class GamePlay
  *
  * @authors: Desmond, Peter, Raul
  */
+
 
 public class GameplayModel {
 
@@ -78,12 +80,12 @@ public class GameplayModel {
     private boolean isDeployed = false;
     private boolean attackTerrNoOpp = false;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         GameplayModel gamePlayModel = new GameplayModel();
     }
 
     /** Game Logic*/
-    public GameplayModel() {
+    public GameplayModel() throws InterruptedException {
         startGame();
     }
 
@@ -91,10 +93,9 @@ public class GameplayModel {
         this.currentPlayer = currentPlayer;
     }
     public boolean getCloseDiceFrame() {return this.closeDiceFrame;}
-    public void startGame( ){
+    public void startGame( ) throws InterruptedException {
 
         setUpColorList();
-            setUpColorList();
        inputNumberofPlayers() ;
         this.playersAlive = new ArrayList<Player>();
         InitializePlayers(numPlayers);
@@ -114,7 +115,6 @@ public class GameplayModel {
         nextPlayer = getPlayers(1);
         }
 
-
     /**
      * Method: Asks User which players will be AI
      */
@@ -124,7 +124,7 @@ public class GameplayModel {
 
 
     }
-    public void setAIPlayers(){
+    public void setAIPlayers() throws InterruptedException {
         AIsetup.setVisible(true);
         AIsetup.add(stat);
         int j = inputPlayersplaying;
@@ -167,6 +167,10 @@ public class GameplayModel {
                 AIsetup.dispose();
             }
         });
+        AIsetup.remove(buttons.get(0));
+
+        TimeUnit.SECONDS.sleep(6);
+
         /*jplayer2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -468,7 +472,7 @@ public class GameplayModel {
             playersAlive.get(i).setColor(colorList.get(i));   //Set color for player
             System.out.println("player" + playersAlive.get(i).getName());
         }
-        playersAlive.get(num -1).setAIplayer(true);
+        //playersAlive.get(0).setAIplayer(true);
 
         playersDead = new ArrayList<>();
     }

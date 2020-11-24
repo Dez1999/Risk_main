@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class GameplayModelTest {
     GameplayModel gpm;
     @Test
-    void isAttackerSelected() {
+    void isAttackerSelected() throws InterruptedException {
         gpm = new GameplayModel();
         assertEquals(false, gpm.isAttackerSelected());
         gpm.setIsAttackerSelected(true);
@@ -22,7 +22,7 @@ class GameplayModelTest {
 
 
     @Test
-    void isDefenderSelected() {
+    void isDefenderSelected() throws InterruptedException {
         gpm = new GameplayModel();
         assertEquals(false, gpm.isDefenderSelected());
         gpm.setDefenderSelected(true);
@@ -35,7 +35,7 @@ class GameplayModelTest {
     }
 
     @Test
-    void isDiceSelected() {
+    void isDiceSelected() throws InterruptedException {
         gpm = new GameplayModel();
         assertEquals(false, gpm.isDiceSelected());
         gpm.setDiceSelected(true);
@@ -48,7 +48,7 @@ class GameplayModelTest {
 
 
     @Test
-    void isDeployed() {
+    void isDeployed() throws InterruptedException {
         gpm = new GameplayModel();
         assertEquals(false, gpm.isDeployed());
         gpm.setDeployed(true);
@@ -61,7 +61,7 @@ class GameplayModelTest {
 
 
     @Test
-    void setSelectedTerritory() {
+    void setSelectedTerritory() throws InterruptedException {
         gpm = new GameplayModel();
         assertEquals(null, gpm.getSelectedTerritory());
         Territory afghanistan= new Territory("Afghanistan");
@@ -74,7 +74,7 @@ class GameplayModelTest {
         assertNotEquals(null , gpm.getSelectedTerritory());
     }
     @Test
-    void checkPlayerhand(){
+    void checkPlayerhand() throws InterruptedException {
         gpm = new GameplayModel();
         Player player1 = new Player(gpm, "Player1");
         Territory afghanistan= new Territory("Afghanistan");
@@ -99,7 +99,7 @@ class GameplayModelTest {
     }
 
     @Test
-    void initializePlayers() {
+    void initializePlayers() throws InterruptedException {
         gpm = new GameplayModel();
         gpm.setPlayersAlive();
         gpm.InitializePlayers(3);
@@ -110,7 +110,7 @@ class GameplayModelTest {
     }
 
     @Test
-    void removePlayer() {
+    void removePlayer() throws InterruptedException {
         gpm = new GameplayModel();
         gpm.setPlayersAlive();
         gpm.InitializePlayers(3);
@@ -121,7 +121,7 @@ class GameplayModelTest {
 
 
     @Test
-    void winnerStatus() {
+    void winnerStatus() throws InterruptedException {
         gpm = new GameplayModel();
         gpm.setPlayersAlive();
         gpm.InitializePlayers(3);
@@ -135,7 +135,7 @@ class GameplayModelTest {
     }
 
     @Test
-    void stringTerritoryMapping() {
+    void stringTerritoryMapping() throws InterruptedException {
         gpm = new GameplayModel();
         gpm.setBoard(2);
         assertNotEquals(3,gpm.getBoard().getTerritoriesList()[32].getTroops());
@@ -145,7 +145,7 @@ class GameplayModelTest {
 
     
     @Test
-    void changePlayer() {
+    void changePlayer() throws InterruptedException {
         gpm = new GameplayModel();
         //Player player1 = new Player("toBeRemoved");
         //Player player2 = new Player("toBeAdded");
