@@ -230,15 +230,24 @@ public class GamePlayController implements ActionListener {
 
             //gps.fortifyTo();
             //does player own selected territory
+            boolean Afound = false;
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())) {
                     Territory A = gpm.mapper(e.getActionCommand());
                     gpm.setFrom(A);
-
-                    next = 5; // player selected a valid territory
-                } else {
-                    next = 3;// player selected an invalid territory
+                    gpm.setInstructions("you have selected"+  A.getName() +". ");
+                    gpm.gameStatus();
+                    Afound = true;
+                    next = 4; // player selected a valid territory
                 }
+            }
+            if(!Afound){
+                next = 3;
+                gpm.setInstructions("You must select valid connected territories. Please select a valid territory to Fortify again.");
+
+                //update the gameStatus
+                gpm.gameStatus();
+
             }
             //   gpm.setFortifyFrom(e.getActionCommand()); //use the mapper to return territory clicked on
             gpm.gameStatus();
@@ -277,6 +286,7 @@ public class GamePlayController implements ActionListener {
                                 gpm.gameStatus();
                                 isFortified = true;
                                 isFortifying = false;
+                                next = -2;
 
                             }
                         }
@@ -294,6 +304,7 @@ public class GamePlayController implements ActionListener {
 
 
         }
+
         next++;   //Updates the Phase in the Game
 
         }
