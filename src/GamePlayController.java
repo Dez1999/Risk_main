@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +11,11 @@ public class GamePlayController implements ActionListener {
     private int next;
     private boolean success;
     private boolean isFortifying = true;
+
+    private int userTroops;
+
+    private boolean isFortifying = false;
+
 
 
     public GamePlayController(GameplayModel gpm) {
@@ -51,11 +57,11 @@ public class GamePlayController implements ActionListener {
 
 
                         //Show in GameStatus() used in JLabel : gpm
-                        gpm.setInstructions("Please choose Attacking Territory");
+                        gpm.setInstructions("Please choose your own Attacking Territory with Neighbouring enemy Territories");
                         gpm.gameStatus();
                     } else {//Troops were not deployed to selected Territory
                         //Show in GameStatus()
-                        gpm.setInstructions("Please Select Territory to add your bonus Troops to");
+                        gpm.setInstructions("Please Select Territory to add your " + gpm.getBonus() + " bonus Troops to");
                         gpm.gameStatus();
                         next = -1;
                     }
@@ -70,14 +76,22 @@ public class GamePlayController implements ActionListener {
                 if (e.getActionCommand().equals(terr.getName())) {
                     gpm.setAttackingTerritory(terr);  //Assumes user selects their own Territory
                     gpm.checkAttackingOwnership();
-                    if (!gpm.isExitAttack()) {  //Attacking Territory was successfully selected
+
+
+                    if(gpm.noOppBorderingTerr()){ //Attacking Territory has no Opponent Territories
+                        //User must select Attacking Territory with Opponent Territories
+                        gpm.setInstructions("Selection Invalid. Please choose your own Attacking Territory with Neighbouring Enemy Territories");
+                        next = 0;
+                    }
+                    else if(!gpm.isExitAttack()){  //Attacking Territory was successfully selected
                         //updateBoardStatus()
                         //Show in GameStatus()
                         gpm.setInstructions("Please choose Defending Territory");
                         gpm.gameStatus();
-                    } else { //Attackinf Territory was not successfully selected
+                    }
+                    else{ //Attacking Territory was not successfully selected
                         //Show in GameStatus
-                        gpm.setInstructions("You must choose your own Territory");
+                        gpm.setInstructions("Selection Invalid. Please choose your own Attacking Territory with Neighbouring Enemy Territories");
                         gpm.gameStatus();
                         next = 0;
                     }
@@ -101,7 +115,7 @@ public class GamePlayController implements ActionListener {
                     if (gpm.isExitAttack()) {  //Defending Territory was not successfully Selected
 
                         //Show in GameStatus
-                        gpm.setInstructions("You own this Territory. You must choose a Territory you don't own");
+                        gpm.setInstructions("You must choose a Territory you don't own and adjacent to " + gpm.getAttackingTerritory().getName()  + ". Please Choose Defending Territory");
                         gpm.gameStatus();
                         next = 1;
 
@@ -110,23 +124,69 @@ public class GamePlayController implements ActionListener {
                         //Show in GameStatus
                         gpm.setInstructions("Choose the Number of Dice to Attack with (1 to 3 Dice");
                         gpm.gameStatus();
-
-                        //Pop-up Window to have user select the # of troops
-                        int userTroops = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of Dice to use. Only choose values 1-3:"));
+                        JFrame diceFrame = new JFrame("amount of dice for the attack");
+                        diceFrame.getContentPane().setBackground(Color.pink);
+                        diceFrame.setLayout(new FlowLayout());
+                        diceFrame.setSize(300, 200);
+                        JLabel label = new JLabel("choose the amount of dice you for the attack");
+                        label.setPreferredSize(new Dimension(270, 50));
+                        diceFrame.add(label);
+                        JButton oneDie = new JButton("1 Die");
+                        JButton twoDie = new JButton("2 Dice");
+                        JButton threeDie = new JButton("3 Dice");
+                        oneDie.addActionListener(new ActionListener()
+                        {
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                userTroops = 1;
+                                gpm.setUserAttackingTroops(userTroops);
+                                gpm.chooseAttackingTroops();
+                                diceFrame.setVisible(false);
+                            }
+                        });
+                        twoDie.addActionListener(new ActionListener()
+                        {
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                userTroops = 2;
+                                gpm.setUserAttackingTroops(userTroops);
+                                gpm.chooseAttackingTroops();
+                                diceFrame.setVisible(false);
+                            }
+                        });
+                        threeDie.addActionListener(new ActionListener()
+                        {
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                userTroops = 3;
+                                gpm.setUserAttackingTroops(userTroops);
+                                gpm.chooseAttackingTroops();
+                                diceFrame.setVisible(false);
+                            }
+                        });
+                        diceFrame.setVisible(true);
+                        diceFrame.add(oneDie);
+                        diceFrame.add(twoDie);
+                        diceFrame.add(threeDie);
                         //Get user input number and save it then run method below:
-                        gpm.setUserAttackingTroops(userTroops);
-                        gpm.chooseAttackingTroops();
+                       // gpm.setUserAttackingTroops(userTroops);
+                       // gpm.chooseAttackingTroops();
 
                         if (gpm.isExitAttack()) {
 
                             //Show in GameStatus
-                            gpm.setInstructions("You must choose the correct amount of Dice. Please choose the Attacking Territory");
+
+                            gpm.setInstructions("You must choose the correct amount of Dice. Please choose the Attacking Territory with Neighbouring Enemy Territories");
+
                             gpm.gameStatus();
                             next = 0;
                         } else {
                             //Attack was Successful
                             //updateBoardStatus()
-
+                            //diceFrame.setVisible(false);
+                            if(gpm.isExitAttack() == true){
+                               // diceFrame.setVisible(false);
+                            }
                             if (gpm.WinnerStatus()) { //Check if Game is Over
 
                                 //Show in Pop-up
@@ -147,7 +207,9 @@ public class GamePlayController implements ActionListener {
                                 next = 0;
                             }
                         }
-
+                        if(gpm.getCloseDiceFrame()){
+                          //  diceFrame.setVisible(false);
+                        }
                     }
 
                 }
@@ -156,6 +218,7 @@ public class GamePlayController implements ActionListener {
 
         //Next Button is Selected. Change Player and start to deploy Troops, Checks if AI player is next
         else if (e.getActionCommand().equals("next")) {
+
 
             if (isFortifying) {
 
@@ -180,6 +243,7 @@ public class GamePlayController implements ActionListener {
                     territories = territories + "\n " + terr.getName() + ": Troops = " + terr.getTroops();
                 }
 
+
                 JOptionPane.showInternalMessageDialog(null, territories,
                         "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
 
@@ -198,6 +262,8 @@ public class GamePlayController implements ActionListener {
 
             }
 
+    //Next (first time)
+
 
             //Next (first time)
 
@@ -210,18 +276,20 @@ public class GamePlayController implements ActionListener {
         //         next = 4;}
 
 
+
         //consider removing
         //BACK Button is Selected. Go back to ATTACK
         else if (e.getActionCommand().equals("Back")) {
             JOptionPane.showMessageDialog(parent, "You have Restarted the Attack Phase");
 
             //Show GameStatus
-            gpm.setInstructions("Player Selected Back. Please choose the Attacking Territory:");
+            gpm.setInstructions("Player Selected Back. Please choose Attacking Territory with Neighbouring Enemy Territories");
             gpm.gameStatus();
 
             //This will bring the user back to ATTACK phase and ask them to choose an attacking Territory
             next = 0;
         }
+
         //Start fortify phase
         else if (next == 4 && isFortifying) {
             //this is where next e.getActionComm... should return selected territory "A"
@@ -311,6 +379,7 @@ public class GamePlayController implements ActionListener {
             //prompt user for a troop amount and fortify from territory A to B
             //If successful: fortify complete -> set isFortifying to false
             //End the turn
+
 
         next++;   //Updates the Phase in the Game
 
