@@ -253,14 +253,20 @@ public class GamePlayController implements ActionListener {
 
 
                 //Test for AI Player
-                if(gpm.getCurrentPlayer().isAIplayer()){
-                    try {
-                        gpm.AIUtilityFunction();
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    //gpm.getCurrentPlayer().AIplayerFunction();
+
+                    //try {
+                        //gpm.AIUtilityFunction();
+                       // }
+                if(gpm.getCurrentPlayer().isAIplayer()) {
+                    gpm.setUserCurrentPlayer();
+                    gpm.CheckAiPlayer();
                 }
+
+                    //} catch (InterruptedException ex) {
+                     //   ex.printStackTrace();
+                    //}
+                    //gpm.getCurrentPlayer().AIplayerFunction();
+
 
             }
 
