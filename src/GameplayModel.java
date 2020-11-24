@@ -141,6 +141,7 @@ public class GameplayModel {
         for(int i = 0; i< inputPlayersplaying; i++ ){
             AIsetup.add(buttons.get(i));
         }
+        AIsetup.remove(buttons.get(0));
         AIsetup.add(ok);
         ok.addActionListener(new ActionListener() {
             @Override
@@ -1773,7 +1774,7 @@ public class GameplayModel {
      * Returns the weakest Territory adjacent to the most populated Territory
      * @return
      */
-    private Territory findMostPopulated(ArrayList<Territory> Territories) {
+    public Territory findMostPopulated(ArrayList<Territory> Territories) {
         Territory mostPop;
         mostPop = Territories.get(0);
         for (Territory terr : Territories){
@@ -1820,7 +1821,7 @@ public class GameplayModel {
      * Method: Clears all the flags in the Territories
      * @param terrWithtroops
      */
-    private void clearAllFlags(ArrayList<Territory> terrWithtroops) {
+    public void clearAllFlags(ArrayList<Territory> terrWithtroops) {
         for(Territory terr : terrWithtroops){
             terr.setFlagAdded(false);
         }
