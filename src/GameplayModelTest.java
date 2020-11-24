@@ -124,7 +124,6 @@ class GameplayModelTest {
 
     @Test
     void winnerStatus() {
-        //USE input 3 THIS IS TO TEST FOR INPUT 3
         gpm = new GameplayModel();
         gpm.setPlayersAlive();
         gpm.InitializePlayers(3);

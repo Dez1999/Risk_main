@@ -43,7 +43,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     /**
      * Setting up a frame for the game board layout.
      */
-    public GamePlayFrame(){
+    public GamePlayFrame() throws InterruptedException {
 
         //MVC Set Up
         super("Risk Game");
@@ -110,9 +110,9 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         NewZealandSetup(gpc);
 
         gpm.gameStatus();
-        if(gpm.playersAlive.get(0).isAIplayer()) {
-            gpm.CheckAiPlayer();
-        }
+       // if(gpm.playersAlive.get(0).isAIplayer()) {
+         //   gpm.CheckAiPlayer();
+        //}
     }
 
     /**
@@ -673,7 +673,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
      * @param args
      */
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
         new GamePlayFrame();
 
     }
