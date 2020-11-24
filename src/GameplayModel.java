@@ -8,11 +8,13 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Integer.parseInt;
 
+import java.util.concurrent.TimeUnit;
 /**
  * Class GamePlay
  *
  * @authors: Desmond, Peter, Raul
  */
+
 
 public class GameplayModel {
 
@@ -21,7 +23,17 @@ public class GameplayModel {
     private Board board;
     private Player currentPlayer;
     private int inputPlayersplaying ;
-
+    private JFrame AIsetup = new JFrame("set up your AIplayers");
+    private JRadioButton jplayer1 = new JRadioButton("player 1");
+    private JRadioButton jplayer2 = new JRadioButton("player 2");
+    private JRadioButton jplayer3 = new JRadioButton("player 3");
+    private JRadioButton jplayer4 = new JRadioButton("player 4");
+    private JRadioButton jplayer5 = new JRadioButton("player 5");
+    private JRadioButton jplayer6 = new JRadioButton("player 6");
+    private JButton ok = new JButton("ok");
+    private ArrayList<JRadioButton> buttons = new ArrayList<JRadioButton>();
+    private boolean UserCurrentPlayer;
+    private JLabel stat = new JLabel("choose which players do you want to be AI players");
     private Player nextPlayer;
     private Die die = new Die();
     private twoDice dice2 = new twoDice();
@@ -74,13 +86,13 @@ public class GameplayModel {
 
     private boolean attackTerrNoOpp = false;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         GameplayModel gamePlayModel = new GameplayModel();
     }
 
 
     /** Game Logic*/
-    public GameplayModel() {
+    public GameplayModel() throws InterruptedException {
         startGame();
     }
 
@@ -88,13 +100,16 @@ public class GameplayModel {
         this.currentPlayer = currentPlayer;
     }
     public boolean getCloseDiceFrame() {return this.closeDiceFrame;}
-    public void startGame( ){
+    public void startGame( ) throws InterruptedException {
 
         setUpColorList();
-            setUpColorList();
        inputNumberofPlayers() ;
         this.playersAlive = new ArrayList<Player>();
         InitializePlayers(numPlayers);
+       setAIPlayers();
+       if(playersAlive.get(0).isAIplayer()){
+           UserCurrentPlayer = false;
+       }
         board = new Board(numPlayers);
         initializeLand();
 
@@ -107,7 +122,6 @@ public class GameplayModel {
         nextPlayer = getPlayers(1);
         }
 
-
     /**
      * Method: Asks User which players will be AI
      */
@@ -116,6 +130,85 @@ public class GameplayModel {
         int AIPlayersplaying = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please select"));
 
 
+    }
+    public void setAIPlayers() throws InterruptedException {
+        AIsetup.setVisible(true);
+        AIsetup.add(stat);
+        int j = inputPlayersplaying;
+        buttons.add(jplayer1);
+        buttons.add(jplayer2);
+        buttons.add(jplayer3);
+        buttons.add(jplayer4);
+        buttons.add(jplayer5);
+        buttons.add(jplayer6);
+        AIsetup.setLayout(new FlowLayout());
+        stat.setSize(290,100);
+        AIsetup.getContentPane().setBackground(Color.pink);
+        AIsetup.setSize(300,300);
+        for(int i = 0; i< inputPlayersplaying; i++ ){
+            AIsetup.add(buttons.get(i));
+        }
+        AIsetup.remove(buttons.get(0));
+        AIsetup.add(ok);
+        ok.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+               if(jplayer1.isSelected()){
+                   playersAlive.get(0).setAIplayer(true);
+               }
+                if(jplayer2.isSelected()){
+                    playersAlive.get(1).setAIplayer(true);
+                }
+                if(jplayer3.isSelected()){
+                    playersAlive.get(2).setAIplayer(true);
+                }
+                if(jplayer4.isSelected()){
+                    playersAlive.get(3).setAIplayer(true);
+                }
+                if(jplayer5.isSelected()){
+                    playersAlive.get(4).setAIplayer(true);
+                }
+                if(jplayer6.isSelected()){
+                    playersAlive.get(5).setAIplayer(true);
+                }
+                AIsetup.dispose();
+            }
+        });
+        AIsetup.remove(buttons.get(0));
+
+        TimeUnit.SECONDS.sleep(6);
+
+        /*jplayer2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playersAlive.get(1).setAIplayer(true);
+            }
+        });
+        jplayer3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playersAlive.get(2).setAIplayer(true);
+            }
+        });
+        jplayer4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playersAlive.get(3).setAIplayer(true);
+            }
+        });
+        jplayer5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playersAlive.get(4).setAIplayer(true);
+            }
+        });
+        jplayer6.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playersAlive.get(5).setAIplayer(true);
+            }
+        });*/
     }
 
 
@@ -401,7 +494,7 @@ public class GameplayModel {
             playersAlive.get(i).setColor(colorList.get(i));   //Set color for player
             System.out.println("player" + playersAlive.get(i).getName());
         }
-        playersAlive.get(num -1).setAIplayer(true);
+        //playersAlive.get(0).setAIplayer(true);
 
         playersDead = new ArrayList<>();
     }
@@ -1758,7 +1851,7 @@ public class GameplayModel {
      * Returns the weakest Territory adjacent to the most populated Territory
      * @return
      */
-    private Territory findMostPopulated(ArrayList<Territory> Territories) {
+    public Territory findMostPopulated(ArrayList<Territory> Territories) {
         Territory mostPop;
         mostPop = Territories.get(0);
         for (Territory terr : Territories){
@@ -1805,7 +1898,7 @@ public class GameplayModel {
      * Method: Clears all the flags in the Territories
      * @param terrWithtroops
      */
-    private void clearAllFlags(ArrayList<Territory> terrWithtroops) {
+    public void clearAllFlags(ArrayList<Territory> terrWithtroops) {
         for(Territory terr : terrWithtroops){
             terr.setFlagAdded(false);
         }
@@ -1893,6 +1986,24 @@ public class GameplayModel {
         setInstructions("Player " + getCurrentPlayer().getName() + " has passed their Turn. Player "+ getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
         gameStatus();
         // wait(100);
+    }
+    public void CheckAiPlayer() {
+        while (!UserCurrentPlayer) {
+            try {
+                AIUtilityFunction();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (! nextPlayer.isAIplayer() ) {
+                UserCurrentPlayer = true;
+            }
+        }
+    }
+    public void setUserCurrentPlayer(){
+        UserCurrentPlayer = false;
+    }
+    public boolean getUserCurrentPlayer(){
+        return UserCurrentPlayer ;
     }
 
 }

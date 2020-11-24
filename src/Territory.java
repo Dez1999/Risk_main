@@ -126,27 +126,14 @@ public class Territory
         numberOppTerritories = i;
     }
 
-    /**
-     * Sets the number of troops in the Territory
-     * @param i
-     */
     public void setTroops(int i) {
         troops = i;
     }
 
-    /**
-     * Sets the flag in the Territory is it was added to a list of Available Attacking Territories
-     * @param flag determines if it was added to a list or not
-     */
-    public void setFlagAdded(boolean flag){
+    public void setFlagAdded(boolean flag) {
         flagAdded = flag;
     }
-
-    /**
-     * Returns the boolean variable flag Added
-     * @return
-     */
-    public boolean getFlagAdded() {
-        return flagAdded;
+    public boolean getFlagAdded(){
+        return  flagAdded;
     }
 }

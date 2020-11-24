@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -156,5 +158,38 @@ class GameplayModelTest {
         assertEquals("0" , gpm.getCurrentPlayer().getName());
         gpm.changePlayer();
         assertEquals("1" , gpm.getCurrentPlayer().getName());
+    }
+
+    @Test
+    void findMostPopulated(){
+        gpm = new GameplayModel();
+        Territory afghanistan= new Territory("Afghanistan");
+        Territory egypt = new Territory("Egypt");
+        egypt.setTroops(20000);
+        afghanistan.setTroops(3);
+        ArrayList<Territory> terrs = new ArrayList<>();
+        terrs.add(egypt);
+        terrs.add(afghanistan);
+        assertEquals("egypt" , gpm.findMostPopulated(terrs).getName());
+
+    }
+
+    @Test
+    void clearAllFlags(){
+        gpm = new GameplayModel();
+        Territory afghanistan= new Territory("Afghanistan");
+        Territory egypt = new Territory("Egypt");
+        egypt.setTroops(20000);
+        afghanistan.setTroops(3);
+        ArrayList<Territory> terrs = new ArrayList<>();
+        terrs.add(egypt);
+        terrs.add(afghanistan);
+        egypt.setFlagAdded(true);
+        afghanistan.setFlagAdded(true);
+        assertEquals(true, egypt.getFlagAdded());
+        assertEquals(true, afghanistan.getFlagAdded());
+        gpm.clearAllFlags(terrs);
+        assertEquals(false , egypt.getFlagAdded());
+        assertEquals(false , afghanistan.getFlagAdded());
     }
 }
