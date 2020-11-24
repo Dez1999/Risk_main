@@ -235,7 +235,7 @@ public class GamePlayController implements ActionListener {
                 if (terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())) {
                     Territory A = gpm.mapper(e.getActionCommand());
                     gpm.setFrom(A);
-                    gpm.setInstructions("you have selected"+  A.getName() +". ");
+                    gpm.setInstructions("you have selected"+  A.getName() +". Please choose the Connected Territory to Fortify to ");
                     gpm.gameStatus();
                     Afound = true;
                     next = 4; // player selected a valid territory
@@ -257,9 +257,11 @@ public class GamePlayController implements ActionListener {
             Territory B;
             boolean isFortified = false;
             //making sure user owns selection.
+            boolean found = false;
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (terr.getName().equals(e.getActionCommand()) && terr.getPlayer().equals(gpm.getCurrentPlayer())) {
                     // player selected a valid territory
+                    found = true;
 
                     B = terr;
                     gpm.setTo(B);
@@ -273,7 +275,7 @@ public class GamePlayController implements ActionListener {
                     } else {
                         while (!isFortified) {
                             //Pop-up Window to have user select the # of troops
-                            int troops = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to move. Please Use less than" + gpm.getFrom().getTroops()+":"));
+                            int troops = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to move. Please Use less than" + gpm.getFrom().getTroops() + ":"));
 
                             //check if can fortify
                             isFortified = gpm.Fortify(troops);
@@ -293,6 +295,14 @@ public class GamePlayController implements ActionListener {
                     }
                 }
             }
+
+            if (!found) {
+                gpm.setInstructions("You must select valid connected territories. Please select a valid territory to Fortify from again.");
+                //update the gameStatus
+                gpm.gameStatus();
+                next = 3; // this code is repeated below. Figure out if can replace.
+            }
+        }
             //create global vars in GPM for A,B. Update them here ^ / v
 
             //Check if there is a path from B
@@ -301,9 +311,6 @@ public class GamePlayController implements ActionListener {
             //prompt user for a troop amount and fortify from territory A to B
             //If successful: fortify complete -> set isFortifying to false
             //End the turn
-
-
-        }
 
         next++;   //Updates the Phase in the Game
 
