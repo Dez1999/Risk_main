@@ -1382,13 +1382,51 @@ public class GameplayModel {
         }
 
     }
+
+    /**
+     * Path finding algo -  In progress
+     * @param From
+     * @param To
+     * @param path
+     * @return boolean
+     */
+    /*
+    public boolean findPath(Territory From, Territory To, LinkedList path){
+
+        for (Territory terr : getCurrentPlayer().getTerritories()) {
+            if(terr.equals(From)){
+                path.add(terr);
+            } else{
+                // if FROM is not in owned territory list.
+            }
+
+           for(Territory adj: From.getBorderTerritories()){
+               if(To==adj){
+                   path.add(adj);
+                   return true;
+
+               }else{
+                   if(!findPath(adj,To,path)){
+                       path.removeLast();
+
+                   }
+
+                   return findPath(adj,To,path);
+               }
+           }return false;
+        }
+
+        return false;
+    }
+
     public boolean isPathable(){
+        LinkedList<Territory> path = new LinkedList<>();
         //insert pathing algo
-        isPathable = true;
+        isPathable = findPath(this.From,this.To,path);
 
         return isPathable;
     }
-
+*/
     /**
      * Fortify Method: helps AI player fortify Troops to a specfic Territory that it owns
      */
