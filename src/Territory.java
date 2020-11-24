@@ -13,6 +13,7 @@ public class Territory
     private int troops ;
     private LinkedList<Territory> boardingTerritories;
     private int numberOppTerritories;
+    private boolean flagAdded;
     /*
      * Constructor for objects of class Territory
      */
@@ -22,6 +23,7 @@ public class Territory
         //this.boardingTerritories = boardingTerritories;
         boardingTerritories = new LinkedList<>();
         numberOppTerritories = 0;
+        flagAdded = false;
     }
 
     /**
@@ -122,5 +124,16 @@ public class Territory
      */
     public void setNumberOppTerr(int i){
         numberOppTerritories = i;
+    }
+
+    public void setTroops(int i) {
+        troops = i;
+    }
+
+    public void setFlagAdded(boolean flag) {
+        flagAdded = flag;
+    }
+    public boolean getFlagAdded(){
+        return  flagAdded;
     }
 }

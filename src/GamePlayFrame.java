@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.awt.Graphics;
 
 /**
  * @author Peter, Des
@@ -37,6 +38,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private JButton NewZealand;
     private JButton next = new JButton("next");
     private ArrayList<JButton> territoryButtons;
+    private GameplayModel gpm;
 
     /**
      * Setting up a frame for the game board layout.
@@ -48,7 +50,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(Color.BLUE);
         this.setLayout(new FlowLayout());
-        GameplayModel gpm = new GameplayModel();
+        gpm = new GameplayModel();
         this.setBackground(Color.BLUE);
         gpm.addGamePlayView(this);
         GamePlayController gpc = new GamePlayController(gpm);
@@ -57,6 +59,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.setSize(1600, 800);
         this.setVisible(true);
         this.setResizable(true);  //Changed this to true
+        //JPanel p = new JPanel();
+        //Graphics g = p.getGraphics();
+        //g.drawLine(120,120,220,200);
+        //g.setColor(Color.black);
+        //this.add(p);
         LabelPanel.setPreferredSize(new Dimension(1400 , 50));
         LabelPanel.setBackground(Color.gray);
         LabelPanel.add(GameStatus);
@@ -103,7 +110,9 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         NewZealandSetup(gpc);
 
         gpm.gameStatus();
-
+        if(gpm.playersAlive.get(0).isAIplayer()) {
+            gpm.CheckAiPlayer();
+        }
     }
 
     /**
@@ -653,12 +662,19 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         this.add(Africa );
     }
-
+    public void checkPlayer(){
+        gpm.gameStatus();
+        if(gpm.playersAlive.get(0).isAIplayer()) {
+            gpm.CheckAiPlayer();
+        }
+    }
     /**
      *main method for initializing the frame.
      * @param args
      */
+
     public static void main(String[] args){
         new GamePlayFrame();
+
     }
 }
