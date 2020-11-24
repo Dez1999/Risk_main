@@ -69,13 +69,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         LabelPanel.add(GameStatus);
         territoryButtons = new ArrayList<>(); //Set up List of all Territory Buttons
 
+        gpm.displayInitialInstructions();
 
-
-        //Show INSTRUCTIONS
-        gpm.setInstructions(gpm.printWelcome() + gpm.printRules() + "At the start of each turn each player receives 3 or more troops and" +
-                " if you rule a whole continent you will get more bonus troops.");
-        gpm.gameStatus();
-        gpm.setInstructions("Player 1 begins the Game. Please choose the Territory to Deploy Troops to");
+        /*
+        gpm.calculateBonusTroops();
+        gpm.setInstructions("Player 1 begins the Game. Please choose the Territory to Deploy" + gpm.getBonus() + " Troops to");
 
 
         //Territory Ownership for First Player
@@ -87,10 +85,12 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         String gameRules = "" ;
 
-        gameRules = gpm.printWelcome() + gpm.printRules();
+        gameRules = gpm.printWelcome() + gpm.printRules() + "At the start of each turn each player receives 3 or more troops and" +
+                " if you rule a whole continent you will get more bonus troops.";
 
         JOptionPane.showInternalMessageDialog(null, gameRules,
                 "Risk", JOptionPane.INFORMATION_MESSAGE);
+         */
 
 
 
