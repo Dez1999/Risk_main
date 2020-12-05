@@ -177,7 +177,7 @@ public class GameplayModel {
         });
         AIsetup.remove(buttons.get(0));
 
-        TimeUnit.SECONDS.sleep(6);
+        TimeUnit.SECONDS.sleep(10);
 
         /*jplayer2.addActionListener(new ActionListener() {
             @Override
