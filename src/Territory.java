@@ -130,6 +130,10 @@ public class Territory
         troops = i;
     }
 
+    /**
+     * AI Helper: Sets the Flag to indicate this territory is a Potential Territory to Attack with for the Current Player
+     * @param flag
+     */
     public void setFlagAdded(boolean flag) {
         flagAdded = flag;
     }

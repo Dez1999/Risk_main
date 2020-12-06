@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Integer.parseInt;
 
-import java.util.concurrent.TimeUnit;
 /**
  * Class GamePlay
  *
@@ -23,17 +22,17 @@ public class GameplayModel {
     private Board board;
     private Player currentPlayer;
     private int inputPlayersplaying ;
-    private JFrame AIsetup = new JFrame("set up your AIplayers");
-    private JRadioButton jplayer1 = new JRadioButton("player 1");
-    private JRadioButton jplayer2 = new JRadioButton("player 2");
-    private JRadioButton jplayer3 = new JRadioButton("player 3");
-    private JRadioButton jplayer4 = new JRadioButton("player 4");
-    private JRadioButton jplayer5 = new JRadioButton("player 5");
-    private JRadioButton jplayer6 = new JRadioButton("player 6");
-    private JButton ok = new JButton("ok");
+    private JFrame AIsetup = new JFrame("Set up your AIplayers");
+    private JRadioButton jplayer1 = new JRadioButton("Player 1");
+    private JRadioButton jplayer2 = new JRadioButton("Player 2");
+    private JRadioButton jplayer3 = new JRadioButton("Player 3");
+    private JRadioButton jplayer4 = new JRadioButton("Player 4");
+    private JRadioButton jplayer5 = new JRadioButton("Player 5");
+    private JRadioButton jplayer6 = new JRadioButton("Player 6");
+    private JButton ok = new JButton("OK");
     private ArrayList<JRadioButton> buttons = new ArrayList<JRadioButton>();
     private boolean UserCurrentPlayer;
-    private JLabel stat = new JLabel("choose which players do you want to be AI players");
+    private JLabel stat = new JLabel("Choose which players you want to be AI players");
     private Player nextPlayer;
     private Die die = new Die();
     private twoDice dice2 = new twoDice();
@@ -83,6 +82,8 @@ public class GameplayModel {
     private Territory From;
     private Territory To;
 
+    private boolean doneAiSelection = false;
+
 
     private boolean attackTerrNoOpp = false;
 
@@ -113,7 +114,6 @@ public class GameplayModel {
         board = new Board(numPlayers);
         initializeLand();
 
-
         i = 1;
         /**Sets the currentPlayer*/
         currentPlayer = getPlayers(0);
@@ -131,6 +131,11 @@ public class GameplayModel {
 
 
     }
+
+    /**
+     * Method: Sets the Numebr of Ai Players depending on User Input
+     * @throws InterruptedException
+     */
     public void setAIPlayers() throws InterruptedException {
         AIsetup.setVisible(true);
         AIsetup.add(stat);
@@ -150,6 +155,8 @@ public class GameplayModel {
         }
         AIsetup.remove(buttons.get(0));
         AIsetup.add(ok);
+
+        while (!doneAiSelection){
         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -172,43 +179,11 @@ public class GameplayModel {
                 if(jplayer6.isSelected()){
                     playersAlive.get(5).setAIplayer(true);
                 }
+                doneAiSelection = true;
                 AIsetup.dispose();
             }
         });
-        AIsetup.remove(buttons.get(0));
-
-        TimeUnit.SECONDS.sleep(10);
-
-        /*jplayer2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playersAlive.get(1).setAIplayer(true);
-            }
-        });
-        jplayer3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playersAlive.get(2).setAIplayer(true);
-            }
-        });
-        jplayer4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playersAlive.get(3).setAIplayer(true);
-            }
-        });
-        jplayer5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playersAlive.get(4).setAIplayer(true);
-            }
-        });
-        jplayer6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playersAlive.get(5).setAIplayer(true);
-            }
-        });*/
+        }
     }
 
 
@@ -235,6 +210,9 @@ public class GameplayModel {
                 "Risk", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * Method: Sets the colors for each Player Playing
+     */
     private void setUpColorList() {
         colorList = new ArrayList<>();
         colorList.add(GRAY);
@@ -523,7 +501,6 @@ public class GameplayModel {
 
     void fortify() {
     }
-
     //FIX This: print each players own Territories. Each territory has player owner
     //NOT BEING USED?
     private void getGameStatus() {
@@ -560,6 +537,9 @@ public class GameplayModel {
         }
     }
 
+    /**
+     * Method: Saves the State of the Game Board
+     */
     //public static void printBoard(Command command) {
     //}
 
@@ -1244,7 +1224,7 @@ public class GameplayModel {
                                 " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops." + attackingTerritory.getName() + " has conquered " + defendingTerritory.getName(),
                         "Territory Conquered", JOptionPane.INFORMATION_MESSAGE);
 
-                System.out.println(defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". ");
+                System.out.println(defendingTerritory.getName() + " tied with " + attackingTerritory.getName() + ". ");
                 System.out.println(attackingTerritory.getName() +
                         " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
                 System.out.println(attackingTerritory.getName() + " has conquered " + defendingTerritory.getName());
@@ -1281,7 +1261,7 @@ public class GameplayModel {
                                 attackingTerritory.getName() +
                                 " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops",
                         "Battle Tied", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println(defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". ");
+                System.out.println(defendingTerritory.getName() + " tied with " + attackingTerritory.getName() + ". ");
                 System.out.println(attackingTerritory.getName() +
                         " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops");
 
@@ -1491,19 +1471,19 @@ public class GameplayModel {
         //   wait(100);
 
         //update GameStatus
-        setInstructions("AI Player" + currentPlayer.getName() + " has finished the Deploy Phase");
+        setInstructions("AI Player " + currentPlayer.getName() + " has finished the Deploy Phase");
         gameStatus();
 
-        TimeUnit.SECONDS.sleep(2);
+        //TimeUnit.SECONDS.sleep(1);  //Not Necessary
 
         /**
          * FIX: AI will Sometimes Attack own Territory. Attacking Territory is correct. Check how Defending Territory is Chosen
          */
         AIattack();
-        setInstructions("AI Player" + currentPlayer.getName() + " has finished the Attack Phase");
+        setInstructions("AI Player " + currentPlayer.getName() + " has finished the Attack Phase");
         gameStatus();
 
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
 
         //    wait(100);
 
@@ -1588,7 +1568,6 @@ public class GameplayModel {
             //1) With the most populated Territory -> return Target   : Find most populated terr, return enemy neighbouring Territory with least troops to attack
             //2) The biggest Threat  -> return BiggestThreat Target
             //3) list of weakest threat
-
 
             //Develop Rankings for Territory Attack Mode
             //1) With the most populated Territory -> return Target
@@ -1895,7 +1874,7 @@ public class GameplayModel {
     }
 
     /**
-     * Method: Clears all the flags in the Territories
+     * Method: Clears all the flags in the Territories. Flags represent
      * @param terrWithtroops
      */
     public void clearAllFlags(ArrayList<Territory> terrWithtroops) {
@@ -1904,6 +1883,11 @@ public class GameplayModel {
         }
     }
 
+    /**
+     * Method: Fortify used for Players to transfer troops from one territory to another Territory
+     * @param troops
+     * @return
+     */
     public boolean Fortify(int troops){
 
     //move troops FROM -> TO.
@@ -1914,7 +1898,6 @@ public class GameplayModel {
         } else{
             return false;
         }
-
     }
 
     /**
@@ -1983,7 +1966,8 @@ public class GameplayModel {
      */
     public void AInextTurn() throws InterruptedException {
         changePlayer();
-        setInstructions("Player " + getCurrentPlayer().getName() + " has passed their Turn. Player "+ getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
+        setInstructions("Player " + getCurrentPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
+        //setInstructions("Player " + getCurrentPlayer().getName() + " has passed their Turn. Player "+ getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
         gameStatus();
         // wait(100);
     }
@@ -1994,7 +1978,7 @@ public class GameplayModel {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (! nextPlayer.isAIplayer() ) {
+            if (! currentPlayer.isAIplayer() ) {
                 UserCurrentPlayer = true;
             }
         }
