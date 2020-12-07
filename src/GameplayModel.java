@@ -1990,6 +1990,7 @@ public class GameplayModel {
         }
         out.write(strAlivePlayers);
         out.newLine();
+        //
 
         //Save the Current Player
         String current = "$$-" + currentPlayer.getName();
