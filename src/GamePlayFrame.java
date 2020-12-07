@@ -673,13 +673,8 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             gpm.CheckAiPlayer();
         }
     }
-    /**
-     *main method for initializing the frame.
-     * @param args
-     */
 
-    public static void main(String[] args) throws InterruptedException {
-        /*
+    public static void newgSetup(){
         JFrame x = new JFrame();
         JButton newg = new JButton("new game");
         JButton load = new JButton("load game");
@@ -691,14 +686,21 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         x.setVisible(true);
         newg.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                x.setVisible(false);
+                x.dispose();
                 try {
                     new GamePlayFrame();
                 } catch (InterruptedException interruptedException) {
                     interruptedException.printStackTrace();
                 }
             }
-        } );*/
-        new GamePlayFrame();
+        } );
+    }
+    /**
+     *main method for initializing the frame.
+     * @param args
+     */
+    public static void main(String[] args) throws InterruptedException {
+       // newgSetup();
+      new GamePlayFrame();
     }
 }
