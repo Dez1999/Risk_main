@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * @author Des, Peter, Raul
@@ -32,7 +33,11 @@ public class GamePlayController implements ActionListener {
 
 
         if(e.getActionCommand().equals("save")){
-            gpm.save();
+            try {
+                gpm.save();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
         //Select Territory to Deploy Troops
 

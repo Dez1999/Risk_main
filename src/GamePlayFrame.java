@@ -52,7 +52,10 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(new Color(688590));
         this.setLayout(new FlowLayout());
+
         gpm = new GameplayModel();
+
+
         this.setBackground(new Color(688590));
         gpm.addGamePlayView(this);
         GamePlayController gpc = new GamePlayController(gpm);
@@ -110,6 +113,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
        // if(gpm.playersAlive.get(0).isAIplayer()) {
          //   gpm.CheckAiPlayer();
         //}
+        ///////**********
     }
 
     /**
@@ -675,7 +679,8 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
      */
 
     public static void main(String[] args) throws InterruptedException {
-       /* JFrame x = new JFrame();
+        /*
+        JFrame x = new JFrame();
         JButton newg = new JButton("new game");
         JButton load = new JButton("load game");
         x.setLayout(new FlowLayout());

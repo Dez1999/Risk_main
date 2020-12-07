@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -105,12 +109,16 @@ public class GameplayModel {
         this.currentPlayer = currentPlayer;
     }
     public boolean getCloseDiceFrame() {return this.closeDiceFrame;}
+
     public void startGame( ) throws InterruptedException {
 
         setUpColorList();
+
+
+
        inputNumberofPlayers() ;
-        this.playersAlive = new ArrayList<Player>();
-        InitializePlayers(numPlayers);
+       this.playersAlive = new ArrayList<Player>();
+       InitializePlayers(numPlayers);
        setAIPlayers();
        if(playersAlive.get(0).isAIplayer()){
            UserCurrentPlayer = false;
@@ -1963,8 +1971,89 @@ public class GameplayModel {
 
        // wait(100);
     }
-    public  void save(){
+
+    /**
+     * Method: Saves the state of the game
+     */
+    public  void save() throws IOException {
+        BufferedWriter out = new BufferedWriter(new FileWriter(new File("SaveTest" + ".txt")));
+
+
+        //Save the Players Alive
+        String strAlivePlayers = "$-";
+        for(int i = 0; i < playersAlive.size(); i++){
+            String player = playersAlive.get(i).getName();
+
+            if (i == playersAlive.size()-1){
+                strAlivePlayers += player;
+            }
+            else {
+                strAlivePlayers += player + "#";
+            }
+        }
+        out.write(strAlivePlayers);
+        out.newLine();
+
+        //Save the Current Player
+        String current = "$$-" + currentPlayer.getName();
+        out.write(current);
+        out.newLine();
+
+        //Save the AI players
+        String Aiplayers = "$$$-";
+        ArrayList<Player> Aiplayerslist = new ArrayList<>();
+        for(int i = 0; i < playersAlive.size(); i++){
+
+            if(playersAlive.get(i).isAIplayer()){
+                Aiplayerslist.add(playersAlive.get(i));
+            }
+        }
+        for(int i = 0; i < Aiplayerslist.size(); i++){
+            String player = Aiplayerslist.get(i).getName();
+            if (i == Aiplayerslist.size()-1){
+                Aiplayers += player;
+            }
+            else {
+                Aiplayers += player + "#";
+            }
+        }
+        out.write(Aiplayers);
+        out.newLine();
+
+        //Save $$$$$-Territory (terr name, player, troops)
+        //$$$$$-Ontario#1#3
+        for(int i = 0; i < board.getNumTerritories(); i++){
+            String Terr = "$$$$$-" + board.getTerritoriesList()[i].getName() + "#" + board.getTerritoriesList()[i].getPlayer().getName() + "#" + board.getTerritoriesList()[i].getTroops();
+            out.write(Terr);
+            out.newLine();
+        }
+
+
+        //Save Player Hands
+        //$$$$$$-PlayerHand (player, card type)
+        //$$$$$$-1#1
+        for(int i = 0; i < playersAlive.size(); i++){
+
+            String card = "$$$$$$-" + playersAlive.get(i).getName() + "#";
+            for(int j = 0; j < playersAlive.get(i).getHand().getHandSize(); j++) {
+
+                if(j < playersAlive.get(i).getHand().getHandSize()-1){
+                    card += playersAlive.get(i).getHand().getCard(j).getTypeWorth() +"#";
+                }
+                else {
+                    card +=  playersAlive.get(i).getHand().getCard(j).getTypeWorth();
+
+                }
+                //String hand = "$$$$$$-" + playersAlive.get(i).getName() + "#" + playersAlive.get(i).getHand().getCard(j).getTypeWorth();
+            }
+            out.write(card);
+            out.newLine();
+        }
+
+
+        System.out.println(strAlivePlayers);
         JOptionPane.showMessageDialog(null, "game saved");
+        out.close();
     }
 
 
