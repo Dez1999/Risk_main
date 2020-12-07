@@ -90,30 +90,6 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         gpm.displayInitialInstructions();
 
-        /*
-        gpm.calculateBonusTroops();
-        gpm.setInstructions("Player 1 begins the Game. Please choose the Territory to Deploy" + gpm.getBonus() + " Troops to");
-
-
-        //Territory Ownership for First Player
-        String territories = "Player 1";
-        for (Territory terr : gpm.getCurrentPlayer().getTerritories()) {
-            System.out.println(terr.getName() + "Player 1: Troops = " + terr.getTroops());
-            territories = territories + "\n " + terr.getName() + ": Troops = " + terr.getTroops();
-        }
-
-        String gameRules = "" ;
-
-        gameRules = gpm.printWelcome() + gpm.printRules() + "At the start of each turn each player receives 3 or more troops and" +
-                " if you rule a whole continent you will get more bonus troops.";
-
-
-        JOptionPane.showInternalMessageDialog(null, gameRules,
-                "Risk", JOptionPane.INFORMATION_MESSAGE);
-         */
-
-
-
 
         //GameStatus.setText("This is where we will have the status");
         this.add(LabelPanel);
@@ -153,7 +129,6 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         Color color = e.getPlayerColor();
 
-
         GameStatus.setText(output);
         LabelPanel.setBackground(color);
 
@@ -166,6 +141,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
                 if (territoryButton.getActionCommand().equals(terr.getName())){
                     if(terr.getPlayer().getName().equals("1"))
                     {
+                        //GRAY
                         territoryButton.setBackground(Color.GRAY);
                     }
                     else if(terr.getPlayer().getName().equals("2"))
@@ -186,8 +162,10 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
                                 181, 121, 224
                         ));
                     }
+
                     else if(terr.getPlayer().getName().equals("6"))
                     {
+                        //PINK
                         territoryButton.setBackground(Color.PINK);
                     }
                     territoryButton.setText(terr.getTroops() +" :"+ territoryButton.getActionCommand());

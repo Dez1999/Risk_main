@@ -1,11 +1,13 @@
-# Risk_main
-
 Java implementation of a basic GUI for the risk game 
 
-version 2  of the Game 
+version 3 of the Game 
+In this version we added the fortify function
+ATTENTION: Fortify is enforced on the user to use it.
+Also we added AI players and allowed the user to choose which players to be the AI 
+We need to show the players which Territory they own on the map
+Instead We changed the colours of the buttons to match which players own which territories. 
+THE FORTIFY IS NOT ENTIRELY FIGURED OUT YET SO ITS ONLY BETWEEN ADJACENT TERRITORIES 
 
-Note to User:
-•	The GUI was tested in an environment where the size of the monitor was atleast 24”. On a smaller screen, such as a laptop, the user won’t be able to see the whole board and play the game. Thus, the testing should be done on a larger monitor if you have access to one. We are currently working on allowing our game to be adjustable for all devices.
 
 Troops.java 
 is a super class for different types of armies and for the wildCard 
@@ -57,39 +59,33 @@ player's hand in addition to a boolean which is set true if player can tradeinma
 Player.java
 represents each player playing the game and their Hand of cars and a list of the territories owned and 
 continents a player is controlling to manage the amount of bonus troops a player is to get on a new turn 
+Started implementing AI functionalities for this class. now AI works and attacks, defends and passes to next turn
 
 Board.java
 is the class that initializes the board structure and assigns territories to continents along with initializing territories
 and initializing the continents. Moreover it also initializes the deck of cards to be used in the 
-game.
+game.Added methods for shuffling/randomizing the territory ownerships at the start of game. instead of hardcoding assignment in the class now it is all random
+depending on the number of players playing
 
 gamePlayModel.java
 A class that has to operate the game on the board initialize players amount and allow players to take turn runs the game shows the winner, used by JFrame 
-following MVC pattern for implementing 
+following MVC pattern for implementing. implemented a version of Fortify with out an effective pathfinding algo-. but FORTIFY WORKS BETWEEN ADJACENT TERRITORIES ONLT FOR THE TERRITORIES
+THAT THE PLAYER OWNS
+
 
 GameplayModelTest.java
 GamePlayModelTest class has the unit tests for the gamePlayModel.java class and they all run wuth no failures. Additional testing could be added but time
-is limited 
+is limited Added additional tests for the AI players
 
 GamePlayEvent.java
 handlese the attack outcome movements of troops, deployment of troops and helps to change player turns. 
 
 GamePlayController.java
 usede to control phases of the game whenever a button is press it figures whether its a territory or the next button. GamePlayController use the methods in gamePlayModel to run the game 
-properly
+properly implemented Fortify method and adjusted the gameplay loops.
 
-GamePlayView.java
 
 GamePlayFrame.java
-creaetes the visual aspects of the GUI creates all the territories and has a display field to tell users what interactions they should do and updates them on the game status each 
-territory is created of a button 
-
-
-
-
-Improvements
-- We need to show the players which Territory they own on the map
-- We need to change the colour of the buttons
-- We need to make adjustments to the size of the window for the game to be more dynamic for all devices
+Added new buttons for player selection, replaced excessive input dialog pop-ups and added changing colours to indicate territory ownership.
 
 
