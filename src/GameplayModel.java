@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -105,12 +109,13 @@ public class GameplayModel {
         this.currentPlayer = currentPlayer;
     }
     public boolean getCloseDiceFrame() {return this.closeDiceFrame;}
+
     public void startGame( ) throws InterruptedException {
 
         setUpColorList();
        inputNumberofPlayers() ;
-        this.playersAlive = new ArrayList<Player>();
-        InitializePlayers(numPlayers);
+       this.playersAlive = new ArrayList<Player>();
+       InitializePlayers(numPlayers);
        setAIPlayers();
        if(playersAlive.get(0).isAIplayer()){
            UserCurrentPlayer = false;
@@ -210,7 +215,7 @@ public class GameplayModel {
         gameRules = printWelcome() + printRules() + "At the start of each turn each player receives 3 or more troops and" +
                 " if you rule a whole continent you will get more bonus troops.";
 
-        JOptionPane.showInternalMessageDialog(null, gameRules,
+        JOptionPane.showMessageDialog(null, gameRules,
                 "Risk", JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -1161,7 +1166,7 @@ public class GameplayModel {
 
                 closeDiceFrame = true;
                 //Show GameStatus
-               JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops. " +
+               JOptionPane.showMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops. " +
                                 attackingTerritory.getName() + " has conquered " + defendingTerritory.getName(),
                         "Attacking Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
 
@@ -1196,7 +1201,7 @@ public class GameplayModel {
             else {
                 closeDiceFrame = true;
                 //Show GameStatus
-                JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops",
+                JOptionPane.showMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops",
                         "Attacking Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println(attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops");
             }
@@ -1209,7 +1214,7 @@ public class GameplayModel {
             closeDiceFrame = true;
 
             //Show GameStatus
-            JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops",
+            JOptionPane.showMessageDialog(null, defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops",
                     "Defending Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
             System.out.println(defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops");
         }
@@ -1224,7 +1229,7 @@ public class GameplayModel {
                 closeDiceFrame = true;
                 //Show GameStatus
 
-                JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
+                JOptionPane.showMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
                                 attackingTerritory.getName() +
                                 " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops." + attackingTerritory.getName() + " has conquered " + defendingTerritory.getName(),
                         "Territory Conquered", JOptionPane.INFORMATION_MESSAGE);
@@ -1262,7 +1267,7 @@ public class GameplayModel {
             else {
                 closeDiceFrame = true;
                 //Show GameStatus
-                JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
+                JOptionPane.showMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
                                 attackingTerritory.getName() +
                                 " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops",
                         "Battle Tied", JOptionPane.INFORMATION_MESSAGE);
@@ -1291,7 +1296,7 @@ public class GameplayModel {
          */
 
         //Show GameStatus
-        JOptionPane.showInternalMessageDialog(null, "Player " + prevOwnerPlayer.getName() + " is killed.",
+        JOptionPane.showMessageDialog(null, "Player " + prevOwnerPlayer.getName() + " is killed.",
                 "Player is Killed", JOptionPane.INFORMATION_MESSAGE);
         System.out.println("Player " + prevOwnerPlayer.getName() + " is killed.");
     }
@@ -1964,8 +1969,89 @@ public class GameplayModel {
 
        // wait(100);
     }
-    public  void save(){
+
+    /**
+     * Method: Saves the state of the game
+     */
+    public  void save() throws IOException {
+        BufferedWriter out = new BufferedWriter(new FileWriter(new File("SaveTest" + ".txt")));
+
+
+        //Save the Players Alive
+        String strAlivePlayers = "$-";
+        for(int i = 0; i < playersAlive.size(); i++){
+            String player = playersAlive.get(i).getName();
+
+            if (i == playersAlive.size()-1){
+                strAlivePlayers += player;
+            }
+            else {
+                strAlivePlayers += player + "#";
+            }
+        }
+        out.write(strAlivePlayers);
+        out.newLine();
+
+        //Save the Current Player
+        String current = "$$-" + currentPlayer.getName();
+        out.write(current);
+        out.newLine();
+
+        //Save the AI players
+        String Aiplayers = "$$$-";
+        ArrayList<Player> Aiplayerslist = new ArrayList<>();
+        for(int i = 0; i < playersAlive.size(); i++){
+
+            if(playersAlive.get(i).isAIplayer()){
+                Aiplayerslist.add(playersAlive.get(i));
+            }
+        }
+        for(int i = 0; i < Aiplayerslist.size(); i++){
+            String player = Aiplayerslist.get(i).getName();
+            if (i == Aiplayerslist.size()-1){
+                Aiplayers += player;
+            }
+            else {
+                Aiplayers += player + "#";
+            }
+        }
+        out.write(Aiplayers);
+        out.newLine();
+
+        //Save $$$$$-Territory (terr name, player, troops)
+        //$$$$$-Ontario#1#3
+        for(int i = 0; i < board.getNumTerritories(); i++){
+            String Terr = "$$$$$-" + board.getTerritoriesList()[i].getName() + "#" + board.getTerritoriesList()[i].getPlayer().getName() + "#" + board.getTerritoriesList()[i].getTroops();
+            out.write(Terr);
+            out.newLine();
+        }
+
+
+        //Save Player Hands
+        //$$$$$$-PlayerHand (player, card type)
+        //$$$$$$-1#1
+        for(int i = 0; i < playersAlive.size(); i++){
+
+            String card = "$$$$$$-" + playersAlive.get(i).getName() + "#";
+            for(int j = 0; j < playersAlive.get(i).getHand().getHandSize(); j++) {
+
+                if(j < playersAlive.get(i).getHand().getHandSize()-1){
+                    card += playersAlive.get(i).getHand().getCard(j).getTypeWorth() +"#";
+                }
+                else {
+                    card +=  playersAlive.get(i).getHand().getCard(j).getTypeWorth();
+
+                }
+                //String hand = "$$$$$$-" + playersAlive.get(i).getName() + "#" + playersAlive.get(i).getHand().getCard(j).getTypeWorth();
+            }
+            out.write(card);
+            out.newLine();
+        }
+
+
+        System.out.println(strAlivePlayers);
         JOptionPane.showMessageDialog(null, "game saved");
+        out.close();
     }
 
 

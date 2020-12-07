@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * @author Des, Peter, Raul
@@ -32,7 +33,11 @@ public class GamePlayController implements ActionListener {
 
 
         if(e.getActionCommand().equals("save")){
-            gpm.save();
+            try {
+                gpm.save();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
         //Select Territory to Deploy Troops
 
@@ -187,7 +192,7 @@ public class GamePlayController implements ActionListener {
                             if (gpm.WinnerStatus()) { //Check if Game is Over
 
                                 //Show in Pop-up
-                                JOptionPane.showInternalMessageDialog(null, gpm.playersAlive.get(0).getHand() + " is the WINNER",
+                                JOptionPane.showMessageDialog(null, gpm.playersAlive.get(0).getHand() + " is the WINNER",
                                         "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
                                 /*
                                 System.out.println("Winner!! Winner!!");
@@ -242,7 +247,7 @@ public class GamePlayController implements ActionListener {
                 }
 
 
-                JOptionPane.showInternalMessageDialog(null, territories,
+                JOptionPane.showMessageDialog(null, territories,
                         "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
 
                 next = -1;
