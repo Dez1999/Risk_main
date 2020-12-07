@@ -861,19 +861,20 @@ public class GameplayModel {
      */
     public void changeColor(){
         if (currentPlayer.getColor().equals("RED")){
-            playerColor = Color.RED;
+            playerColor = new Color(184, 59, 59);
         }
         else if(currentPlayer.getColor().equals("ORANGE")){
-            playerColor = Color.ORANGE;
+            playerColor = new Color(
+                    181, 121, 224);
         }
         else if(currentPlayer.getColor().equals("GRAY")){
             playerColor = Color.GRAY;
         }
         else if(currentPlayer.getColor().equals("GREEN")){
-            playerColor = Color.GREEN;
+            playerColor = new Color(73, 186, 58);
         }
         else if(currentPlayer.getColor().equals("YELLOW")){
-            playerColor = Color.YELLOW;
+            playerColor = new Color(224, 227, 75);
         }
         else if(currentPlayer.getColor().equals("PINK")){
             playerColor = Color.PINK;
