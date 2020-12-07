@@ -8,6 +8,10 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Integer.parseInt;
 
+
+import java.util.concurrent.TimeUnit;
+import javax.swing.JOptionPane;
+
 /**
  * Class GamePlay
  *
@@ -1958,6 +1962,9 @@ public class GameplayModel {
 
 
        // wait(100);
+    }
+    public  void save(){
+        JOptionPane.showMessageDialog(null, "game saved");
     }
 
 

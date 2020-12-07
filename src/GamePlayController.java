@@ -30,7 +30,14 @@ public class GamePlayController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JFrame parent = new JFrame();
 
+
+        if(e.getActionCommand().equals("save")){
+            gpm.save();
+        }
+        //Select Territory to Deploy Troops
+
         //Deploy Phase: Select Territory to Deploy Troops
+
         if (next == 0) {
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (e.getActionCommand().equals(terr.getName())) {

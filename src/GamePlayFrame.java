@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.Graphics;
@@ -39,6 +40,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private JButton next = new JButton("next");
     private ArrayList<JButton> territoryButtons;
     private GameplayModel gpm;
+    private JMenuBar menu = new JMenuBar();
 
     /**
      * Setting up a frame for the game board layout.
@@ -48,17 +50,34 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         //MVC Set Up
         super("Risk Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.getContentPane().setBackground(Color.BLUE);
+        this.getContentPane().setBackground(new Color(688590));
         this.setLayout(new FlowLayout());
         gpm = new GameplayModel();
-        this.setBackground(Color.BLUE);
+        this.setBackground(new Color(688590));
         gpm.addGamePlayView(this);
         GamePlayController gpc = new GamePlayController(gpm);
         next.addActionListener(gpc);
         next.setActionCommand("next");
         this.setSize(1600, 800);
         this.setVisible(true);
-        this.setResizable(true);  //Changed this to true
+        this.setResizable(true);  //Changed this to tru
+
+        // create a menu
+        JMenu x = new JMenu("Menu");
+
+        // create menuitems
+        JMenuItem m1 = new JMenuItem("Save Game");
+        m1.addActionListener(gpc);
+        m1.setActionCommand("save");
+
+        // add menu items to menu
+        x.add(m1);
+
+        // add menu to menu bar
+        menu.add(x);
+
+        // add menubar to frame
+        this.setJMenuBar(menu);
         //JPanel p = new JPanel();
         //Graphics g = p.getGraphics();
         //g.drawLine(120,120,220,200);
@@ -127,24 +146,23 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
                     }
                     else if(terr.getPlayer().getName().equals("2"))
                     {
-                        //RED
-                        territoryButton.setBackground(Color.RED);
+                        territoryButton.setBackground(new Color(184, 59, 59));
                     }
                     else if(terr.getPlayer().getName().equals("3"))
                     {
-                        //GREEN
-                        territoryButton.setBackground(Color.GREEN);
+                        territoryButton.setBackground(new Color(73, 186, 58));
                     }
                     else if(terr.getPlayer().getName().equals("4"))
                     {
-                        //YELLOW
-                        territoryButton.setBackground(Color.YELLOW);
+                        territoryButton.setBackground(new Color(224, 227, 75));
                     }
                     else if(terr.getPlayer().getName().equals("5"))
                     {
-                        //ORANGE
-                        territoryButton.setBackground(Color.ORANGE);
+                        territoryButton.setBackground(new Color(
+                                181, 121, 224
+                        ));
                     }
+
                     else if(terr.getPlayer().getName().equals("6"))
                     {
                         //PINK
@@ -213,7 +231,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         JPanel exFirstPanel = new JPanel();
         exFirstPanel.setLayout(new GridLayout(1,3));
         JPanel exempty1 = new JPanel();
-        exempty1.setBackground(Color.BLUE);
+        exempty1.setBackground(new Color(688590));
 
         greenLand = new JButton("GreenLand");
         greenLand.addActionListener(gpc);
@@ -228,13 +246,13 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         exFirstPanel.add(iceLand);
         JPanel exSecond = new JPanel();
         exSecond.setLayout(new GridLayout(1,1));
-        exSecond.setBackground(Color.BLUE);
+        exSecond.setBackground(new Color(688590));
         JPanel exThird = new JPanel();
         exThird.setLayout(new GridLayout(1,3));
         JPanel exempty2 = new JPanel();
-        exempty2.setBackground(Color.BLUE);
+        exempty2.setBackground(new Color(688590));
         JPanel exempty3 = new JPanel();
-        exempty3.setBackground(Color.BLUE);
+        exempty3.setBackground(new Color(688590));
         exThird.add(exempty2);
         exThird.add(exempty3);
 
@@ -257,7 +275,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private void uselessSetup(){
         JPanel useless = new JPanel();
         useless.setPreferredSize(new Dimension(100 , 100));
-        useless.setBackground(Color.BLUE);
+        useless.setBackground(new Color(688590));
         this.add(useless);
     }
 
@@ -290,11 +308,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         }
         JPanel ASSecondPanel = new JPanel();
         ASSecondPanel.setLayout(new GridLayout(1,1));
-        ASSecondPanel.setBackground(Color.BLUE);
+        ASSecondPanel.setBackground(new Color(688590));
         JPanel ASFirstPanel = new JPanel();
         ASFirstPanel.setLayout(new GridLayout(1,3));
         JPanel ASempty1 = new JPanel();
-        ASempty1.setBackground(Color.BLUE);
+        ASempty1.setBackground(new Color(688590));
         ASIbutton = new JButton("Indonesia");
         ASIbutton.addActionListener(gpc);
         ASIbutton.setActionCommand("Indonesia");
@@ -344,7 +362,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         JPanel ASecondPanel = new JPanel();
         ASecondPanel.setLayout(new GridLayout(1,3));
         JPanel AemptyPanel = new JPanel();
-        AemptyPanel.setBackground(Color.BLUE);
+        AemptyPanel.setBackground(new Color(688590));
         ASecondPanel.add(AemptyPanel);
         ASecondbutton = new JButton[1][2];
         for(int i = 0 ; i < 2 ; i ++){
@@ -366,9 +384,9 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         JPanel AFirstPanel = new JPanel();
         AFirstPanel.setLayout(new GridLayout(1,3));
         JPanel Aempty2 = new JPanel();
-        Aempty2.setBackground(Color.BLUE);
+        Aempty2.setBackground(new Color(688590));
         JPanel Aempty3 = new JPanel();
-        Aempty3.setBackground(Color.BLUE);
+        Aempty3.setBackground(new Color(688590));
         AFirstPanel.add(Aempty2);
         AFirstPanel.add(Aempty3);
         AFirstButton = new JButton("Mongolia");
@@ -414,7 +432,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         JPanel ESecondPanel = new JPanel();
         ESecondPanel.setLayout(new GridLayout(1,3));
         JPanel emptyPanel = new JPanel();
-        emptyPanel.setBackground(Color.BLUE);
+        emptyPanel.setBackground(new Color(688590));
         ESecondPanel.add(emptyPanel);
         ESecondbuttons = new JButton[1][2];
         for(int i = 0 ; i < 2 ; i ++){
@@ -436,9 +454,9 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         JPanel EFirstPanel = new JPanel();
         EFirstPanel.setLayout(new GridLayout(1,3));
         JPanel Eempty2 = new JPanel();
-        Eempty2.setBackground(Color.BLUE);
+        Eempty2.setBackground(new Color(688590));
         JPanel Eempty3 = new JPanel();
-        Eempty3.setBackground(Color.BLUE);
+        Eempty3.setBackground(new Color(688590));
         EFirstPanel.add(Eempty2);
         EFirstPanel.add(Eempty3);
         EFirstbutton = new JButton("Scandinavia");
@@ -462,11 +480,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         northAmerica.setPreferredSize(new Dimension(350, 300));  //Before: width = 350
         JPanel NaFirstPanel = new JPanel();
         NaFirstPanel.setLayout(new GridLayout(1,4));
-        NaFirstPanel.setBackground(Color.BLUE);
+        NaFirstPanel.setBackground(new Color(688590));
         JPanel emptyPanel = new JPanel();
         JPanel emptyPanel2 = new JPanel();
-        emptyPanel2.setBackground(Color.BLUE);
-        emptyPanel.setBackground(Color.BLUE);
+        emptyPanel2.setBackground(new Color(688590));
+        emptyPanel.setBackground(new Color(688590));
         NaFirstbuttons = new JButton[1][2];
         for(int i = 0 ; i < 2 ; i ++){
             JButton b = new JButton();
@@ -489,7 +507,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         NaFirstPanel.add(emptyPanel2);
         JPanel NaSecondPanel = new JPanel();
         NaSecondPanel.setLayout(new GridLayout(1,3));
-        NaSecondPanel.setBackground(Color.BLUE);
+        NaSecondPanel.setBackground(new Color(688590));
         NaSecondbuttons = new JButton[1][3];
         for(int i = 0 ; i < 3 ; i ++){
             JButton b = new JButton();
@@ -657,7 +675,25 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
      */
 
     public static void main(String[] args) throws InterruptedException {
+       /* JFrame x = new JFrame();
+        JButton newg = new JButton("new game");
+        JButton load = new JButton("load game");
+        x.setLayout(new FlowLayout());
+        x.getContentPane().setBackground(Color.pink);
+        x.add(newg);
+        x.add(load);
+        x.setSize(400,400);
+        x.setVisible(true);
+        newg.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                x.setVisible(false);
+                try {
+                    new GamePlayFrame();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+            }
+        } );*/
         new GamePlayFrame();
-
     }
 }
