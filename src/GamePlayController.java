@@ -192,7 +192,7 @@ public class GamePlayController implements ActionListener {
                             if (gpm.WinnerStatus()) { //Check if Game is Over
 
                                 //Show in Pop-up
-                                JOptionPane.showInternalMessageDialog(null, gpm.playersAlive.get(0).getHand() + " is the WINNER",
+                                JOptionPane.showMessageDialog(null, gpm.playersAlive.get(0).getHand() + " is the WINNER",
                                         "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
                                 /*
                                 System.out.println("Winner!! Winner!!");
@@ -247,7 +247,7 @@ public class GamePlayController implements ActionListener {
                 }
 
 
-                JOptionPane.showInternalMessageDialog(null, territories,
+                JOptionPane.showMessageDialog(null, territories,
                         "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
 
                 next = -1;
