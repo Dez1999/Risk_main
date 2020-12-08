@@ -15,4 +15,8 @@ public class Edge {
     public Integer getW() {
         return w;
     }
+
+    public int getWeight() {
+        return weight;
+    }
 }
