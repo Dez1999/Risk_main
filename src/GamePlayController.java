@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -38,6 +39,20 @@ public class GamePlayController implements ActionListener {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+            next = next - 1 ;
+        }
+
+        if(e.getActionCommand().equals("load")){
+            JFileChooser C = new JFileChooser();
+            C.showDialog(null,"Choose XML file to import");
+            C.setVisible(true);
+            File filename = C.getSelectedFile();
+            try {
+                gpm.load(filename);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            next = -1;
         }
         //Select Territory to Deploy Troops
 

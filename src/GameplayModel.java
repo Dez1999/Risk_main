@@ -2,10 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import static java.lang.Integer.parseInt;
 
 
-import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 /**
@@ -66,7 +62,7 @@ public class GameplayModel {
 
     private int bonus = 0;
     boolean gameWon = false;
-    private int i;
+    private int pTurn;
     int userAttackingTroops = 1;
     private List<GamePlayView> GamePlayView = new ArrayList<>();
 
@@ -123,7 +119,7 @@ public class GameplayModel {
         board = new Board(numPlayers);
         initializeLand();
 
-        i = 1;
+        pTurn = 1;
         /**Sets the currentPlayer*/
         currentPlayer = getPlayers(0);
 
@@ -1428,11 +1424,11 @@ public class GameplayModel {
         /**Set Next Player Turn*/
         if (getPlayers(playersAlive.size() -1) == currentPlayer) {
             nextPlayer = getPlayers(0);
-            i = 0;
+            pTurn = 0;
         }
         else if (getPlayers(playersAlive.size() -1) != currentPlayer) {
-            i++;
-            nextPlayer = getPlayers(i);
+            pTurn++;
+            nextPlayer = getPlayers(pTurn);
         }
 
         /*Reset Territories conquered in the current Turn to 0*/
@@ -2055,6 +2051,103 @@ public class GameplayModel {
         out.close();
     }
 
+    public void load(File myFile) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(myFile));
+        try {
+            String l1 = br.readLine();
+            while (l1 != null) {
+                if(l1.charAt(1)=='-'){
+                    ArrayList<Player> newAlive = new ArrayList<>();
+                    for(int i = 2; i< l1.length(); i= i + 2){
+                        String d =  String.valueOf(l1.charAt(i));
+                        Player newadd = new Player(this,d);
+                        int l = Integer.parseInt(d);
+                        newAlive.add(newadd);
+                        newAlive.get(l-1).setColor(colorList.get(l-1));
+                    }
+                    this.playersAlive = newAlive;
+                }
+                else if(l1.charAt(2)=='-'){
+                    for(int i = 0 ; i < playersAlive.size(); i++){
+                        String f =  String.valueOf(l1.charAt(3));
+                        if(playersAlive.get(i).getName().equals(f)){
+                            this.currentPlayer = playersAlive.get(i);
+                            this.pTurn = i;
+                            if(i < playersAlive.size()-1) {
+                                this.nextPlayer = playersAlive.get(i + 1);
+                            }
+                            else{
+                                this.nextPlayer = playersAlive.get(0);
+                            }
+                        }
+                    }
+                }
+                else if(l1.charAt(3)=='-'){
+                    for(int j = 4; j< l1.length(); j= j + 2) {
+                        for (int i = 0; i < playersAlive.size(); i++) {
+                            String f =  String.valueOf(l1.charAt(j));
+                            if (playersAlive.get(i).getName().equals(f)) {
+                                playersAlive.get(i).setAIplayer(true);
+                            }
+                        }
+                    }
+                }
+                else if(l1.charAt(5)=='-'){
+                    String[] s = split(l1);
+                    String[] t = splitTwo(s[0]);
+                    String terName = t[1];
+                    String owner = s[1];
+                    String troops = s[2];
+                    for(Territory terr: board.getTerritoriesList()) {
+                        if(terr.getName().equals(terName)){
+                            for(int i = 0; i < playersAlive.size(); i++){
+                                if(playersAlive.get(i).getName().equals(owner)){
+                                    terr.changeOwner(playersAlive.get(i));
+                                    playersAlive.get(i).addTerritories(terr);
+                                }
+                            }
+                            terr.setTroops(Integer.parseInt(troops));
+                        }
+                    }
+                }
+                else if(l1.charAt(6)=='-'){
+                    /*for(int i = 0 ; i < playersAlive.size(); i++) {
+                        String f =  String.valueOf(l1.charAt(7));
+                        if(playersAlive.get(i).getName().equals(f)){
+                            for(int j = 9; i< l1.length(); i= i + 2){
+                                playersAlive.get(i).
+                            }
+                        }
+                    }*/
+                    return;
+                }
+
+                l1 = br.readLine();
+            }
+        } finally {
+            br.close();
+            gameStatus();
+            if(currentPlayer.isAIplayer()) {
+                UserCurrentPlayer = false;
+            }
+            else{
+                UserCurrentPlayer = true;
+
+            }
+            CheckAiPlayer();
+        }
+        JOptionPane.showMessageDialog(null, "game loaded");
+    }
+    public String[] split(String t){
+        String line = t;
+        String[] strings = line.split("#");
+        return strings;
+    }
+    public String[] splitTwo(String s){
+        String line = s;
+        String[] strings = line.split("-");
+        return strings;
+    }
 
     /**
      * NextTurn: helps AI player choose when to go to the next players Turn
@@ -2065,7 +2158,7 @@ public class GameplayModel {
         //setInstructions("Player " + getCurrentPlayer().getName() + " has passed their Turn. Player "+ getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
         gameStatus();
         // wait(100);
-    }
+       }
     public void CheckAiPlayer() {
         while (!UserCurrentPlayer) {
             try {
