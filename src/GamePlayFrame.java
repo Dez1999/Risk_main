@@ -73,8 +73,14 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         m1.addActionListener(gpc);
         m1.setActionCommand("save");
 
+        JMenuItem m2 = new JMenuItem("load Game");
+        m2.addActionListener(gpc);
+        m2.setActionCommand("load");
+
+
         // add menu items to menu
         x.add(m1);
+        x.add(m2);
 
         // add menu to menu bar
         menu.add(x);
@@ -127,9 +133,9 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         int handsize = e.getPlayerHand().handList().size();
         GameplayModel gpm = (GameplayModel) e.getSource();
-        String output = null;
+        String output = null;    //+ e.getcurrentPlayer().getColor()
 
-        output = "Current Player: " + e.getPlayerName() + ". " + e.getcurrentPlayer().getColor() +  ". Number of cards: " + handsize + ". " + e.getInstructions();  //ADD later: Instructions and Outcome
+        output = "Current Player: " + e.getPlayerName() +  ". Number of cards: " + handsize + ". " + e.getInstructions();  //ADD later: Instructions and Outcome
 
         Color color = e.getPlayerColor();
 
