@@ -828,7 +828,7 @@ public class GameplayModel {
 
         for (Territory terr : currentPlayer.getTerritories()) {
             if (terr.getName().equals(selectedTerritory.getName())) {//deploying troops if == true
-                int deployed = stringTerritoryMapping(selectedTerritory.getName(), newTroops);
+                deployed = stringTerritoryMapping(selectedTerritory.getName(), newTroops);
                 return true;
             } else if (terr.getName().equals((currentPlayer.getTerritories().get(temp)).getName())) {
 
