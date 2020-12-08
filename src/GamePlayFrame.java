@@ -37,7 +37,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private JLabel GameStatus = new JLabel();
     private JPanel LabelPanel = new JPanel();
     private JButton NewZealand;
-    private JButton next = new JButton("next");
+    private JButton next = new JButton("Next");
     private ArrayList<JButton> territoryButtons;
     private GameplayModel gpm;
     private JMenuBar menu = new JMenuBar();
@@ -73,7 +73,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         m1.addActionListener(gpc);
         m1.setActionCommand("save");
 
-        JMenuItem m2 = new JMenuItem("load Game");
+        JMenuItem m2 = new JMenuItem("Load Game");
         m2.addActionListener(gpc);
         m2.setActionCommand("load");
 

@@ -44,7 +44,7 @@ public class GamePlayController implements ActionListener {
 
         if(e.getActionCommand().equals("load")){
             JFileChooser C = new JFileChooser();
-            C.showDialog(null,"Choose XML file to import");
+            C.showDialog(null,"Choose File to import");
             C.setVisible(true);
             File filename = C.getSelectedFile();
             try {
