@@ -12,12 +12,15 @@ public class GamePlayController implements ActionListener {
     private boolean success;
     private boolean isFortifying = true;
     private int userTroops;
+    private int currentDeployable;
+    private int deployCount;
 
 
     public GamePlayController(GameplayModel gpm) {
 
         this.gpm = gpm;
         next = 0;
+        deployCount=0;
     }
 
     /**
@@ -42,12 +45,26 @@ public class GamePlayController implements ActionListener {
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (e.getActionCommand().equals(terr.getName())) {
                     gpm.setSelectedTerritory(terr);
+                    gpm.setInstructions("Please Choose number of troops to deploy");
+                    gpm.gameStatus();
+
+                    if(deployCount ==0){
+                        gpm.calculateBonusTroops();
+                    }deployCount =+ 1;
+
                     //Check if player owns Territory
                     //Add troops to Territory
                     //Ask User to choose Attacking Territory
-                    success = gpm.userDeploysTroops();
-                    if (success) { //Troops were deployed to selected Territory
-                        //gpm.updateBoardStatus()   -> ADD METHOD
+                    currentDeployable = gpm.getBonus() - gpm.getDeployedNum();
+                    gpm.setDeployedNum((int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to deploy. Please Use less than" + currentDeployable+ ":")));
+
+                    if(currentDeployable > 0){
+                        next = -1;
+                        gpm.userDeploysTroops();
+                    }else{success = gpm.userDeploysTroops();}
+                    //success = gpm.userDeploysTroops();
+                    if (success) { //Troops were - ALL - deployed
+                        //gpm.updateBoardStatus(); //remove comment ASK!
 
 
                         //Show in GameStatus() used in JLabel : gpm
@@ -59,6 +76,7 @@ public class GamePlayController implements ActionListener {
                         gpm.gameStatus();
                         next = -1;
                     }
+
                 }
             }
 
@@ -215,7 +233,7 @@ public class GamePlayController implements ActionListener {
 
         //Next Button is Selected. Changes to Fortify and then Changes Player turn and start to deploy Troops. Checks if AI player is next
         else if (e.getActionCommand().equals("next")) {
-
+            deployCount = 0;
             if (isFortifying) {
 
                 isFortifying = false;
@@ -363,6 +381,5 @@ public class GamePlayController implements ActionListener {
 
 
         next++;   //Updates the Phase in the Game
-
         }
     }
