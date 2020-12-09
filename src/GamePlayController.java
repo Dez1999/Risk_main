@@ -34,8 +34,9 @@ public class GamePlayController implements ActionListener {
 
 
         if(e.getActionCommand().equals("save")){
+            String file = JOptionPane.showInputDialog(null, "Enter FileName");
             try {
-                gpm.save();
+                gpm.save(file);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
