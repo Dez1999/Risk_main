@@ -63,14 +63,23 @@ public class GamePlayController implements ActionListener {
         //Deploy Phase: Select Territory to Deploy Troops
 
         if (next == 0) {
-            int a;
+            int a = 0;
             boolean correctTerry = false;
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (e.getActionCommand().equals(terr.getName())) {
                     gpm.setSelectedTerritory(terr);
-                    //if(terr.getPlayer()!= gpm.getCurrentPlayer()){}
                     // tell user they selected wrong territory
-                    correctTerry = true;
+                    if(terr.getPlayer()!= gpm.getCurrentPlayer()){
+                        next = -1;
+
+
+                    }else{//correct
+                        correctTerry = true;
+                        a = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to deploy. You have this many troops to deploy" + currentDeployable + ":"));
+
+                    }
+
+
 
                     if (deployCount == 0) {
                         gpm.setBonus(0);
@@ -84,14 +93,13 @@ public class GamePlayController implements ActionListener {
                     //Add troops to Territory
                     //Ask User to choose Attacking Territory
 
-                    a = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to deploy. You have this many troops to deploy" + currentDeployable + ":"));
 
                     if (a > currentDeployable || a < 0) {
                         next = -1;
                         gpm.setInstructions("Please Choose the correct number of troops to deploy out of : "+ currentDeployable+"");
                         gpm.gameStatus();
                     }
-                    if (currentDeployable > 0 || currentDeployable <= a) {
+                    if (currentDeployable > 0 && currentDeployable >= a) {
                         gpm.setDeployedNum(a);
                         success = gpm.userDeploysTroops();
                         currentDeployable = currentDeployable - a;
@@ -231,13 +239,10 @@ public class GamePlayController implements ActionListener {
                             //Attack was Successful
                             //updateBoardStatus()
                             //diceFrame.setVisible(false);
-                            if(gpm.isExitAttack() == true){
-                               // diceFrame.setVisible(false);
-                            }
                             if (gpm.WinnerStatus()) { //Check if Game is Over
 
                                 //Show in Pop-up
-                                JOptionPane.showMessageDialog(null, gpm.playersAlive.get(0).getHand() + " is the WINNER",
+                                JOptionPane.showMessageDialog(null, gpm.getWinner().getName() + " is the WINNER",
                                         "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
                                 /*
                                 System.out.println("Winner!! Winner!!");
@@ -254,9 +259,7 @@ public class GamePlayController implements ActionListener {
                                 next = 0;
                             }
                         }
-                        if(gpm.getCloseDiceFrame()){
-                          //  diceFrame.setVisible(false);
-                        }
+                        //if(gpm.getCloseDiceFrame()){//  diceFrame.setVisible(false);}
                     }
 
                 }
@@ -265,7 +268,7 @@ public class GamePlayController implements ActionListener {
 
         //Next Button is Selected. Changes to Fortify and then Changes Player turn and start to deploy Troops. Checks if AI player is next
         else if (e.getActionCommand().equals("next")) {
-            deployCount = 0;
+            //deployCount = 0;
             if (isFortifying) {
 
                 isFortifying = false;
@@ -276,30 +279,18 @@ public class GamePlayController implements ActionListener {
                 gpm.gameStatus();
                 next = 3;
             } else if (!isFortifying) {
+                deployCount = 0;
                 JOptionPane.showMessageDialog(parent, "Your turn is now Over");
                 gpm.setBonus(0);
                 gpm.calculateBonusTroops();
                 //Show GameStatus
-
                 gpm.changePlayer();  //This is good
-                gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " is up Next. Please choose the Territory to add "+ gpm.getBonus() + "Troops to");
+                gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " is up Next. Please choose the Territory to add "+ gpm.getBonus() + "Troops to"); //preiously had BONUS instead of currentdeployable.
 
                 gpm.gameStatus();
 
-                String territories = null;
-
-                for (Territory terr : gpm.getCurrentPlayer().getTerritories()) {
-                    System.out.println(terr.getName() + ": Troops = " + terr.getTroops());
-                    territories = territories + "\n " + terr.getName() + ": Troops = " + terr.getTroops();
-                }
-
-
-                JOptionPane.showMessageDialog(null, territories,
-                        "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
-
                 next = -1;
                 isFortifying = true;
-
 
                 //Test for AI Player
                 if(gpm.getCurrentPlayer().isAIplayer()) {

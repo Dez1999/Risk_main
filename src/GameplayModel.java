@@ -43,7 +43,7 @@ public class GameplayModel {
     private Die die = new Die();
     private twoDice dice2 = new twoDice();
     private threeDice dice3 = new threeDice();
-
+    public Player winner;
     public ArrayList<Player> playersAlive;
     public ArrayList<Player> playersDead;
 
@@ -534,13 +534,20 @@ public class GameplayModel {
                 "HELP: SHOWS HELP\n" +
                 "RULES: SHOWS THE RULES OF RISK!\n");
     }
-
-
+    public Player getWinner(){
+        return winner;
+        }
     public boolean WinnerStatus() {
-
-        if (playersAlive.size() == 1) {
+        int terrCount = 0;
+        for (Territory terr : board.getTerritoriesList()) {
+            if(terr.getPlayer()==currentPlayer){
+                terrCount++;
+            }
+        }
+        if (terrCount==board.getTerritoriesList().length) {
             gameWon = true;
-            return true;
+            winner = currentPlayer;
+            return gameWon;
         }
         else {
             return false;
@@ -916,34 +923,20 @@ public class GameplayModel {
     public void chooseAttackingTroops() {
         canAttack = false;
         exitAttack = false;
-        Scanner s = new Scanner(System.in);
-        int troopsAmount = attackingTerritory.getTroops();  //Returns number of troops in selected Attacking Territory
-
         while (!canAttack && !exitAttack) {
             //System.out.println("Please choose the Number of Troops to Attack with. Press BACK to exit ATTACK phase");
-
+            attackTroopLogic(userAttackingTroops);
             //int stringword = s.nextInt();
-
+            /*
             if (userAttackingTroops >= 1 && userAttackingTroops <= 3) {
                 attackTroopLogic(userAttackingTroops);
                 //Need to exit while loop if canAttack is true
 
-            } else if (userAttackingTroops > 3) {
-
-                //Show GameStatus
-
-                //JOptionPane.showMessageDialog(null, "You cannot attack with more than 3 dice at one time. Please attack with 1-3 dice.",
-                      //  "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
-                //exitAttack = true;
-            } else {
-
-                //Show GameStatus
-                //JOptionPane.showMessageDialog(null, "You did not enter the right amount of Dice to Attack with",
-                      // "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
-                //exitAttack = true;
-            }
+            }*/
 
         }//End of While loop
+
+
 
     }
 
