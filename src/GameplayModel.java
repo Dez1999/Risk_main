@@ -210,7 +210,7 @@ public class GameplayModel {
         gameRules = printWelcome() + printRules() + "At the start of each turn each player receives 3 or more troops and" +
                 " if you rule a whole continent you will get more bonus troops.";
 
-        JOptionPane.showInternalMessageDialog(null, gameRules,
+        JOptionPane.showMessageDialog(null, gameRules,
                 "Risk", JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -359,7 +359,7 @@ public class GameplayModel {
             }
 
             //Put this into GameStatus
-            //JOptionPane.showInternalMessageDialog(null, "You received " + bonus + " bonus troops for the continents you are holding",
+            //JOptionPane.showMessageDialog(null, "You received " + bonus + " bonus troops for the continents you are holding",
               //      "Bonus Troops", JOptionPane.INFORMATION_MESSAGE);
             //instructions = ("you received" + bonus + "bonus troops for the continents you are holding");
         }
@@ -391,7 +391,7 @@ public class GameplayModel {
             bonus = bonus + 10;
 
             //Show in GameStatus
-            JOptionPane.showInternalMessageDialog(null, "Player's cards have been removed from Hand. Troops were added to Bonus Troops",
+            JOptionPane.showMessageDialog(null, "Player's cards have been removed from Hand. Troops were added to Bonus Troops",
                     "Card Hand In", JOptionPane.INFORMATION_MESSAGE);
             //System.out.println("Player's cards have been removed from Hand. Troops were added to Bonus Troops");
         }
@@ -924,13 +924,13 @@ public class GameplayModel {
 
                 //Show GameStatus
 
-                //JOptionPane.showInternalMessageDialog(null, "You cannot attack with more than 3 dice at one time. Please attack with 1-3 dice.",
+                //JOptionPane.showMessageDialog(null, "You cannot attack with more than 3 dice at one time. Please attack with 1-3 dice.",
                       //  "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
                 //exitAttack = true;
             } else {
 
                 //Show GameStatus
-                //JOptionPane.showInternalMessageDialog(null, "You did not enter the right amount of Dice to Attack with",
+                //JOptionPane.showMessageDialog(null, "You did not enter the right amount of Dice to Attack with",
                       // "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
                 //exitAttack = true;
             }
@@ -964,7 +964,7 @@ public class GameplayModel {
         } else {
 
             //GameStatus
-            JOptionPane.showInternalMessageDialog(null, "Attacking Territory does not have enough troops to Attack",
+            JOptionPane.showMessageDialog(null, "Attacking Territory does not have enough troops to Attack",
                     "Number of Troops", JOptionPane.INFORMATION_MESSAGE);
             System.out.println("Attacking Territory does not have enough troops to Attack");
 
@@ -1161,7 +1161,7 @@ public class GameplayModel {
 
                 closeDiceFrame = true;
                 //Show GameStatus
-               JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops. " +
+               JOptionPane.showMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops. " +
                                 attackingTerritory.getName() + " has conquered " + defendingTerritory.getName(),
                         "Attacking Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
 
@@ -1196,7 +1196,7 @@ public class GameplayModel {
             else {
                 closeDiceFrame = true;
                 //Show GameStatus
-                JOptionPane.showInternalMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops",
+                JOptionPane.showMessageDialog(null, attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops",
                         "Attacking Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println(attackingTerritory.getName() + " has won the battle. " + defendingTerritory.getName() + " has lost " + defendLoss + " troops");
             }
@@ -1209,7 +1209,7 @@ public class GameplayModel {
             closeDiceFrame = true;
 
             //Show GameStatus
-            JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops",
+            JOptionPane.showMessageDialog(null, defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops",
                     "Defending Territory Has Won the Battle", JOptionPane.INFORMATION_MESSAGE);
             System.out.println(defendingTerritory.getName() + " has won the battle. " + attackingTerritory.getName() + " has lost " + attackLoss + " troops");
         }
@@ -1224,7 +1224,7 @@ public class GameplayModel {
                 closeDiceFrame = true;
                 //Show GameStatus
 
-                JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
+                JOptionPane.showMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
                                 attackingTerritory.getName() +
                                 " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops." + attackingTerritory.getName() + " has conquered " + defendingTerritory.getName(),
                         "Territory Conquered", JOptionPane.INFORMATION_MESSAGE);
@@ -1262,7 +1262,7 @@ public class GameplayModel {
             else {
                 closeDiceFrame = true;
                 //Show GameStatus
-                JOptionPane.showInternalMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
+                JOptionPane.showMessageDialog(null, defendingTerritory.getName() + " tied with  " + attackingTerritory.getName() + ". " +
                                 attackingTerritory.getName() +
                                 " has lost " + attackLoss + " troops. " +  defendingTerritory.getName() + " has lost " + defendLoss + " troops",
                         "Battle Tied", JOptionPane.INFORMATION_MESSAGE);
@@ -1291,7 +1291,7 @@ public class GameplayModel {
          */
 
         //Show GameStatus
-        JOptionPane.showInternalMessageDialog(null, "Player " + prevOwnerPlayer.getName() + " is killed.",
+        JOptionPane.showMessageDialog(null, "Player " + prevOwnerPlayer.getName() + " is killed.",
                 "Player is Killed", JOptionPane.INFORMATION_MESSAGE);
         System.out.println("Player " + prevOwnerPlayer.getName() + " is killed.");
     }
