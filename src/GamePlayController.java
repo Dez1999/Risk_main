@@ -63,11 +63,13 @@ public class GamePlayController implements ActionListener {
         //Deploy Phase: Select Territory to Deploy Troops
 
         if (next == 0) {
+            int a;
             boolean correctTerry = false;
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (e.getActionCommand().equals(terr.getName())) {
                     gpm.setSelectedTerritory(terr);
-                    //tell user they selected wrong territory
+                    //if(terr.getPlayer()!= gpm.getCurrentPlayer()){}
+                    // tell user they selected wrong territory
                     correctTerry = true;
 
                     if (deployCount == 0) {
@@ -82,14 +84,14 @@ public class GamePlayController implements ActionListener {
                     //Add troops to Territory
                     //Ask User to choose Attacking Territory
 
-                    int a = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to deploy. You have this many troops to deploy" + currentDeployable + ":"));
+                    a = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to deploy. You have this many troops to deploy" + currentDeployable + ":"));
 
                     if (a > currentDeployable || a < 0) {
                         next = -1;
                         gpm.setInstructions("Please Choose the correct number of troops to deploy out of : "+ currentDeployable+"");
                         gpm.gameStatus();
                     }
-                    if (currentDeployable > 0 && currentDeployable <= a) {
+                    if (currentDeployable > 0 || currentDeployable <= a) {
                         gpm.setDeployedNum(a);
                         success = gpm.userDeploysTroops();
                         currentDeployable = currentDeployable - a;

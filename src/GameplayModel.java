@@ -824,11 +824,12 @@ public class GameplayModel {
         //Scanner s = new Scanner(System.in);
         //String addingToTerritory;
         //addingToTerritory = s.nextLine();
-        int temp = currentPlayer.getTerritories().size() - 1; // store last element in dynamic array
+        int temp = currentPlayer.getTerritories().size() - 1; // store last element index in dynamic array
 
         for (Territory terr : currentPlayer.getTerritories()) {
             if (terr.getName().equals(selectedTerritory.getName())) {//deploying troops if == true
-                deployed = stringTerritoryMapping(selectedTerritory.getName(), newTroops);
+                //deployed =
+                stringTerritoryMapping(selectedTerritory.getName(), newTroops);
                 return true;
             } else if (terr.getName().equals((currentPlayer.getTerritories().get(temp)).getName())) {
 
