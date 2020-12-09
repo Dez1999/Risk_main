@@ -90,7 +90,8 @@ public class GameplayModel {
     private boolean attackTerrNoOpp = false;
 
     //Custom Map
-    private boolean startOver;
+    private boolean startOver; //Exit Program if Custom Map is rejected
+    private boolean custom; //Custom Map
 
     public static void main(String[] args) throws InterruptedException {
         GameplayModel gamePlayModel = new GameplayModel();
@@ -99,8 +100,9 @@ public class GameplayModel {
 
     /** Game Logic*/
     public GameplayModel() throws InterruptedException {
-        startGame();
         startOver = false;
+        custom = false;
+        startGame();
     }
 
     public void setCurrentPlayer(Player currentPlayer) {
@@ -1449,9 +1451,8 @@ public class GameplayModel {
         //Add Instructions
         //Check to see if the player is the correct one
 
-
         for (GamePlayView tttv: GamePlayView)
-            tttv.handleGamePlayUpdate(new GamePlayEvent(this, currentPlayer, currentPlayer.getHand(), currentPlayer.getName(), instructions, board.getTerritoriesList(), playerColor, startOver));
+            tttv.handleGamePlayUpdate(new GamePlayEvent(this, currentPlayer, currentPlayer.getHand(), currentPlayer.getName(), instructions, board.getTerritoriesList(), playerColor, custom, startOver));
 
     }
 
@@ -1556,6 +1557,7 @@ public class GameplayModel {
         int count = 0;
 
         while(!doneAttacking) {
+            boolean stopAttack = false;
 
             //For loop to see which Territories are bordering Opponent Territories
             //Add Available options to a list:
@@ -1564,78 +1566,86 @@ public class GameplayModel {
             ArrayList<Territory> TerrWith2plus = AiTerrAttack(2);  //returns all Territories with more than 2 troops: NEED TO REMOVE
             ArrayList<Territory> TerrWith1plus = AiTerrAttack(1);  //returns all Territories with more than 1 troops
 
-            Territory terrAgainstMostPop = new Territory("terrAgainstMostPop");
-            Territory terrBiggestThreat = new Territory("terrBiggestThreat");
-            ArrayList<Territory> terrWeakestThreats = new ArrayList<>();
-            Territory bestAttackingTerritory;
-
-            Territory chosenTargetTerritory;
-            Territory chosenAttackingTerritory;
-
-            //Determine the Target using 1 and 2.
-            //1) With the most populated Territory -> return Target   : Find most populated terr, return enemy neighbouring Territory with least troops to attack
-            //2) The biggest Threat  -> return BiggestThreat Target
-            //3) list of weakest threat
-
-            //Develop Rankings for Territory Attack Mode
-            //1) With the most populated Territory -> return Target
-            terrAgainstMostPop = findMostPopulated(TerrWith1plus); //Find most populated terr, return enemy neighbouring Territory with least troops to attack
-
-            //2) The biggest Threat  -> return BiggestThreat Target
-            terrBiggestThreat = returnBiggestOppTerr(TerrWith1plus);
-
-            //Choose which Target Territory to Attack (terrAgainstMostPop, terrBiggestThreat,noAttack)
-            chosenTargetTerritory = chooseBestTargetTerritory(TerrWith1plus, TerrWith3plus, terrAgainstMostPop, terrBiggestThreat);
-
-            bestAttackingTerritory = chooseBestAttackingTerritroy();
-
-            if(bestAttackingTerritory.getTroops() >= 10 && defendingTerritory.getPlayer() != currentPlayer){
-                //defendingTerritory = smallestOppTerr(bestAttackingTerritory);
-                attackingTerritory = bestAttackingTerritory;
-
-
-                int numberDice = aiChooseNumberAttackingDie();
-
-                Component frame = new Frame();
-                //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen: " + attackingTerritory.getName() + ": Attacking Territory. " +
-                //      defendingTerritory.getName() + ": Defending Territory");
-
-                attackTroopLogic(numberDice);
-                count++;
-                setInstructions("AI Player" + currentPlayer.getName() + " has finished a battle");
-                gameStatus();
-
-                if(count == 6){
-                    doneAttacking = true;
-                }
-
+            if (TerrWith1plus.size() == 0 || TerrWith1plus.size() == 1) {
+                stopAttack = true;
+                doneAttacking = true;
             }
 
-            else if (chosenTargetTerritory == terrAgainstMostPop || chosenTargetTerritory == terrBiggestThreat) {
-                //Find Attacking Territory
-                chosenAttackingTerritory = aiFindAttackingTerr(chosenTargetTerritory);
-                attackingTerritory = chosenAttackingTerritory;
-                defendingTerritory = chosenTargetTerritory;
+            if (!stopAttack) {
 
-                int numberDice = aiChooseNumberAttackingDie();
 
-                Component frame = new Frame();
-                //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen: " + attackingTerritory.getName() + ": Attacking Territory. " +
-                //      defendingTerritory.getName() + ": Defending Territory");
+                Territory terrAgainstMostPop = new Territory("terrAgainstMostPop");
+                Territory terrBiggestThreat = new Territory("terrBiggestThreat");
+                ArrayList<Territory> terrWeakestThreats = new ArrayList<>();
+                Territory bestAttackingTerritory;
 
-                attackTroopLogic(numberDice);
-                count++;
-                setInstructions("AI Player" + currentPlayer.getName() + " has finished a battle");
-                gameStatus();
+                Territory chosenTargetTerritory;
+                Territory chosenAttackingTerritory;
 
-                if(count == 6){
+                //Determine the Target using 1 and 2.
+                //1) With the most populated Territory -> return Target   : Find most populated terr, return enemy neighbouring Territory with least troops to attack
+                //2) The biggest Threat  -> return BiggestThreat Target
+                //3) list of weakest threat
+
+                //Develop Rankings for Territory Attack Mode
+                //1) With the most populated Territory -> return Target
+                terrAgainstMostPop = findMostPopulated(TerrWith1plus); //Find most populated terr, return enemy neighbouring Territory with least troops to attack
+
+                //2) The biggest Threat  -> return BiggestThreat Target
+                terrBiggestThreat = returnBiggestOppTerr(TerrWith1plus);
+
+                //Choose which Target Territory to Attack (terrAgainstMostPop, terrBiggestThreat,noAttack)
+                chosenTargetTerritory = chooseBestTargetTerritory(TerrWith1plus, TerrWith3plus, terrAgainstMostPop, terrBiggestThreat);
+
+                bestAttackingTerritory = chooseBestAttackingTerritroy();
+
+
+                if (bestAttackingTerritory.getTroops() >= 10 && defendingTerritory.getPlayer() != currentPlayer) {
+                    //defendingTerritory = smallestOppTerr(bestAttackingTerritory);
+                    attackingTerritory = bestAttackingTerritory;
+
+
+                    int numberDice = aiChooseNumberAttackingDie();
+
+                    Component frame = new Frame();
+                    //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen: " + attackingTerritory.getName() + ": Attacking Territory. " +
+                    //      defendingTerritory.getName() + ": Defending Territory");
+
+                    attackTroopLogic(numberDice);
+                    count++;
+                    setInstructions("AI Player" + currentPlayer.getName() + " has finished a battle");
+                    gameStatus();
+
+                    if (count == 6) {
+                        doneAttacking = true;
+                    }
+
+                } else if (chosenTargetTerritory == terrAgainstMostPop || chosenTargetTerritory == terrBiggestThreat) {
+                    //Find Attacking Territory
+                    chosenAttackingTerritory = aiFindAttackingTerr(chosenTargetTerritory);
+                    attackingTerritory = chosenAttackingTerritory;
+                    defendingTerritory = chosenTargetTerritory;
+
+                    int numberDice = aiChooseNumberAttackingDie();
+
+                    Component frame = new Frame();
+                    //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen: " + attackingTerritory.getName() + ": Attacking Territory. " +
+                    //      defendingTerritory.getName() + ": Defending Territory");
+
+                    attackTroopLogic(numberDice);
+                    count++;
+                    setInstructions("AI Player" + currentPlayer.getName() + " has finished a battle");
+                    gameStatus();
+
+                    if (count == 6) {
+                        doneAttacking = true;
+                    }
+                } else if (chosenTargetTerritory.getName().equals("DoNotAttack")) {
+                    //StandBy: No Attack
+                    Component frame = new Frame();
+                    //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen to Not Attack ");
                     doneAttacking = true;
                 }
-            } else if (chosenTargetTerritory.getName().equals("DoNotAttack")) {
-                //StandBy: No Attack
-                Component frame = new Frame();
-                //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen to Not Attack ");
-                doneAttacking = true;
             }
         }
 
@@ -2161,22 +2171,24 @@ public class GameplayModel {
 
     /*
     Custom Map:
-    $-1#2
-    $$-2
-    $$$-2
-    $$$$$-NorthWestTerritories#1#4
+    $-1#2      //Players Playing
+    $$-2        //Current Player
+    $$$-2       //AI player
+    $$$$$-NorthWestTerritories#1#4                      //Territories
     $$$$$-Madagascar#1#4
     $$$$$-Argentina#1#4
     $$$$$-Congo#2#4
     $$$$$-Ukraine#2#4
     $$$$$-Iceland#2#4
-    $$$$$$$-NorthWestTerritories#Madagascar
+    $$$$$$-1#                   //Custom Cards(Need to be same name as Territory
+    $$$$$$-2#
+    $$$$$$$-NorthWestTerritories#Madagascar                 //Territory Neighbours
     $$$$$$$-Madagascar#NorthWestTerritories#Argentina
     $$$$$$$-Argentina#Madagascar#Argentina
     $$$$$$$-Congo#Argentina#Ukraine#Iceland
     $$$$$$$-Ukraine#Congo#Iceland
     $$$$$$$-Iceland#Congo#Ukraine
-    $$$$$$$$-NorthAmerica#NorthWestTerritories#Madagascar
+    $$$$$$$$-NorthAmerica#NorthWestTerritories#Madagascar   //Continent and Territories in Continent
     $$$$$$$$-CoolContinent#Ukraine#Iceland#Congo
 
      */
@@ -2187,7 +2199,6 @@ public class GameplayModel {
      * @throws IOException
      */
     public void customMap(File myFile) throws IOException, InterruptedException {
-        boolean customSuccess = false;
         board.setIndex(0);
         BufferedReader br = new BufferedReader(new FileReader(myFile));
         try {
@@ -2225,7 +2236,7 @@ public class GameplayModel {
                             }
                         }
                     }
-                } else if (l1.charAt(5) == '-') {   //Creates New Territory and Creates Cards for Deck
+                } else if (l1.charAt(5) == '-') {   //Creates New Custom Territory and Creates Custom Cards for Custom Deck
                     String[] s = split(l1);
                     String[] t = splitTwo(s[0]);
                     String terName = t[1];
@@ -2253,7 +2264,7 @@ public class GameplayModel {
                         }
 
 
-                } else if (l1.charAt(6) == '-') {  //Add Cards
+                } else if (l1.charAt(6) == '-') {  //Add Cards to player hands from Custom Deck
                     for (int i = 0; i < playersAlive.size(); i++) {
                         String f = String.valueOf(l1.charAt(7));
                         if (playersAlive.get(i).getName().equals(f)) {
@@ -2267,8 +2278,7 @@ public class GameplayModel {
                         }
                     }
                 }
-                else if(l1.charAt(7) == '-'){  //Adds Adjacent territories
-                    customSuccess = true;
+                else if(l1.charAt(7) == '-'){  //Adds Adjacent territories to Custom Territory List
                     String[] s = split(l1);
                     String[] t = splitTwo(s[0]);
                     String terrName = t[1];  //Territory
@@ -2282,7 +2292,7 @@ public class GameplayModel {
                         }
                     }
                 }
-                else if(l1.charAt(8) == '-'){  //Creates Continents
+                else if(l1.charAt(8) == '-'){  //Creates Custom Continents
                     String[] s = split(l1);
                     String[] t = splitTwo(s[0]);
                     String ContName = t[1];  //Continent
@@ -2304,15 +2314,25 @@ public class GameplayModel {
                 gameStatus();
 
         }
-        if(customSuccess) {
-            board.customTerritoryList();  //Sets old List to New Custom List
+        boolean correctFormat = board.customTerritoryList();  //Sets old Lists to New Custom Lists
+        if(correctFormat) {
             board.setIndex(0);
             gameStatus();
             JOptionPane.showMessageDialog(null, "Custom Map Loaded");
+
+            if(currentPlayer.isAIplayer()) {
+                UserCurrentPlayer = false;
+            }
+            else{
+                UserCurrentPlayer = true;
+
+            }
+            CheckAiPlayer();
         }
         else{
             JOptionPane.showMessageDialog(null, "Custom Map Rejected. Please follow the Correct Format. Restart the Program to play a new Game");
             startOver = true;
+            gameStatus();
         }
     }
 
@@ -2331,7 +2351,7 @@ public class GameplayModel {
     }
 
     /**
-     * NextTurn: helps AI player choose when to go to the next players Turn
+     * NextTurn: Helps AI player choose when to go to the next players Turn
      */
     public void AInextTurn() throws InterruptedException {
         changePlayer();

@@ -714,7 +714,7 @@ public class Board {
     /**
      * Method:Changes Territory List, Deck, continents list and numTerritories for Custom Map
      */
-    public void customTerritoryList() {
+    public boolean customTerritoryList() {
         territoriesList = customTerritoryList;
         deck = customDeck;
         numTerritories = territoriesList.length;
@@ -728,6 +728,49 @@ public class Board {
                 cont.setBonusArmies(5);
             }
         }
+
+        boolean good = checkCustomTerritories();
+
+        if(!good){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
+     * Method: Checks if All territories are connected
+     */
+    private boolean checkCustomTerritories() {
+        for(Territory terr: territoriesList){
+            if(terr.getNumberBorderTerr() == 0){
+                return false;
+            }
+        }
+
+        boolean all = checkAllConnectedTerritories();
+
+        if(!all){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
+     * Method: Checks if All Territories are Connected
+     * @return
+     */
+    private boolean checkAllConnectedTerritories() {
+        //Path Finding Algorithm
+        for(Territory terr: territoriesList){
+
+            //******SOLVE
+        }
+
+        return true;
     }
 
     public Deck getCustomDeck() {
@@ -743,6 +786,11 @@ public class Board {
         customContinentsList.add(newCont);
     }
 
+    /**
+     * Method: Add Territories to Continents
+     * @param contName
+     * @param terrCont
+     */
     public void setCustomContinents(String contName, String terrCont) {
         for(Continent cont : customContinentsList){
             for(Territory terr : customTerritoryList){

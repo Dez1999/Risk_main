@@ -43,6 +43,19 @@ public class GamePlayController implements ActionListener {
             next = next - 1 ;
         }
 
+        if(e.getActionCommand().equals("custom")){
+            JFileChooser C = new JFileChooser();
+            C.showDialog(null,"Choose Custom Map to import");
+            C.setVisible(true);
+            File filename = C.getSelectedFile();
+            try {
+                gpm.customMap(filename);
+            } catch (IOException | InterruptedException ioException) {
+                ioException.printStackTrace();
+            }
+            next = -1;
+        }
+
         if(e.getActionCommand().equals("load")){
             JFileChooser C = new JFileChooser();
             C.showDialog(null,"Choose File to import");
@@ -58,7 +71,6 @@ public class GamePlayController implements ActionListener {
         //Select Territory to Deploy Troops
 
         //Deploy Phase: Select Territory to Deploy Troops
-
         if (next == 0) {
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (e.getActionCommand().equals(terr.getName())) {
@@ -309,17 +321,6 @@ public class GamePlayController implements ActionListener {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
-
-                String territories = null;
-
-                for (Territory terr : gpm.getCurrentPlayer().getTerritories()) {
-                    System.out.println(terr.getName() + ": Troops = " + terr.getTroops());
-                    territories = territories + "\n " + terr.getName() + ": Troops = " + terr.getTroops();
-                }
-
-
-                JOptionPane.showMessageDialog(null, territories,
-                        "Territories Owned", JOptionPane.INFORMATION_MESSAGE);
 
                 next = -1;
                 isFortifying = true;

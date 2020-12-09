@@ -140,4 +140,12 @@ public class Territory
     public boolean getFlagAdded(){
         return  flagAdded;
     }
+
+    /**
+     * Returns the size of the BoarderingTerritories
+     * @return
+     */
+    public int getNumberBorderTerr(){
+        return boardingTerritories.size();
+    }
 }

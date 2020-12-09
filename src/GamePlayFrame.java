@@ -77,10 +77,15 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         m2.addActionListener(gpc);
         m2.setActionCommand("load");
 
+        JMenuItem m3 = new JMenuItem("Load Custom Map");
+        m3.addActionListener(gpc);
+        m3.setActionCommand("custom");
+
 
         // add menu items to menu
         x.add(m1);
         x.add(m2);
+        x.add(m3);
 
         // add menu to menu bar
         menu.add(x);
@@ -186,6 +191,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             }
         }
 
+        //Checks if Custom Map was rejected. If it was then exit the Program
         if(e.isStartOver()){
             this.dispose();
             System.exit(0);
