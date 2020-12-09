@@ -201,6 +201,13 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         territoryButtons.add(Madagascar);  //Add to ArrayList
     }
 
+    /*
+    Number of terrs
+    <Terr>
+        Name
+
+     */
+
     /**
      * Japan GUI setup
      * @param gpc

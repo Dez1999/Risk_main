@@ -477,7 +477,6 @@ public class GameplayModel {
             playersAlive.get(i).setColor(colorList.get(i));   //Set color for player
             System.out.println("player" + playersAlive.get(i).getName());
         }
-        //playersAlive.get(0).setAIplayer(true);
 
         playersDead = new ArrayList<>();
     }
