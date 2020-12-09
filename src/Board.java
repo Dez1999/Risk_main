@@ -20,6 +20,7 @@ public class Board {
     //private ArrayList<Player> players;
     private int initialPlayerTroopstoplace;
 
+
     //Troop types
     private Cavalry cavalry;
     private wildCard wildCardA;
@@ -298,6 +299,75 @@ public class Board {
         //Creating Unknown territory for WildCard
         Territory Unknown2 = new Territory("Unknown");
         this.Unknown = Unknown2;
+
+        /*
+        <Board>
+
+                <Territory>
+                    <Name> Name  <Name>
+
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+
+                    <Continent>ContinentName<Continent>
+               <Territory>
+
+               <Territory>
+                    <Name> Name  <Name>
+
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+
+                    <Continent>ContinentName<Continent>
+               <Territory>
+               <Territory>
+                    <Name> Name  <Name>
+
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+
+                    <Continent>ContinentName<Continent>
+               <Territory>
+
+               <Territory>
+                    <Name> Name  <Name>
+
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+
+                    <Continent>ContinentName<Continent>
+               <Territory>
+
+               <Territory>
+                    <Name> Name  <Name>
+
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+                    <BoarderTerr>BorderName<BoarderTerr>
+
+                    <Continent>ContinentName<Continent>
+               <Territory>
+
+         <Board>
+         */
+
+
+
+
 
 
         territoriesList = new Territory[37];

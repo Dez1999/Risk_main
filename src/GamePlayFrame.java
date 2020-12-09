@@ -37,7 +37,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private JLabel GameStatus = new JLabel();
     private JPanel LabelPanel = new JPanel();
     private JButton NewZealand;
-    private JButton next = new JButton("next");
+    private JButton next = new JButton("Next");
     private ArrayList<JButton> territoryButtons;
     private GameplayModel gpm;
     private JMenuBar menu = new JMenuBar();
@@ -52,7 +52,10 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(new Color(688590));
         this.setLayout(new FlowLayout());
+
         gpm = new GameplayModel();
+
+
         this.setBackground(new Color(688590));
         gpm.addGamePlayView(this);
         GamePlayController gpc = new GamePlayController(gpm);
@@ -70,8 +73,14 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         m1.addActionListener(gpc);
         m1.setActionCommand("save");
 
+        JMenuItem m2 = new JMenuItem("Load Game");
+        m2.addActionListener(gpc);
+        m2.setActionCommand("load");
+
+
         // add menu items to menu
         x.add(m1);
+        x.add(m2);
 
         // add menu to menu bar
         menu.add(x);
@@ -110,6 +119,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
        // if(gpm.playersAlive.get(0).isAIplayer()) {
          //   gpm.CheckAiPlayer();
         //}
+        ///////**********
     }
 
     /**
@@ -123,9 +133,9 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         int handsize = e.getPlayerHand().handList().size();
         GameplayModel gpm = (GameplayModel) e.getSource();
-        String output = null;
+        String output = null;    //+ e.getcurrentPlayer().getColor()
 
-        output = "Current Player: " + e.getPlayerName() + ". " + e.getcurrentPlayer().getColor() +  ". Number of cards: " + handsize + ". " + e.getInstructions();  //ADD later: Instructions and Outcome
+        output = "Current Player: " + e.getPlayerName() +  ". Number of cards: " + handsize + ". " + e.getInstructions();  //ADD later: Instructions and Outcome
 
         Color color = e.getPlayerColor();
 
@@ -190,6 +200,13 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         territoryButtons.add(Madagascar);  //Add to ArrayList
     }
+
+    /*
+    Number of terrs
+    <Terr>
+        Name
+
+     */
 
     /**
      * Japan GUI setup
@@ -669,6 +686,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             gpm.CheckAiPlayer();
         }
     }
+
     public static void newgSetup(){
         JFrame x = new JFrame();
         JButton newg = new JButton("new game");

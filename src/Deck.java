@@ -47,4 +47,20 @@ public class Deck
         }
         deck.add(aCard);
     }
+    public Card getCardByName(String x){
+        for(int i = 0 ; i < deck.size() ; i++){
+            if(deck.get(i).getTerritoryName().equals(x)){
+                return  deck.get(i);
+            }
+        }
+        return null;
+    }
+    public void removeAndAddLoad(Card card){
+        for(int i = 0 ; i < deck.size() ; i++){
+            if (deck.get(i).getTerritoryName().equals(card.getTerritoryName())){
+                deck.remove(i);
+                playingCards.add(card);
+            }
+        }
+    }
 }

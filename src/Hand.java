@@ -28,6 +28,14 @@ public class Hand
         return hand;
     }
 
+    public int getHandSize(){
+        return hand.size();
+    }
+
+    public Card getCard(int i){
+        return hand.get(i);
+    }
+
 
     /**
      *add Card to Player's Hand
