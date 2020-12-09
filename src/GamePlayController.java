@@ -50,6 +50,7 @@ public class GamePlayController implements ActionListener {
                     correctTerry = true;
 
                     if (deployCount == 0) {
+                        gpm.setBonus(0);
                         gpm.calculateBonusTroops();
                         currentDeployable = gpm.getBonus();
                     }
@@ -67,7 +68,7 @@ public class GamePlayController implements ActionListener {
                         gpm.setInstructions("Please Choose the correct number of troops to deploy out of : "+ currentDeployable+"");
                         gpm.gameStatus();
                     }
-                    if (currentDeployable > 0 && currentDeployable < a) {
+                    if (currentDeployable > 0 && currentDeployable <= a) {
                         gpm.setDeployedNum(a);
                         success = gpm.userDeploysTroops();
                         currentDeployable = currentDeployable - a;
@@ -253,11 +254,13 @@ public class GamePlayController implements ActionListener {
                 next = 3;
             } else if (!isFortifying) {
                 JOptionPane.showMessageDialog(parent, "Your turn is now Over");
-
+                gpm.setBonus(0);
+                gpm.calculateBonusTroops();
                 //Show GameStatus
-                gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " has passed their Turn. Player " + gpm.getNextPlayer().getName() + " is up Next. Please choose the Territory to add Troops to");
-                gpm.gameStatus();
+
                 gpm.changePlayer();  //This is good
+                gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " is up Next. Please choose the Territory to add "+ gpm.getBonus() + "Troops to");
+
                 gpm.gameStatus();
 
                 String territories = null;
