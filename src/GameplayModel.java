@@ -327,13 +327,13 @@ public class GameplayModel {
      */
     public boolean userDeploysTroops(){
         //Check Player hand
-        checkPlayerhand();
+        //checkPlayerhand();
 
         //Calculate Troops
-        calculateBonusTroops();
+       //calculateBonusTroops();
         /**Method to deploy troops */
 
-        boolean success = deployInTerritory(bonus);
+        boolean success = deployInTerritory(deployed);
         //Update Map View to show Troops being added. NEED METHOD
 
         return success;
@@ -358,7 +358,7 @@ public class GameplayModel {
      *
      */
     void calculateBonusTroops() {
-
+        checkPlayerhand();
         if (currentPlayer.getContinents().size() > 0) {
             for (int j = 0; j < currentPlayer.getContinents().size(); j++) {
                 bonus = bonus + currentPlayer.getContinents().get(j).getBonusArmies();

@@ -34,7 +34,7 @@ public class GamePlayController implements ActionListener {
         JFrame parent = new JFrame();
 
 
-        if(e.getActionCommand().equals("save")){
+        if (e.getActionCommand().equals("save")) {
             gpm.save();
         }
         //Select Territory to Deploy Troops
@@ -42,46 +42,54 @@ public class GamePlayController implements ActionListener {
         //Deploy Phase: Select Territory to Deploy Troops
 
         if (next == 0) {
+            boolean correctTerry = false;
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
                 if (e.getActionCommand().equals(terr.getName())) {
                     gpm.setSelectedTerritory(terr);
-                    gpm.setInstructions("Please Choose number of troops to deploy");
-                    gpm.gameStatus();
+                    //tell user they selected wrong territory
+                    correctTerry = true;
 
-                    if(deployCount ==0){
+                    if (deployCount == 0) {
                         gpm.calculateBonusTroops();
-                    }deployCount =+ 1;
+                        currentDeployable = gpm.getBonus();
+                    }
+
+                    deployCount = +1;
 
                     //Check if player owns Territory
                     //Add troops to Territory
                     //Ask User to choose Attacking Territory
-                    currentDeployable = gpm.getBonus() - gpm.getDeployedNum();
-                    gpm.setDeployedNum((int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to deploy. Please Use less than" + currentDeployable+ ":")));
 
-                    if(currentDeployable > 0){
+                    int a = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to deploy. You have this many troops to deploy" + currentDeployable + ":"));
+
+                    if (a > currentDeployable || a < 0) {
                         next = -1;
-                        gpm.userDeploysTroops();
-                    }else{success = gpm.userDeploysTroops();}
-                    //success = gpm.userDeploysTroops();
-                    if (success) { //Troops were - ALL - deployed
-                        //gpm.updateBoardStatus(); //remove comment ASK!
-
-
-                        //Show in GameStatus() used in JLabel : gpm
-                        gpm.setInstructions("Please choose your own Attacking Territory with Neighbouring enemy Territories");
+                        gpm.setInstructions("Please Choose the correct number of troops to deploy out of : "+ currentDeployable+"");
                         gpm.gameStatus();
-                    } else {//Troops were not deployed to selected Territory
-                        //Show in GameStatus()
-                        gpm.setInstructions("Please Select Territory to add your " + gpm.getBonus() + " bonus Troops to");
-                        gpm.gameStatus();
-                        next = -1;
                     }
+                    if (currentDeployable > 0 && currentDeployable < a) {
+                        gpm.setDeployedNum(a);
+                        success = gpm.userDeploysTroops();
+                        currentDeployable = currentDeployable - a;
+                        if (currentDeployable == 0) {
+                            gpm.setInstructions("Please choose your own Attacking Territory with Neighbouring enemy Territories");
+                            gpm.gameStatus();
+                            next = 0;
+                        } else {
 
+                            gpm.setInstructions("Please Select Territory to add your " + currentDeployable + " bonus Troops to");
+                            gpm.gameStatus();
+                            next = -1;
+                        }
+                    }
                 }
             }
-
+            if(!correctTerry){
+                gpm.setInstructions("error please select your own territory"+" to add your bonus Troops to");
+                gpm.gameStatus();
+                next = -1;
+            }
         }
-
         //Attack Phase: Select Attacking Territory
         else if (next == 1) {
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
