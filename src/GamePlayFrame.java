@@ -127,8 +127,11 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
      * @param e
      */
     @Override
-    public void handleGamePlayUpdate(GamePlayEvent e ) {
+    public void handleGamePlayUpdate(GamePlayEvent e ) throws InterruptedException {
 
+       // if(custom)(
+        //        //create new frame or change the layout and create new buttons
+         //       )
         Territory[] territories = e.getTerritories();
 
         int handsize = e.getPlayerHand().handList().size();
@@ -183,7 +186,10 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             }
         }
 
-
+        if(e.isStartOver()){
+            this.dispose();
+            System.exit(0);
+        }
 
     }
 
@@ -680,7 +686,7 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
 
         this.add(Africa );
     }
-    public void checkPlayer(){
+    public void checkPlayer() throws InterruptedException {
         gpm.gameStatus();
         if(gpm.playersAlive.get(0).isAIplayer()) {
             gpm.CheckAiPlayer();

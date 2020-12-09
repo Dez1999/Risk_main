@@ -23,6 +23,10 @@ public class Continent {
         System.out.println("Created continent: " + name + "\nBonus armies: " + bonusArmies);
     }
 
+    public Continent(String contName) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -40,5 +44,17 @@ public class Continent {
      **/
     public ArrayList<Territory> getMemberTerritories() {
         return territories;
+    }
+
+    public void setTerritories(ArrayList<Territory> territories) {
+        this.territories = territories;
+    }
+
+    public void setBonusArmies(int bonusArmies) {
+        this.bonusArmies = bonusArmies;
+    }
+
+    public void addTerritory(Territory terr) {
+        this.territories.add(terr);
     }
 }
