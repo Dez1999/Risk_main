@@ -343,6 +343,7 @@ public class GameplayModel {
     void checkPlayerhand(){
         /**Checks the Players Hand*/
 
+
         //Show in GameStatus
         for (Card card : currentPlayer.getHand().handList()) {
             System.out.println("Current Player Hand:" +

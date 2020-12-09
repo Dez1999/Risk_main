@@ -244,6 +244,7 @@ public class GamePlayController implements ActionListener {
                                 //Show in Pop-up
                                 JOptionPane.showMessageDialog(null, gpm.getWinner().getName() + " is the WINNER",
                                         "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+                                System.exit(0);
                                 /*
                                 System.out.println("Winner!! Winner!!");
                                 System.out.println("Player" + gpm.playersAlive.get(0).getName() + ", you have conquered the WORLD!");
@@ -263,6 +264,13 @@ public class GamePlayController implements ActionListener {
                     }
 
                 }
+            }
+            if (gpm.WinnerStatus()) { //Check if Game is Over
+
+                //Show in Pop-up
+                JOptionPane.showMessageDialog(null, gpm.getWinner().getName() + " is the WINNER",
+                        "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+                System.exit(0);
             }
         }
 
