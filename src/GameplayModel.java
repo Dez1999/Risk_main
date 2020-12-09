@@ -1968,8 +1968,8 @@ public class GameplayModel {
     /**
      * Method: Saves the state of the game
      */
-    public  void save() throws IOException {
-        BufferedWriter out = new BufferedWriter(new FileWriter(new File("SaveTest" + ".txt")));
+    public  void save(String fileName) throws IOException {
+        BufferedWriter out = new BufferedWriter(new FileWriter(new File(fileName + ".txt")));
 
 
         //Save the Players Alive
@@ -2032,10 +2032,10 @@ public class GameplayModel {
             for(int j = 0; j < playersAlive.get(i).getHand().getHandSize(); j++) {
 
                 if(j < playersAlive.get(i).getHand().getHandSize()-1){
-                    card += playersAlive.get(i).getHand().getCard(j).getTypeWorth() +"#";
+                    card += playersAlive.get(i).getHand().getCard(j).getTerritoryName() + '-'+ playersAlive.get(i).getHand().getCard(j).getTypeWorth() +"#";
                 }
                 else {
-                    card +=  playersAlive.get(i).getHand().getCard(j).getTypeWorth();
+                    card += playersAlive.get(i).getHand().getCard(j).getTerritoryName() + '-' +  playersAlive.get(i).getHand().getCard(j).getTypeWorth();
 
                 }
                 //String hand = "$$$$$$-" + playersAlive.get(i).getName() + "#" + playersAlive.get(i).getHand().getCard(j).getTypeWorth();
@@ -2110,15 +2110,18 @@ public class GameplayModel {
                     }
                 }
                 else if(l1.charAt(6)=='-'){
-                    /*for(int i = 0 ; i < playersAlive.size(); i++) {
+                    for(int i = 0 ; i < playersAlive.size(); i++) {
                         String f =  String.valueOf(l1.charAt(7));
                         if(playersAlive.get(i).getName().equals(f)){
-                            for(int j = 9; i< l1.length(); i= i + 2){
-                                playersAlive.get(i).
+                            String[] cas = split(l1);
+                            for(int j = 1 ; j < cas.length; j++){
+                                String[] c = splitTwo(cas[j]);
+                                Card d = board.getDeck().getCardByName(c[0]);
+                                playersAlive.get(i).getHand().addCard(d);
+                                board.getDeck().removeAndAddLoad(d);
                             }
                         }
-                    }*/
-                    return;
+                    }
                 }
 
                 l1 = br.readLine();
