@@ -21,6 +21,8 @@ import javax.swing.JOptionPane;
 
 public class GameplayModel {
 
+
+    private int deployed;
     private boolean closeDiceFrame;
     public static final int MAX_DICE = 3;
     private Board board;
@@ -41,7 +43,7 @@ public class GameplayModel {
     private Die die = new Die();
     private twoDice dice2 = new twoDice();
     private threeDice dice3 = new threeDice();
-
+    public Player winner;
     public ArrayList<Player> playersAlive;
     public ArrayList<Player> playersDead;
 
@@ -100,6 +102,10 @@ public class GameplayModel {
     public GameplayModel() throws InterruptedException {
         startGame();
     }
+    public int getDeployedNum() {
+        return deployed;
+    }
+
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -322,13 +328,13 @@ public class GameplayModel {
      */
     public boolean userDeploysTroops(){
         //Check Player hand
-        checkPlayerhand();
+        //checkPlayerhand();
 
         //Calculate Troops
-        calculateBonusTroops();
-
+       //calculateBonusTroops();
         /**Method to deploy troops */
-        boolean success = deployInTerritory(bonus);
+
+        boolean success = deployInTerritory(deployed);
         //Update Map View to show Troops being added. NEED METHOD
 
         return success;
@@ -336,6 +342,7 @@ public class GameplayModel {
 
     void checkPlayerhand(){
         /**Checks the Players Hand*/
+
 
         //Show in GameStatus
         for (Card card : currentPlayer.getHand().handList()) {
@@ -353,7 +360,7 @@ public class GameplayModel {
      *
      */
     void calculateBonusTroops() {
-        bonus = 0;
+        checkPlayerhand();
         if (currentPlayer.getContinents().size() > 0) {
             for (int j = 0; j < currentPlayer.getContinents().size(); j++) {
                 bonus = bonus + currentPlayer.getContinents().get(j).getBonusArmies();
@@ -528,13 +535,20 @@ public class GameplayModel {
                 "HELP: SHOWS HELP\n" +
                 "RULES: SHOWS THE RULES OF RISK!\n");
     }
-
-
+    public Player getWinner(){
+        return winner;
+        }
     public boolean WinnerStatus() {
-
-        if (playersAlive.size() == 1) {
+        int terrCount = 0;
+        for (Territory terr : board.getTerritoriesList()) {
+            if(terr.getPlayer()==currentPlayer){
+                terrCount++;
+            }
+        }
+        if (terrCount==board.getTerritoriesList().length) {
             gameWon = true;
-            return true;
+            winner = currentPlayer;
+            return gameWon;
         }
         else {
             return false;
@@ -602,7 +616,8 @@ public class GameplayModel {
         Territory addT = mapper(t);
         if (addT != null) {
             addT.addTroops(troop);
-            return 0;
+
+            return troop;
         }
         return -1;
     }
@@ -801,7 +816,7 @@ public class GameplayModel {
 
         //System.out.println("Add Troops to:");
 
-        deployInTerritory(newTroops);
+        //deployInTerritory(newTroops);
 
         //listTheTerritories(currentPlayer.getTerritories());
         //System.out.println();
@@ -817,11 +832,12 @@ public class GameplayModel {
         //Scanner s = new Scanner(System.in);
         //String addingToTerritory;
         //addingToTerritory = s.nextLine();
-        int temp = currentPlayer.getTerritories().size() - 1; // store last element in dynamic array
+        int temp = currentPlayer.getTerritories().size() - 1; // store last element index in dynamic array
 
         for (Territory terr : currentPlayer.getTerritories()) {
             if (terr.getName().equals(selectedTerritory.getName())) {//deploying troops if == true
-                int g = stringTerritoryMapping(selectedTerritory.getName(), newTroops);
+                //deployed =
+                stringTerritoryMapping(selectedTerritory.getName(), newTroops);
                 return true;
             } else if (terr.getName().equals((currentPlayer.getTerritories().get(temp)).getName())) {
 
@@ -908,34 +924,20 @@ public class GameplayModel {
     public void chooseAttackingTroops() {
         canAttack = false;
         exitAttack = false;
-        Scanner s = new Scanner(System.in);
-        int troopsAmount = attackingTerritory.getTroops();  //Returns number of troops in selected Attacking Territory
-
         while (!canAttack && !exitAttack) {
             //System.out.println("Please choose the Number of Troops to Attack with. Press BACK to exit ATTACK phase");
-
+            attackTroopLogic(userAttackingTroops);
             //int stringword = s.nextInt();
-
+            /*
             if (userAttackingTroops >= 1 && userAttackingTroops <= 3) {
                 attackTroopLogic(userAttackingTroops);
                 //Need to exit while loop if canAttack is true
 
-            } else if (userAttackingTroops > 3) {
-
-                //Show GameStatus
-
-                //JOptionPane.showMessageDialog(null, "You cannot attack with more than 3 dice at one time. Please attack with 1-3 dice.",
-                      //  "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
-                //exitAttack = true;
-            } else {
-
-                //Show GameStatus
-                //JOptionPane.showMessageDialog(null, "You did not enter the right amount of Dice to Attack with",
-                      // "Number of Dice", JOptionPane.INFORMATION_MESSAGE);
-                //exitAttack = true;
-            }
+            }*/
 
         }//End of While loop
+
+
 
     }
 
@@ -1517,6 +1519,7 @@ public class GameplayModel {
      */
     public void AIdeploy() throws InterruptedException {
         Territory highestOppTerritory = new Territory("HighestOpponentTerritories");
+        bonus = 0;
         calculateBonusTroops();
         //checkPlayerhand();  //Checks to see if AI can trade in Cards for Extra Bonus Troops
 
@@ -2180,4 +2183,11 @@ public class GameplayModel {
         return UserCurrentPlayer ;
     }
 
+    public void setBonus(int bonus) {
+        this.bonus = bonus;
+    }
+
+    public void setDeployedNum(int d) {
+        deployed = d;
+    }
 }
