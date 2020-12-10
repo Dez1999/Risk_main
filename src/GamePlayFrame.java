@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.Graphics;
+import java.util.LinkedList;
 
 /**
  * @author Peter, Des
@@ -39,8 +40,10 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
     private JButton NewZealand;
     private JButton next = new JButton("Next");
     private ArrayList<JButton> territoryButtons;
-    private GameplayModel gpm;
+    private GameplayModel gpm = new GameplayModel();;
     private JMenuBar menu = new JMenuBar();
+    private GamePlayController gpc = new GamePlayController(gpm);
+    //private boolean custom = false;
 
     /**
      * Setting up a frame for the game board layout.
@@ -53,12 +56,9 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         this.getContentPane().setBackground(new Color(688590));
         this.setLayout(new FlowLayout());
 
-        gpm = new GameplayModel();
-
 
         this.setBackground(new Color(688590));
         gpm.addGamePlayView(this);
-        GamePlayController gpc = new GamePlayController(gpm);
         next.addActionListener(gpc);
         next.setActionCommand("next");
         this.setSize(1600, 800);
@@ -77,9 +77,10 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
         m2.addActionListener(gpc);
         m2.setActionCommand("load");
 
-        JMenuItem m3 = new JMenuItem("Load Custom Map");
+        JMenuItem m3 = new JMenuItem("Custom Map");
         m3.addActionListener(gpc);
         m3.setActionCommand("custom");
+
 
 
         // add menu items to menu
@@ -132,11 +133,113 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
      * @param e
      */
     @Override
-    public void handleGamePlayUpdate(GamePlayEvent e ) throws InterruptedException {
+    public void handleGamePlayUpdate(GamePlayEvent e ) {
+        if(custom== true){
+            this.dispose();
+            JFrame cus = new JFrame("Custom Map");
+            LabelPanel.setBounds(15,10, 1400 , 50);
+            next.setBounds(1420,15,60,30);
+            Territory[] territories = e.getTerritories();
+            ArrayList<JButton> b = new ArrayList<>();
+            int previous_y = 0;
+            int previous_x = 0;
+            for(int i = 0; i< territories.length ; i++){
+                String name = territories[i].getName();
+                JButton button = new JButton(name);
+                button.setActionCommand(name);
+                button.addActionListener(this.gpc);
+                b.add(button);
+            }
+            for(int i = 0; i < b.size() ; i++){
+                if(i == 0){
+                    b.get(i).setBounds(50 , 120 , 150 , 100);
+                    previous_x = 50 ;
+                    previous_y = 120;
+                }
+                else{
+                    if(previous_y == 120){
+                        b.get(i).setBounds(previous_x+200 , 250 , 150 , 100);
+                        previous_x = previous_x+200;
+                        previous_y = 250;
+                    }
+                    else{
+                        b.get(i).setBounds(previous_x+200 , 120 , 150 , 100);
+                        previous_x = previous_x+200;
+                        previous_y = 120;
 
-       // if(custom)(
-        //        //create new frame or change the layout and create new buttons
-         //       )
+                    }
+                }
+            }
+            for (JButton button : b){
+                for (Territory terr : territories){
+                    if (button.getActionCommand().equals(terr.getName())){
+                        if(terr.getPlayer().getName().equals("1"))
+                        {
+                            //GRAY
+                            button.setBackground(Color.GRAY);
+                        }
+                        else if(terr.getPlayer().getName().equals("2"))
+                        {
+                            button.setBackground(new Color(184, 59, 59));
+                        }
+                        else if(terr.getPlayer().getName().equals("3"))
+                        {
+                            button.setBackground(new Color(73, 186, 58));
+                        }
+                        else if(terr.getPlayer().getName().equals("4"))
+                        {
+                            button.setBackground(new Color(224, 227, 75));
+                        }
+                        else if(terr.getPlayer().getName().equals("5"))
+                        {
+                            button.setBackground(new Color(
+                                    181, 121, 224
+                            ));
+                        }
+
+                        else if(terr.getPlayer().getName().equals("6"))
+                        {
+                            //PINK
+                            button.setBackground(Color.PINK);
+                        }
+                        button.setText(terr.getTroops() +" :"+ button.getActionCommand());
+                    }
+                }
+            }
+            JPanel panel = new JPanel(true) {
+                @Override
+                public void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                   // g.drawLine(60, 60, 1066, 1666);
+                    for(int i = 0 ; i < b.size() ; i++) {
+                        for(int j = 0 ; j < territories.length ; j++) {
+                            if(b.get(i).getActionCommand().equals(territories[j].getName())) {
+                                LinkedList<Territory> borders =  territories[j].getBorderTerritories();
+                                for(int k =0 ; k < borders.size() ; k ++) {
+                                    for(int x = 0; x<b.size() ; x++){
+                                        if(b.get(x).getActionCommand().equals(borders.get(k).getName())) {
+                                            g.drawLine(b.get(i).getBounds().x, b.get(i).getBounds().y, b.get(x).getBounds().x, b.get(x).getBounds().y);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            panel.setBackground(new Color(688590));
+            for(int i = 0 ; i < b.size() ; i++){
+                cus.add(b.get(i));
+            }
+            cus.add(LabelPanel);
+            cus.add(next);
+            cus.add(panel);
+            cus.setVisible(true);
+            cus.setSize(1600, 800);
+            cus.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            return;
+
+        }
         Territory[] territories = e.getTerritories();
 
         int handsize = e.getPlayerHand().handList().size();
