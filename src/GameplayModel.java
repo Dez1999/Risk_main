@@ -89,9 +89,16 @@ public class GameplayModel {
     private Territory To;
 
     private boolean doneAiSelection = false;
-
-
     private boolean attackTerrNoOpp = false;
+
+    //Custom Map
+    private boolean startOver; //Exit Program if Custom Map is rejected
+
+    public void setCustom(boolean custom) {
+        this.custom = custom;
+    }
+
+    private boolean custom; //Custom Map
 
     public static void main(String[] args) throws InterruptedException {
         GameplayModel gamePlayModel = new GameplayModel();
@@ -100,6 +107,8 @@ public class GameplayModel {
 
     /** Game Logic*/
     public GameplayModel() throws InterruptedException {
+        startOver = false;
+        custom = false;
         startGame();
     }
     public int getDeployedNum() {
@@ -201,7 +210,7 @@ public class GameplayModel {
     /**
      * Method: Used to show the Initial Instructions and game Rules when the game first starts
      */
-    public void displayInitialInstructions(){
+    public void displayInitialInstructions() throws InterruptedException {
         calculateBonusTroops();
         setInstructions("Player 1 begins the Game. Please choose the Territory to Deploy " + getBonus() + " Troops to");
 
@@ -326,7 +335,7 @@ public class GameplayModel {
     /**
      * Method: User Deploys Troops
      */
-    public boolean userDeploysTroops(){
+    public boolean userDeploysTroops() throws InterruptedException {
         //Check Player hand
         //checkPlayerhand();
 
@@ -359,7 +368,7 @@ public class GameplayModel {
     /**Calculates the bonus troops a player receives
      *
      */
-    void calculateBonusTroops() {
+    void calculateBonusTroops() throws InterruptedException {
         checkPlayerhand();
         if (currentPlayer.getContinents().size() > 0) {
             for (int j = 0; j < currentPlayer.getContinents().size(); j++) {
@@ -1439,7 +1448,7 @@ public class GameplayModel {
     /**
      * Method: Shows gameStatus in JLabel
      */
-    public void gameStatus(){
+    public void gameStatus() throws InterruptedException {
         //Shows currentPlayer's turn
         //Shows currentPlayer's Hand
         //Shows extra message to show User
@@ -1451,7 +1460,8 @@ public class GameplayModel {
 
 
         for (GamePlayView tttv: GamePlayView)
-            tttv.handleGamePlayUpdate(new GamePlayEvent(this, currentPlayer, currentPlayer.getHand(), currentPlayer.getName(),instructions, board.getTerritoriesList(), playerColor));
+            tttv.handleGamePlayUpdate(new GamePlayEvent(this, currentPlayer, currentPlayer.getHand(), currentPlayer.getName(), instructions, board.getTerritoriesList(), playerColor, custom, startOver));
+
     }
 
     /**
@@ -1519,7 +1529,6 @@ public class GameplayModel {
      */
     public void AIdeploy() throws InterruptedException {
         Territory highestOppTerritory = new Territory("HighestOpponentTerritories");
-        bonus = 0;
         calculateBonusTroops();
         //checkPlayerhand();  //Checks to see if AI can trade in Cards for Extra Bonus Troops
 
@@ -1564,78 +1573,86 @@ public class GameplayModel {
             ArrayList<Territory> TerrWith2plus = AiTerrAttack(2);  //returns all Territories with more than 2 troops: NEED TO REMOVE
             ArrayList<Territory> TerrWith1plus = AiTerrAttack(1);  //returns all Territories with more than 1 troops
 
-            Territory terrAgainstMostPop = new Territory("terrAgainstMostPop");
-            Territory terrBiggestThreat = new Territory("terrBiggestThreat");
-            ArrayList<Territory> terrWeakestThreats = new ArrayList<>();
-            Territory bestAttackingTerritory;
-
-            Territory chosenTargetTerritory;
-            Territory chosenAttackingTerritory;
-
-            //Determine the Target using 1 and 2.
-            //1) With the most populated Territory -> return Target   : Find most populated terr, return enemy neighbouring Territory with least troops to attack
-            //2) The biggest Threat  -> return BiggestThreat Target
-            //3) list of weakest threat
-
-            //Develop Rankings for Territory Attack Mode
-            //1) With the most populated Territory -> return Target
-            terrAgainstMostPop = findMostPopulated(TerrWith1plus); //Find most populated terr, return enemy neighbouring Territory with least troops to attack
-
-            //2) The biggest Threat  -> return BiggestThreat Target
-            terrBiggestThreat = returnBiggestOppTerr(TerrWith1plus);
-
-            //Choose which Target Territory to Attack (terrAgainstMostPop, terrBiggestThreat,noAttack)
-            chosenTargetTerritory = chooseBestTargetTerritory(TerrWith1plus, TerrWith3plus, terrAgainstMostPop, terrBiggestThreat);
-
-            bestAttackingTerritory = chooseBestAttackingTerritroy();
-
-            if(bestAttackingTerritory.getTroops() >= 10 && defendingTerritory.getPlayer() != currentPlayer){
-                //defendingTerritory = smallestOppTerr(bestAttackingTerritory);
-                attackingTerritory = bestAttackingTerritory;
-
-
-                int numberDice = aiChooseNumberAttackingDie();
-
-                Component frame = new Frame();
-                //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen: " + attackingTerritory.getName() + ": Attacking Territory. " +
-                //      defendingTerritory.getName() + ": Defending Territory");
-
-                attackTroopLogic(numberDice);
-                count++;
-                setInstructions("AI Player" + currentPlayer.getName() + " has finished a battle");
-                gameStatus();
-
-                if(count == 6){
-                    doneAttacking = true;
-                }
-
+            if (TerrWith1plus.size() == 0 || TerrWith1plus.size() == 1) {
+                stopAttack = true;
+                doneAttacking = true;
             }
 
-            else if (chosenTargetTerritory == terrAgainstMostPop || chosenTargetTerritory == terrBiggestThreat) {
-                //Find Attacking Territory
-                chosenAttackingTerritory = aiFindAttackingTerr(chosenTargetTerritory);
-                attackingTerritory = chosenAttackingTerritory;
-                defendingTerritory = chosenTargetTerritory;
+            if (!stopAttack) {
 
-                int numberDice = aiChooseNumberAttackingDie();
 
-                Component frame = new Frame();
-                //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen: " + attackingTerritory.getName() + ": Attacking Territory. " +
-                //      defendingTerritory.getName() + ": Defending Territory");
+                Territory terrAgainstMostPop = new Territory("terrAgainstMostPop");
+                Territory terrBiggestThreat = new Territory("terrBiggestThreat");
+                ArrayList<Territory> terrWeakestThreats = new ArrayList<>();
+                Territory bestAttackingTerritory;
 
-                attackTroopLogic(numberDice);
-                count++;
-                setInstructions("AI Player" + currentPlayer.getName() + " has finished a battle");
-                gameStatus();
+                Territory chosenTargetTerritory;
+                Territory chosenAttackingTerritory;
 
-                if(count == 6){
+                //Determine the Target using 1 and 2.
+                //1) With the most populated Territory -> return Target   : Find most populated terr, return enemy neighbouring Territory with least troops to attack
+                //2) The biggest Threat  -> return BiggestThreat Target
+                //3) list of weakest threat
+
+                //Develop Rankings for Territory Attack Mode
+                //1) With the most populated Territory -> return Target
+                terrAgainstMostPop = findMostPopulated(TerrWith1plus); //Find most populated terr, return enemy neighbouring Territory with least troops to attack
+
+                //2) The biggest Threat  -> return BiggestThreat Target
+                terrBiggestThreat = returnBiggestOppTerr(TerrWith1plus);
+
+                //Choose which Target Territory to Attack (terrAgainstMostPop, terrBiggestThreat,noAttack)
+                chosenTargetTerritory = chooseBestTargetTerritory(TerrWith1plus, TerrWith3plus, terrAgainstMostPop, terrBiggestThreat);
+
+                bestAttackingTerritory = chooseBestAttackingTerritroy();
+
+
+                if (bestAttackingTerritory.getTroops() >= 10 && defendingTerritory.getPlayer() != currentPlayer) {
+                    //defendingTerritory = smallestOppTerr(bestAttackingTerritory);
+                    attackingTerritory = bestAttackingTerritory;
+
+
+                    int numberDice = aiChooseNumberAttackingDie();
+
+                    Component frame = new Frame();
+                    //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen: " + attackingTerritory.getName() + ": Attacking Territory. " +
+                    //      defendingTerritory.getName() + ": Defending Territory");
+
+                    attackTroopLogic(numberDice);
+                    count++;
+                    setInstructions("AI Player" + currentPlayer.getName() + " has finished a battle");
+                    gameStatus();
+
+                    if (count == 6) {
+                        doneAttacking = true;
+                    }
+
+                } else if (chosenTargetTerritory == terrAgainstMostPop || chosenTargetTerritory == terrBiggestThreat) {
+                    //Find Attacking Territory
+                    chosenAttackingTerritory = aiFindAttackingTerr(chosenTargetTerritory);
+                    attackingTerritory = chosenAttackingTerritory;
+                    defendingTerritory = chosenTargetTerritory;
+
+                    int numberDice = aiChooseNumberAttackingDie();
+
+                    Component frame = new Frame();
+                    //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen: " + attackingTerritory.getName() + ": Attacking Territory. " +
+                    //      defendingTerritory.getName() + ": Defending Territory");
+
+                    attackTroopLogic(numberDice);
+                    count++;
+                    setInstructions("AI Player" + currentPlayer.getName() + " has finished a battle");
+                    gameStatus();
+
+                    if (count == 6) {
+                        doneAttacking = true;
+                    }
+                } else if (chosenTargetTerritory.getName().equals("DoNotAttack")) {
+                    //StandBy: No Attack
+                    Component frame = new Frame();
+                    //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen to Not Attack ");
                     doneAttacking = true;
                 }
-            } else if (chosenTargetTerritory.getName().equals("DoNotAttack")) {
-                //StandBy: No Attack
-                Component frame = new Frame();
-                //JOptionPane.showMessageDialog(frame, "AI Player " + currentPlayer.getName() + " has chosen to Not Attack ");
-                doneAttacking = true;
             }
         }
 
@@ -2053,7 +2070,12 @@ public class GameplayModel {
         out.close();
     }
 
-    public void load(File myFile) throws IOException {
+    /**
+     * MethodL Loads a previously saved game
+     * @param myFile
+     * @throws IOException
+     */
+    public void load(File myFile) throws IOException, InterruptedException {
         BufferedReader br = new BufferedReader(new FileReader(myFile));
         try {
             String l1 = br.readLine();
@@ -2154,8 +2176,212 @@ public class GameplayModel {
         return strings;
     }
 
+    /*
+    Custom Map:
+    -6          //Number of Territories
+    $-1#2      //Players Playing
+    $$-2        //Current Player
+    $$$-2       //AI player
+    $$$$$-NorthWestTerritories#1#4                      //Territories
+    $$$$$-Madagascar#1#4
+    $$$$$-Argentina#1#4
+    $$$$$-Congo#2#4
+    $$$$$-Ukraine#2#4
+    $$$$$-Iceland#2#4
+    $$$$$$-1#                   //Custom Cards(Need to be same name as Territory
+    $$$$$$-2#
+    $$$$$$$-NorthWestTerritories#Madagascar                 //Territory Neighbours
+    $$$$$$$-Madagascar#NorthWestTerritories#Argentina
+    $$$$$$$-Argentina#Madagascar#Argentina
+    $$$$$$$-Congo#Argentina#Ukraine#Iceland
+    $$$$$$$-Ukraine#Congo#Iceland
+    $$$$$$$-Iceland#Congo#Ukraine
+    $$$$$$$$-NorthAmerica#NorthWestTerritories#Madagascar   //Continent and Territories in Continent
+    $$$$$$$$-CoolContinent#Ukraine#Iceland#Congo
+
+     */
+
     /**
-     * NextTurn: helps AI player choose when to go to the next players Turn
+     * Method: Laods a Custom Map into the Game
+     * @param myFile
+     * @throws IOException
+     */
+    public void customMap(File myFile) throws IOException, InterruptedException {
+        board.setIndex(0);
+        BufferedReader br = new BufferedReader(new FileReader(myFile));
+        try {
+            String l1 = br.readLine();
+            while (l1 != null) {
+                if (l1.charAt(0) == '-') {
+                    String[] s = splitTwo(l1);
+                    int numTerr = Integer.parseInt(s[1]);
+                    board.setCustomTerritoryList(numTerr);
+                }
+                else if (l1.charAt(1) == '-') {
+                    ArrayList<Player> newAlive = new ArrayList<>();
+                    for (int i = 2; i < l1.length(); i = i + 2) {
+                        String d = String.valueOf(l1.charAt(i));
+                        Player newadd = new Player(this, d);
+                        int l = Integer.parseInt(d);
+                        newAlive.add(newadd);
+                        newAlive.get(l - 1).setColor(colorList.get(l - 1));
+                    }
+                    this.playersAlive = newAlive;
+                } else if (l1.charAt(2) == '-') {
+                    for (int i = 0; i < playersAlive.size(); i++) {
+                        String f = String.valueOf(l1.charAt(3));
+                        if (playersAlive.get(i).getName().equals(f)) {
+                            this.currentPlayer = playersAlive.get(i);
+                            this.pTurn = 0;
+                            this.nextPlayer = playersAlive.get(1);
+                        }
+                    }
+                } else if (l1.charAt(3) == '-') {
+                    for (int j = 4; j < l1.length(); j = j + 2) {
+                        for (int i = 0; i < playersAlive.size(); i++) {
+                            String f = String.valueOf(l1.charAt(j));
+                            if (playersAlive.get(i).getName().equals(f)) {
+                                playersAlive.get(i).setAIplayer(true);
+                            }
+                        }
+                    }
+                } else if (l1.charAt(5) == '-') {   //Creates New Custom Territory and Creates Custom Cards for Custom Deck
+                    String[] s = split(l1);
+                    String[] t = splitTwo(s[0]);
+                    String terName = t[1];
+                    String owner = s[1];
+                    String troops = s[2];
+                    Player ownerPlayer = null;
+                    //clear board.getTerritoriesList
+                    //Add Territory from string
+                    for (int i = 0; i < playersAlive.size(); i++) {
+                        String o = String.valueOf(owner);
+                        if (playersAlive.get(i).getName().equals(o)) {
+                            ownerPlayer = playersAlive.get(i);
+                        }
+                    }
+                    board.setNewTerritory(terName, ownerPlayer, troops);
+
+                    int length = board.getCustomTerritoryList().length;
+
+                    for(int i = 0; i< board.getCustomTerritoryList().length - 1; i++){
+                        if(board.getCustomTerritoryList()[i] != null){
+                            if (board.getCustomTerritoryList()[i].getName().equals(terName)) {
+                                for (int j = 0; j < playersAlive.size(); j++) {
+                                    if (playersAlive.get(j).getName().equals(owner)) {
+                                        playersAlive.get(j).addTerritories(board.getCustomTerritoryList()[i]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    /*
+                    for (Territory terr : board.getCustomTerritoryList()) {
+                        if (terr.getName().equals(terName)) {
+                            for (int i = 0; i < playersAlive.size(); i++) {
+                                if (playersAlive.get(i).getName().equals(owner)) {
+                                    playersAlive.get(i).addTerritories(terr);
+                                }
+                            }
+                        }
+                        }
+
+                     */
+
+
+                } else if (l1.charAt(6) == '-') {  //Add Cards to player hands from Custom Deck
+                    for (int i = 0; i < playersAlive.size(); i++) {
+                        String f = String.valueOf(l1.charAt(7));
+                        if (playersAlive.get(i).getName().equals(f)) {
+                            String[] cas = split(l1);
+                            for (int j = 1; j < cas.length; j++) {
+                                String[] c = splitTwo(cas[j]);
+                                Card d = board.getCustomDeck().getCardByName(c[0]);
+                                playersAlive.get(i).getHand().addCard(d);
+                                board.getCustomDeck().removeAndAddLoad(d);
+                            }
+                        }
+                    }
+                }
+                else if(l1.charAt(7) == '-'){  //Adds Adjacent territories to Custom Territory List
+                    String[] s = split(l1);
+                    String[] t = splitTwo(s[0]);
+                    String terrName = t[1];  //Territory
+                    for (int i = 1; i < s.length ; i++){
+                        String adjTerrString = s[i];
+                        Territory adjTerr = CustomMapper(adjTerrString);
+                        for(Territory territory: board.getCustomTerritoryList()){
+                            if(territory.getName().equals(terrName)){
+                                territory.addBorderTerritories(adjTerr);
+                            }
+                        }
+                    }
+                }
+                else if(l1.charAt(8) == '-'){  //Creates Custom Continents
+                    String[] s = split(l1);
+                    String[] t = splitTwo(s[0]);
+                    String ContName = t[1];  //Continent
+                    board.createCustomContinent(ContName);
+                    for (int i = 1; i < s.length ; i++){
+                        String terrCont = s[i];
+                        for(Territory territory: board.getCustomTerritoryList()){
+                            if(territory.getName().equals(terrCont)){
+                                board.setCustomContinents(ContName, terrCont);
+                            }
+                        }
+                    }
+                }
+
+                l1 = br.readLine();
+            }
+        } finally {
+                br.close();
+                gameStatus();
+
+        }
+        boolean correctFormat = board.customTerritoryList();  //Sets old Lists to New Custom Lists
+        if(correctFormat) {
+            board.setIndex(0);
+            custom = true;
+            gameStatus();
+            JOptionPane.showMessageDialog(null, "Custom Map Loaded");
+
+            /*
+            if(currentPlayer.isAIplayer()) {
+                UserCurrentPlayer = false;
+            }
+            else{
+                UserCurrentPlayer = true;
+
+            }
+            CheckAiPlayer();
+
+             */
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Custom Map Rejected. Please follow the Correct Format. Restart the Program to play a new Game");
+            startOver = true;
+            gameStatus();
+        }
+    }
+
+    /**
+     * Method: Returns Territory
+     *
+     * @param confirm Territory String name
+     * @return Terr Territory
+     */
+    public Territory CustomMapper(String confirm) {
+        for (Territory terr : board.getCustomTerritoryList())
+            if (terr.getName().equals(confirm)) {
+                return terr;
+            }
+        return null;
+    }
+
+    /**
+     * NextTurn: Helps AI player choose when to go to the next players Turn
      */
     public void AInextTurn() throws InterruptedException {
         changePlayer();

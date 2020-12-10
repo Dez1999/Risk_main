@@ -12,13 +12,21 @@ import java.util.*;
 
 public class Board {
     private int numPlayers;
-    private static final int numTerritories = 37;
-    private static Territory[] territoriesList;
+    private int numTerritories = 37;
+    private Territory[] territoriesList;
     private static ArrayList<Continent> continentsList;
     private static Deck deck;
     //private Hand hand;
     //private ArrayList<Player> players;
     private int initialPlayerTroopstoplace;
+
+    private Territory[] customTerritoryList;
+    private Deck customDeck;
+    private ArrayList<Continent> customContinentsList;
+
+
+
+    int index;
 
 
     //Troop types
@@ -32,6 +40,17 @@ public class Board {
 
     public Board(int numPlayers){
         this.numPlayers = numPlayers;
+        cavalry = new Cavalry();
+        wildCardA = new wildCard();
+        infantry = new infantry();
+        artillery = new artillery();
+        wildCardB = new wildCard();
+
+
+        customDeck = new Deck();
+        customContinentsList = new ArrayList<>();
+
+
 
         //setPlayers();   //GamePlay() class
         setTerritories();
@@ -85,12 +104,6 @@ public class Board {
      * Creates the cards and the deck for the Risk Game
      */
     private void setDeck() {
-
-        cavalry = new Cavalry();
-        wildCardA = new wildCard();
-        infantry = new infantry();
-        artillery = new artillery();
-        wildCardB = new wildCard();
 
         Card Alaska, NorthWestTerritories, GreenLand, Alberta, Ontario, Quebec, WestUSA, EastUSA, CentralAmerica;
         Card Venezuela, Peru, Brazil, Argentina, NorthAfrica, Egypt, EastAfrica, Congo, SouthAfrica, Madagascar;
@@ -367,9 +380,6 @@ public class Board {
 
 
 
-
-
-
         territoriesList = new Territory[37];
 
         //North America
@@ -632,6 +642,10 @@ public class Board {
         return territoriesList;
     }
 
+    public void setCustomTerritoryList(int i){
+        customTerritoryList = new Territory[i];
+    }
+
     /**
      * Method to return the Continent list in the Class
      * @return continentsList
@@ -640,6 +654,164 @@ public class Board {
         return continentsList;
     }
 
+    public int random()
+    {
+        // rand() produces a random number
+        int random = (int) Math.random();
+
+        // if the random number is even, return 0
+        // if the random number is odd, return 1
+        return (random % 2);
+    }
+
+    public int generate(){
+        int x = random();
+        int y = random();
+
+        // if x == 1 and y == 0, try again
+        return (x == 1 && y == 0)? generate(): (x + y);
+
+
+    }
+
+    public String getRandomCard(){
+        String[] cards = {"cavalry", "infantry", "artillery"};
+        int val = generate();
+        return cards[val];
+    }
+
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+    public void increaseIndex(){
+        index++;
+    }
+
+    /**
+     * Method: Creates new Territory and adds to CustomList
+     * @param terName Territory Name
+     * @param owner  Territory Owner
+     * @param troops  Territory Troops
+     */
+    public void setNewTerritory(String terName, Player owner, String troops) {
+        Territory newTerr = new Territory(terName);
+        customTerritoryList[index] = newTerr;
+        newTerr.setTroops(Integer.parseInt(troops));
+        newTerr.changeOwner(owner);
+
+        String type = getRandomCard();
+        if (type.equals("cavalry")){
+            Card newCard = new Card(customTerritoryList[index], cavalry);
+            customDeck.addCard(newCard);
+        }
+        else if(type.equals("infantry")){
+            Card newCard = new Card(customTerritoryList[index], infantry);
+            customDeck.addCard(newCard);
+        }
+        else{
+            Card newCard = new Card(customTerritoryList[index], artillery);
+            customDeck.addCard(newCard);
+        }
+
+        increaseIndex();
+    }
+
+    public Territory[] getCustomTerritoryList() {
+        return customTerritoryList;
+    }
+
+    /**
+     * Method:Changes Territory List, Deck, continents list and numTerritories for Custom Map
+     */
+    public boolean customTerritoryList() {
+        territoriesList = customTerritoryList;
+        deck = customDeck;
+        numTerritories = territoriesList.length;
+        continentsList = customContinentsList;
+
+        for(Continent cont: continentsList){
+            if(cont.getMemberTerritories().size() < 5){
+                cont.setBonusArmies(3);
+            }
+            else if(cont.getMemberTerritories().size() > 4){
+                cont.setBonusArmies(5);
+            }
+        }
+
+        boolean good = checkCustomTerritories();
+
+        if(!good){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
+     * Method: Checks if All territories are connected
+     */
+    private boolean checkCustomTerritories() {
+        for(Territory terr: territoriesList){
+            if(terr.getNumberBorderTerr() == 0){
+                return false;
+            }
+        }
+
+        boolean all = checkAllConnectedTerritories();
+
+        if(!all){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
+     * Method: Checks if All Territories are Connected
+     * @return
+     */
+    private boolean checkAllConnectedTerritories() {
+        //Path Finding Algorithm
+        for(Territory terr: territoriesList){
+
+            //******SOLVE
+        }
+
+        return true;
+    }
+
+    public Deck getCustomDeck() {
+        return customDeck;
+    }
+
+    /**
+     * Method: Creates Custom Continent
+     * @param contName
+     */
+    public void createCustomContinent(String contName) {
+        Continent newCont = new Continent(contName);
+        customContinentsList.add(newCont);
+    }
+
+    /**
+     * Method: Add Territories to Continents
+     * @param contName
+     * @param terrCont
+     */
+    public void setCustomContinents(String contName, String terrCont) {
+        for(Continent cont : customContinentsList){
+            for(Territory terr : customTerritoryList){
+                if(terr != null && cont != null) {
+                    if (terr.getName().equals(terrCont) && cont.getName().equals(contName)) {
+                        cont.addTerritory(terr);
+                    }
+                }
+            }
+        }
+    }
 
 
 /**

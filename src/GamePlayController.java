@@ -46,6 +46,19 @@ public class GamePlayController implements ActionListener {
             next = next - 1 ;
         }
 
+        if(e.getActionCommand().equals("custom")){
+            JFileChooser C = new JFileChooser();
+            C.showDialog(null,"Choose Custom Map to import");
+            C.setVisible(true);
+            File filename = C.getSelectedFile();
+            try {
+                gpm.customMap(filename);
+            } catch (IOException | InterruptedException ioException) {
+                ioException.printStackTrace();
+            }
+            next = -1;
+        }
+
         if(e.getActionCommand().equals("load")){
             JFileChooser C = new JFileChooser();
             C.showDialog(null,"Choose File to import");
@@ -53,7 +66,7 @@ public class GamePlayController implements ActionListener {
             File filename = C.getSelectedFile();
             try {
                 gpm.load(filename);
-            } catch (IOException ioException) {
+            } catch (IOException | InterruptedException ioException) {
                 ioException.printStackTrace();
             }
             next = -1;
@@ -127,7 +140,9 @@ public class GamePlayController implements ActionListener {
                 gpm.gameStatus();
                 next = -1;
             }
+
         }
+
         //Attack Phase: Select Attacking Territory
         else if (next == 1) {
             for (Territory terr : gpm.getBoard().getTerritoriesList()) {
@@ -145,12 +160,20 @@ public class GamePlayController implements ActionListener {
                         //updateBoardStatus()
                         //Show in GameStatus()
                         gpm.setInstructions("Please choose Defending Territory");
-                        gpm.gameStatus();
+                        try {
+                            gpm.gameStatus();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                     else{ //Attacking Territory was not successfully selected
                         //Show in GameStatus
                         gpm.setInstructions("Selection Invalid. Please choose your own Attacking Territory with Neighbouring Enemy Territories");
-                        gpm.gameStatus();
+                        try {
+                            gpm.gameStatus();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                         next = 0;
                     }
                 }
@@ -174,14 +197,22 @@ public class GamePlayController implements ActionListener {
 
                         //Show in GameStatus
                         gpm.setInstructions("You must choose a Territory you don't own and adjacent to " + gpm.getAttackingTerritory().getName()  + ". Please Choose Defending Territory");
-                        gpm.gameStatus();
+                        try {
+                            gpm.gameStatus();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                         next = 1;
 
                     } else { //Defending Territory was successfully selected
 
                         //Show in GameStatus
                         gpm.setInstructions("Choose the Number of Dice to Attack with (1 to 3 Dice)");
-                        gpm.gameStatus();
+                        try {
+                            gpm.gameStatus();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                         JFrame diceFrame = new JFrame("Amount of dice for the attack");
                         diceFrame.getContentPane().setBackground(Color.pink);
                         diceFrame.setLayout(new FlowLayout());
@@ -200,7 +231,11 @@ public class GamePlayController implements ActionListener {
                                 gpm.setUserAttackingTroops(userTroops);
                                 gpm.chooseAttackingTroops();
                                 diceFrame.setVisible(false);
-                                gpm.gameStatus();
+                                try {
+                                    gpm.gameStatus();
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
                             }
                         });
                         twoDie.addActionListener(new ActionListener()
@@ -211,7 +246,11 @@ public class GamePlayController implements ActionListener {
                                 gpm.setUserAttackingTroops(userTroops);
                                 gpm.chooseAttackingTroops();
                                 diceFrame.setVisible(false);
-                                gpm.gameStatus();
+                                try {
+                                    gpm.gameStatus();
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
                             }
                         });
                         threeDie.addActionListener(new ActionListener()
@@ -222,7 +261,11 @@ public class GamePlayController implements ActionListener {
                                 gpm.setUserAttackingTroops(userTroops);
                                 gpm.chooseAttackingTroops();
                                 diceFrame.setVisible(false);
-                                gpm.gameStatus();
+                                try {
+                                    gpm.gameStatus();
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
                             }
                         });
                         diceFrame.setVisible(true);
@@ -239,7 +282,11 @@ public class GamePlayController implements ActionListener {
 
                             gpm.setInstructions("You must choose the correct amount of Dice. Please choose the Attacking Territory with Neighbouring Enemy Territories");
 
-                            gpm.gameStatus();
+                            try {
+                                gpm.gameStatus();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
                             next = 0;
                         } else {
                             //Attack was Successful
@@ -262,7 +309,11 @@ public class GamePlayController implements ActionListener {
                             } else {
                                 //Show GameStatus
                                 gpm.setInstructions("Please choose Attacking Territory");
-                                gpm.gameStatus();
+                                try {
+                                    gpm.gameStatus();
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
                                 next = 0;
                             }
                         }
@@ -282,7 +333,7 @@ public class GamePlayController implements ActionListener {
 
         //Next Button is Selected. Changes to Fortify and then Changes Player turn and start to deploy Troops. Checks if AI player is next
         else if (e.getActionCommand().equals("next")) {
-            //deployCount = 0;
+
             if (isFortifying) {
 
                 isFortifying = false;
@@ -290,7 +341,11 @@ public class GamePlayController implements ActionListener {
                 //Tell the user to select Territory A
                 gpm.setInstructions("Please choose a Territory to fortify from. Press Next to skip Fortifying Phase");
                 //update the gameStatus
-                gpm.gameStatus();
+                try {
+                    gpm.gameStatus();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 next = 3;
             } else if (!isFortifying) {
                 deployCount = 0;
@@ -322,7 +377,11 @@ public class GamePlayController implements ActionListener {
 
             //Show GameStatus
             gpm.setInstructions("Player Selected Back. Please choose Attacking Territory with Neighbouring Enemy Territories");
-            gpm.gameStatus();
+            try {
+                gpm.gameStatus();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
 
             //This will bring the user back to ATTACK phase and ask them to choose an attacking Territory
             next = 0;
@@ -340,7 +399,11 @@ public class GamePlayController implements ActionListener {
                     Territory A = gpm.mapper(e.getActionCommand());
                     gpm.setFrom(A);
                     gpm.setInstructions("You have selected "+  A.getName() + ". Please choose the Connected Territory to Fortify to ");
-                    gpm.gameStatus();
+                    try {
+                        gpm.gameStatus();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
                     Afound = true;
                     next = 4; // player selected a valid territory
                 }
@@ -350,11 +413,19 @@ public class GamePlayController implements ActionListener {
                 gpm.setInstructions("You cannot fortify from a Territory you do not own. Please select a valid territory to Fortify again.");
 
                 //update the gameStatus
-                gpm.gameStatus();
+                try {
+                    gpm.gameStatus();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
 
             }
             //   gpm.setFortifyFrom(e.getActionCommand()); //use the mapper to return territory clicked on
-            gpm.gameStatus();
+            try {
+                gpm.gameStatus();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
 
         }
         //Fortifying Phase: Select Territory to Fortify to and select number of Troops
@@ -375,7 +446,11 @@ public class GamePlayController implements ActionListener {
                         gpm.setInstructions("You cannot deploy to another Territory that is not connected. Please select a valid territory to Fortify from again.");
 
                         //update the gameStatus
-                        gpm.gameStatus();
+                        try {
+                            gpm.gameStatus();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
 
                         next = 3; // this code is repeated below. Figure out if can replace.                    }
                     } else {
@@ -391,7 +466,11 @@ public class GamePlayController implements ActionListener {
                                 gpm.setInstructions("Successful Fortify! Please choose a Territory to fortify from. Press Next to skip Fortifying Phase");
 
                                 //update the gameStatus
-                                gpm.gameStatus();
+                                try {
+                                    gpm.gameStatus();
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
                                 isFortified = true;
                                 //isFortifying = false;
                                 next = 3;
@@ -405,7 +484,11 @@ public class GamePlayController implements ActionListener {
             if (!found) {
                 gpm.setInstructions("You cannot deploy to a country you do not own. Please select a valid territory to Fortify from again.");
                 //update the gameStatus
-                gpm.gameStatus();
+                try {
+                    gpm.gameStatus();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 next = 3; // this code is repeated below. Figure out if can replace.
             }
         }

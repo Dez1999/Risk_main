@@ -13,9 +13,11 @@ public class GamePlayEvent extends EventObject {
     private ArrayList<Continent> continents;
     private String instructions;
     private Color playerColor;
+    private boolean custom;
+    private boolean startOver;
 
 
-    public GamePlayEvent(GameplayModel gameModel, Player currentPlayer, Hand playerHand, String playername, String instruction, Territory[] territoriesList, Color playerColor) {
+    public GamePlayEvent(GameplayModel gameModel, Player currentPlayer, Hand playerHand, String playername, String instruction, Territory[] territoriesList, Color playerColor, boolean custom, boolean startOver) {
         super(gameModel);
         this.currentPlayer = currentPlayer;
         this.playerHand = playerHand;
@@ -23,7 +25,8 @@ public class GamePlayEvent extends EventObject {
         this.instructions = instruction;
         this.territories = territoriesList;
         this.playerColor = playerColor;
-
+        this.custom = custom;
+        this.startOver = startOver;
     }
 
     /**
@@ -68,5 +71,21 @@ public class GamePlayEvent extends EventObject {
 
     public Territory[] getTerritories() {
         return territories;
+    }
+
+    /**
+     * Returns startOver Boolean
+     * @return
+     */
+    public boolean isStartOver() {
+        return startOver;
+    }
+
+    /**
+     * Returms Custom boolean Variable: If this is true -> Add custom Map
+     * @return
+     */
+    public boolean isCustom() {
+        return custom;
     }
 }
