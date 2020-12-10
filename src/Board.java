@@ -46,6 +46,12 @@ public class Board {
         artillery = new artillery();
         wildCardB = new wildCard();
 
+
+        customDeck = new Deck();
+        customContinentsList = new ArrayList<>();
+
+
+
         //setPlayers();   //GamePlay() class
         setTerritories();
         setContinents();
@@ -636,6 +642,10 @@ public class Board {
         return territoriesList;
     }
 
+    public void setCustomTerritoryList(int i){
+        customTerritoryList = new Territory[i];
+    }
+
     /**
      * Method to return the Continent list in the Class
      * @return continentsList
@@ -794,8 +804,10 @@ public class Board {
     public void setCustomContinents(String contName, String terrCont) {
         for(Continent cont : customContinentsList){
             for(Territory terr : customTerritoryList){
-                if(terr.getName().equals(terrCont) && cont.getName().equals(contName)){
-                    cont.addTerritory(terr);
+                if(terr != null && cont != null) {
+                    if (terr.getName().equals(terrCont) && cont.getName().equals(contName)) {
+                        cont.addTerritory(terr);
+                    }
                 }
             }
         }

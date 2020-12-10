@@ -24,11 +24,14 @@ public class Continent {
     }
 
     public Continent(String contName) {
-        this.name = name;
+        this.name = contName;
+        territories = new ArrayList<>();
+        bonusArmies = 0;
     }
 
     public String getName() {
         return name;
+
     }
 
     /**

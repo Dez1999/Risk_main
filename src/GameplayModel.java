@@ -91,6 +91,11 @@ public class GameplayModel {
 
     //Custom Map
     private boolean startOver; //Exit Program if Custom Map is rejected
+
+    public void setCustom(boolean custom) {
+        this.custom = custom;
+    }
+
     private boolean custom; //Custom Map
 
     public static void main(String[] args) throws InterruptedException {
@@ -2204,7 +2209,12 @@ public class GameplayModel {
         try {
             String l1 = br.readLine();
             while (l1 != null) {
-                if (l1.charAt(1) == '-') {
+                if (l1.charAt(0) == '-') {
+                    String[] s = splitTwo(l1);
+                    int numTerr = Integer.parseInt(s[1]);
+                    board.setCustomTerritoryList(numTerr);
+                }
+                else if (l1.charAt(1) == '-') {
                     ArrayList<Player> newAlive = new ArrayList<>();
                     for (int i = 2; i < l1.length(); i = i + 2) {
                         String d = String.valueOf(l1.charAt(i));
@@ -2219,12 +2229,8 @@ public class GameplayModel {
                         String f = String.valueOf(l1.charAt(3));
                         if (playersAlive.get(i).getName().equals(f)) {
                             this.currentPlayer = playersAlive.get(i);
-                            this.pTurn = i;
-                            if (i < playersAlive.size() - 1) {
-                                this.nextPlayer = playersAlive.get(i + 1);
-                            } else {
-                                this.nextPlayer = playersAlive.get(0);
-                            }
+                            this.pTurn = 0;
+                            this.nextPlayer = playersAlive.get(1);
                         }
                     }
                 } else if (l1.charAt(3) == '-') {
@@ -2253,6 +2259,21 @@ public class GameplayModel {
                     }
                     board.setNewTerritory(terName, ownerPlayer, troops);
 
+                    int length = board.getCustomTerritoryList().length;
+
+                    for(int i = 0; i< board.getCustomTerritoryList().length - 1; i++){
+                        if(board.getCustomTerritoryList()[i] != null){
+                            if (board.getCustomTerritoryList()[i].getName().equals(terName)) {
+                                for (int j = 0; j < playersAlive.size(); j++) {
+                                    if (playersAlive.get(j).getName().equals(owner)) {
+                                        playersAlive.get(j).addTerritories(board.getCustomTerritoryList()[i]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    /*
                     for (Territory terr : board.getCustomTerritoryList()) {
                         if (terr.getName().equals(terName)) {
                             for (int i = 0; i < playersAlive.size(); i++) {
@@ -2262,6 +2283,8 @@ public class GameplayModel {
                             }
                         }
                         }
+
+                     */
 
 
                 } else if (l1.charAt(6) == '-') {  //Add Cards to player hands from Custom Deck
@@ -2317,9 +2340,11 @@ public class GameplayModel {
         boolean correctFormat = board.customTerritoryList();  //Sets old Lists to New Custom Lists
         if(correctFormat) {
             board.setIndex(0);
+            custom = true;
             gameStatus();
             JOptionPane.showMessageDialog(null, "Custom Map Loaded");
 
+            /*
             if(currentPlayer.isAIplayer()) {
                 UserCurrentPlayer = false;
             }
@@ -2328,6 +2353,8 @@ public class GameplayModel {
 
             }
             CheckAiPlayer();
+
+             */
         }
         else{
             JOptionPane.showMessageDialog(null, "Custom Map Rejected. Please follow the Correct Format. Restart the Program to play a new Game");

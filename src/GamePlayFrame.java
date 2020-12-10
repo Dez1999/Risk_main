@@ -134,7 +134,8 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
      */
     @Override
     public void handleGamePlayUpdate(GamePlayEvent e ) {
-        if(custom== true){
+        if(e.isCustom()){
+            gpm.setCustom(false);
             this.dispose();
             JFrame cus = new JFrame("Custom Map");
             LabelPanel.setBounds(15,10, 1400 , 50);
@@ -170,6 +171,9 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
                     }
                 }
             }
+            territoryButtons.clear();
+            territoryButtons = b;
+
             for (JButton button : b){
                 for (Territory terr : territories){
                     if (button.getActionCommand().equals(terr.getName())){
@@ -239,57 +243,48 @@ public class GamePlayFrame extends JFrame implements GamePlayView{
             cus.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             return;
 
+
         }
-        Territory[] territories = e.getTerritories();
+        else {
+            Territory[] territories = e.getTerritories();
 
-        int handsize = e.getPlayerHand().handList().size();
-        GameplayModel gpm = (GameplayModel) e.getSource();
-        String output = null;    //+ e.getcurrentPlayer().getColor()
+            int handsize = e.getPlayerHand().handList().size();
+            GameplayModel gpm = (GameplayModel) e.getSource();
+            String output = null;    //+ e.getcurrentPlayer().getColor()
 
-        output = "Current Player: " + e.getPlayerName() +  ". Number of cards: " + handsize + ". " + e.getInstructions();  //ADD later: Instructions and Outcome
+            output = "Current Player: " + e.getPlayerName() + ". Number of cards: " + handsize + ". " + e.getInstructions();  //ADD later: Instructions and Outcome
 
-        Color color = e.getPlayerColor();
+            Color color = e.getPlayerColor();
 
-        GameStatus.setText(output);
-        LabelPanel.setBackground(color);
+            GameStatus.setText(output);
+            LabelPanel.setBackground(color);
 
-        //Update the Territory Owners and Number of Troops
-        //Iterate through the list of Buttons
-        //If Button name = Territory Name
-        //Change the Text of the Button to : Territory Name. Territory Owner. # of Troops using Territory List
-        for (JButton territoryButton : territoryButtons){
-            for (Territory terr : territories){
-                if (territoryButton.getActionCommand().equals(terr.getName())){
-                    if(terr.getPlayer().getName().equals("1"))
-                    {
-                        //GRAY
-                        territoryButton.setBackground(Color.GRAY);
+            //Update the Territory Owners and Number of Troops
+            //Iterate through the list of Buttons
+            //If Button name = Territory Name
+            //Change the Text of the Button to : Territory Name. Territory Owner. # of Troops using Territory List
+            for (JButton territoryButton : territoryButtons) {
+                for (Territory terr : territories) {
+                    if (territoryButton.getActionCommand().equals(terr.getName())) {
+                        if (terr.getPlayer().getName().equals("1")) {
+                            //GRAY
+                            territoryButton.setBackground(Color.GRAY);
+                        } else if (terr.getPlayer().getName().equals("2")) {
+                            territoryButton.setBackground(new Color(184, 59, 59));
+                        } else if (terr.getPlayer().getName().equals("3")) {
+                            territoryButton.setBackground(new Color(73, 186, 58));
+                        } else if (terr.getPlayer().getName().equals("4")) {
+                            territoryButton.setBackground(new Color(224, 227, 75));
+                        } else if (terr.getPlayer().getName().equals("5")) {
+                            territoryButton.setBackground(new Color(
+                                    181, 121, 224
+                            ));
+                        } else if (terr.getPlayer().getName().equals("6")) {
+                            //PINK
+                            territoryButton.setBackground(Color.PINK);
+                        }
+                        territoryButton.setText(terr.getTroops() + " :" + territoryButton.getActionCommand());
                     }
-                    else if(terr.getPlayer().getName().equals("2"))
-                    {
-                        territoryButton.setBackground(new Color(184, 59, 59));
-                    }
-                    else if(terr.getPlayer().getName().equals("3"))
-                    {
-                        territoryButton.setBackground(new Color(73, 186, 58));
-                    }
-                    else if(terr.getPlayer().getName().equals("4"))
-                    {
-                        territoryButton.setBackground(new Color(224, 227, 75));
-                    }
-                    else if(terr.getPlayer().getName().equals("5"))
-                    {
-                        territoryButton.setBackground(new Color(
-                                181, 121, 224
-                        ));
-                    }
-
-                    else if(terr.getPlayer().getName().equals("6"))
-                    {
-                        //PINK
-                        territoryButton.setBackground(Color.PINK);
-                    }
-                    territoryButton.setText(terr.getTroops() +" :"+ territoryButton.getActionCommand());
                 }
             }
         }
