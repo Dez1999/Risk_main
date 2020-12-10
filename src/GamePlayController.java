@@ -91,12 +91,20 @@ public class GamePlayController implements ActionListener {
                         correctTerry = true;
                         if (deployCount == 0) {
                             gpm.setBonus(0);
-                            gpm.calculateBonusTroops();
+                            try {
+                                gpm.calculateBonusTroops();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
                             currentDeployable = gpm.getBonus();
 
                         }
                         gpm.setInstructions("Please enter the number of troops to deploy. You have this many troops to deploy " + currentDeployable + " :");
-                        gpm.gameStatus();
+                        try {
+                            gpm.gameStatus();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                         a = (int) Double.parseDouble(JOptionPane.showInputDialog(this, "Please enter the number of troops to deploy. You have this many troops to deploy " + currentDeployable + " :"));
 
                     }
@@ -115,21 +123,37 @@ public class GamePlayController implements ActionListener {
                     if (a > currentDeployable || a < 0) {
                         next = -1;
                         gpm.setInstructions("Please Choose the correct number of troops to deploy out of : "+ currentDeployable+" again");
-                        gpm.gameStatus();
+                        try {
+                            gpm.gameStatus();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                     if (currentDeployable > 0 && currentDeployable >= a) {
                         gpm.setDeployedNum(a);
-                        success = gpm.userDeploysTroops();
+                        try {
+                            success = gpm.userDeploysTroops();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                         currentDeployable = currentDeployable - a;
                         a=0;
                         if (currentDeployable == 0) {
                             gpm.setInstructions("Please choose your own Attacking Territory with Neighbouring enemy Territories");
-                            gpm.gameStatus();
+                            try {
+                                gpm.gameStatus();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
                             next = 0;
                         } else {
 
                             gpm.setInstructions("Please Select Territory to add your " + currentDeployable + " bonus Troops to");
-                            gpm.gameStatus();
+                            try {
+                                gpm.gameStatus();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
                             next = -1;
                         }
                     }
@@ -137,7 +161,11 @@ public class GamePlayController implements ActionListener {
             }
             if(!correctTerry){
                 gpm.setInstructions("error please select your own territory"+" to add your bonus Troops to");
-                gpm.gameStatus();
+                try {
+                    gpm.gameStatus();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 next = -1;
             }
 
@@ -353,10 +381,18 @@ public class GamePlayController implements ActionListener {
                 gpm.setBonus(0);
                 //Show GameStatus
                 gpm.changePlayer();  //This is good
-                gpm.calculateBonusTroops();
+                try {
+                    gpm.calculateBonusTroops();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 gpm.setInstructions("Player " + gpm.getCurrentPlayer().getName() + " is up Next. Please choose the Territory to add "+ gpm.getBonus() + " Troops to"); //preiously had BONUS instead of currentdeployable.
 
-                gpm.gameStatus();
+                try {
+                    gpm.gameStatus();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
 
                 next = -1;
                 isFortifying = true;

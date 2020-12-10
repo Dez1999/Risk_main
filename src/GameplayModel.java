@@ -1561,10 +1561,12 @@ public class GameplayModel {
      */
     public void AIattack() throws InterruptedException {
 
+
         boolean doneAttacking = false;
         int count = 0;
 
         while(!doneAttacking) {
+            boolean stopAttack = false;
 
             //For loop to see which Territories are bordering Opponent Territories
             //Add Available options to a list:
