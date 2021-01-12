@@ -1,4 +1,4 @@
-Java implementation of a basic GUI for the risk game 
+Java implementation of a basic GUI for the risk game. This application was made for School Purposese only and we do not hold the license for this.  
 
 version 4 of the Game 
 In this version we added save/load feature, added custom maps and refined already implemented features to make sure a full game can be played.
