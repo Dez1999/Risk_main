@@ -1,4 +1,4 @@
-Java implementation of a basic GUI for the risk game. This application was made for School Purposese only and we do not hold the license for this.  
+Java implementation of a basic GUI for the risk game. This application was made for School Purposes only and we do not hold the license for this.  
 
 version 4 of the Game 
 In this version we added save/load feature, added custom maps and refined already implemented features to make sure a full game can be played.
@@ -82,7 +82,7 @@ GamePlayEvent.java:
 Handles the attack outcome movements of troops, deployment of troops and helps to change player turns. 
 
 GamePlayController.java:
-Used to control phases of the game whenever a button is press it figures whether its a territory or the next button. GamePlayController use the methods in gamePlayModel to run the game 
+Used to control phases of the game whenever a button is pressed it figures whether its a territory or the next button. GamePlayController use the methods in gamePlayModel to run the game 
 properly implemented Fortify method and adjusted the gameplay loops.
 Players can now fortify more than once.
 
